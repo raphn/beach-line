@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://b7ghecej73myq"]
+
+[ext_resource type="Script" uid="uid://bw1hr051dwxqt" path="res://Interface/Tracks/StringTuningRow.cs" id="2_row_script"]
+[ext_resource type="PackedScene" path="res://Interface/Tracks/Scenes/NotePitchSelector.tscn" id="3_pitch"]
+
+[node name="StringTuningRow" type="PanelContainer" unique_id=692808287]
+script = ExtResource("2_row_script")
+
+[node name="StringRowContent" type="HBoxContainer" parent="." unique_id=1165446029]
+layout_mode = 2
+
+[node name="DragHandle" type="Button" parent="StringRowContent" unique_id=1526625758]
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+mouse_filter = 1
+text = "☰"
+
+[node name="StringNumber" type="Label" parent="StringRowContent" unique_id=1247536404]
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+text = "1"
+vertical_alignment = 1
+
+[node name="Pitch" parent="StringRowContent" unique_id=1295972408 instance=ExtResource("3_pitch")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MoveUp" type="Button" parent="StringRowContent" unique_id=1573687364]
+layout_mode = 2
+text = "↑"
+
+[node name="MoveDown" type="Button" parent="StringRowContent" unique_id=924730034]
+layout_mode = 2
+text = "↓"
+
+[node name="RemoveString" type="Button" parent="StringRowContent" unique_id=1486795585]
+layout_mode = 2
+text = "−"

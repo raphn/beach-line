@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Interface/Tab/Scripts/NoteVelocityDragFeedback.cs" id="1_script"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="2_theme"]
+[ext_resource type="StyleBox" uid="uid://cqglgxgj6twcc" path="res://Interface/Themes/Panels/popup.tres" id="3_panel"]
+
+[node name="NoteVelocityDragFeedback" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="FeedbackPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+theme = ExtResource("2_theme")
+theme_override_styles/panel = ExtResource("3_panel")
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="FeedbackPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="FeedbackLabel" type="Label" parent="FeedbackPanel/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Velocity 3"

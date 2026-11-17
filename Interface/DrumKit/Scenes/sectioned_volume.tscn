@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://07mapix6umfh"]
+
+[ext_resource type="Theme" path="res://Interface/Themes/main.tres" id="1_theme"]
+
+[node name="SectionedVolume" type="VBoxContainer" unique_id=1593590891]
+editor_description = "Sets the drum beat execution intensity in 5 steps"
+theme = ExtResource("1_theme")
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Volume1" type="Button" parent="." unique_id=1403814771]
+theme_type_variation = &"BeatIntensityButton"
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+tooltip_text = "Set execution intensity to 5 of 5"
+toggle_mode = true
+
+[node name="Volume2" type="Button" parent="." unique_id=84891545]
+theme_type_variation = &"BeatIntensityButton"
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+tooltip_text = "Set execution intensity to 4 of 5"
+toggle_mode = true
+
+[node name="Volume3" type="Button" parent="." unique_id=663288228]
+theme_type_variation = &"BeatIntensityButton"
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+tooltip_text = "Set execution intensity to 3 of 5"
+toggle_mode = true
+
+[node name="Volume4" type="Button" parent="." unique_id=371644489]
+theme_type_variation = &"BeatIntensityButton"
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+tooltip_text = "Set execution intensity to 2 of 5"
+toggle_mode = true
+
+[node name="Volume5" type="Button" parent="." unique_id=601920859]
+theme_type_variation = &"BeatIntensityButton"
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+tooltip_text = "Set execution intensity to 1 of 5"
+toggle_mode = true

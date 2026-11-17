@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <IntermediateOutputPath>obj\AudioClipMixer\$(Configuration)\$(TargetFramework)\</IntermediateOutputPath>
+    <OutputPath>bin\AudioClipMixer\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AudioClipMixerRegression.cs" />
+    <ProjectReference Include="../../BeachLine.csproj" />
+  </ItemGroup>
+</Project>

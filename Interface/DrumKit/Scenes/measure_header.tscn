@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://nfn54ygvwgpt"]
+
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="drum_theme"]
+
+[node name="MeasureHeader" type="PanelContainer" unique_id=1339142634]
+offset_right = 386.0
+offset_bottom = 71.0
+size_flags_horizontal = 3
+theme = ExtResource("drum_theme")
+theme_type_variation = &"DrumHeaderPanel"
+
+[node name="HeaderContent" type="HBoxContainer" parent="." unique_id=1633459466]
+layout_mode = 2
+
+[node name="TimeSignatureSelector" type="OptionButton" parent="HeaderContent" unique_id=1481143380]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+theme_type_variation = &"DrumOptionButton"
+item_count = 6
+popup/item_0/text = "2/4"
+popup/item_0/id = 0
+popup/item_1/text = "3/4"
+popup/item_1/id = 1
+popup/item_2/text = "4/4"
+popup/item_2/id = 2
+popup/item_3/text = "5/8"
+popup/item_3/id = 3
+popup/item_4/text = "6/8"
+popup/item_4/id = 4
+popup/item_5/text = "7/8"
+popup/item_5/id = 5
+
+[node name="ValidationInfo" type="RichTextLabel" parent="HeaderContent" unique_id=96428449]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Complete"
+scroll_active = false
+vertical_alignment = 1
+
+[node name="InsertBeforeButton" type="Button" parent="HeaderContent"]
+custom_minimum_size = Vector2(30, 24)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Insert a new measure before this one"
+theme_type_variation = &"DrumActionButton"
+text = "←+"
+
+[node name="DuplicateBeforeButton" type="Button" parent="HeaderContent"]
+custom_minimum_size = Vector2(32, 24)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Duplicate this measure before it"
+theme_type_variation = &"DrumActionButton"
+text = "⧉←"
+
+[node name="DuplicateAfterButton" type="Button" parent="HeaderContent"]
+custom_minimum_size = Vector2(32, 24)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Duplicate this measure after it"
+theme_type_variation = &"DrumActionButton"
+text = "⧉→"
+[node name="AddMeasureButton" type="Button" parent="HeaderContent" unique_id=864677665]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Insert a measure after this one"
+theme_type_variation = &"DrumActionButton"
+text = "+"
+
+[node name="DeleteMeasureButton" type="Button" parent="HeaderContent" unique_id=1299499235]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Delete this measure"
+theme_type_variation = &"BeatRemoveButton"
+text = "−"
+
+[node name="DeleteMeasureConfirmation" type="ConfirmationDialog" parent="." unique_id=194946781]
+oversampling_override = 1.0
+title = "Delete measure?"
+theme = ExtResource("drum_theme")
+ok_button_text = "Delete"

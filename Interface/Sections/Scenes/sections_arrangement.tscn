@@ -1,0 +1,284 @@
+[gd_scene format=3 uid="uid://cv5qaibiau3n0"]
+
+[ext_resource type="Texture2D" uid="uid://wohrrpvqbirw" path="res://Interface/Common/Graphs/play-menu/play-button_guard13007.png" id="1_3edd2"]
+[ext_resource type="PackedScene" uid="uid://qqbn1tf7a1qp" path="res://Interface/Sections/Scenes/section_thumbnail.tscn" id="1_oou5u"]
+[ext_resource type="Texture2D" uid="uid://cvlahmds5gj8g" path="res://Interface/Sections/Graphs/openclipart-vectors-garbage-1295900_640.png" id="2_7i5wn"]
+[ext_resource type="Texture2D" uid="uid://77m2fjjg1e65" path="res://Interface/Common/Graphs/play-menu/plain-square_delapouite.png" id="2_f1vnv"]
+[ext_resource type="Texture2D" uid="uid://dcj3hysgue38v" path="res://Interface/Common/Graphs/play-menu/play-loop.png" id="3_f3tct"]
+[ext_resource type="Script" uid="uid://dvrc86fxcy4nm" path="res://Interface/Sections/Scripts/ArrangementDropTarget.cs" id="delete_script"]
+[ext_resource type="StyleBox" uid="uid://d2yrfid8hrq04" path="res://Interface/Themes/Panels/arrangement_lane.tres" id="lane_style"]
+[ext_resource type="StyleBox" uid="uid://b0rnwkgpw6u67" path="res://Interface/Themes/Panels/arrangement_player.tres" id="player_style"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Arrangement/normal.tres" id="arrangement_normal"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Arrangement/hover.tres" id="arrangement_hover"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Arrangement/pressed.tres" id="arrangement_pressed"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Arrangement/hover_pressed.tres" id="arrangement_hover_pressed"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Arrangement/focus.tres" id="arrangement_focus"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Inputs/ArrangementScroll/focus.tres" id="arrangement_input_focus"]
+[ext_resource type="Theme" path="res://Interface/Themes/Inputs/ArrangementScroll/theme.tres" id="arrangement_scroll_theme"]
+
+[sub_resource type="StyleBoxEmpty" id="transport_empty"]
+
+[node name="SectionsArrangement" type="PanelContainer" unique_id=1470689308]
+offset_right = 671.0
+offset_bottom = 87.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"AppWorkspacePanel"
+theme_override_styles/panel = ExtResource("player_style")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1922100393]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="VBoxContainer" unique_id=1057270087]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Label2" type="Label" parent="VBoxContainer/BoxContainer" unique_id=1738329033]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.93, 0.93, 1)
+theme_override_font_sizes/font_size = 12
+text = "Arrangement"
+vertical_alignment = 1
+
+[node name="SelectArrangementMenuButton" type="MenuButton" parent="VBoxContainer/BoxContainer" unique_id=994917792]
+layout_mode = 2
+theme_type_variation = &"AppArrangementMenuButton"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+theme_override_font_sizes/font_size = 16
+text = "Select"
+item_count = 1
+popup/item_0/text = "New"
+popup/item_0/id = 0
+
+[node name="ArrangementNameEdit" type="LineEdit" parent="VBoxContainer/BoxContainer" unique_id=1947815883]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/selection_color = Color(0.56078434, 0.23921569, 0.85490197, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = ExtResource("arrangement_input_focus")
+theme_override_font_sizes/font_size = 16
+placeholder_text = "Arrange name"
+expand_to_text_length = true
+clear_button_enabled = true
+
+[node name="DeleteArrangementButton" type="Button" parent="VBoxContainer/BoxContainer" unique_id=1494787375]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+icon = ExtResource("2_7i5wn")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/BoxContainer" unique_id=889864354]
+layout_mode = 2
+theme_override_styles/panel = SubResource("transport_empty")
+
+[node name="BoxContainer" type="BoxContainer" parent="VBoxContainer/BoxContainer/PanelContainer" unique_id=190343197]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PlayArrangementButton" type="Button" parent="VBoxContainer/BoxContainer/PanelContainer/BoxContainer" unique_id=1482323690]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"AppToggleButton"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+toggle_mode = true
+icon = ExtResource("1_3edd2")
+icon_alignment = 1
+expand_icon = true
+
+[node name="StopArrangementButton" type="Button" parent="VBoxContainer/BoxContainer/PanelContainer/BoxContainer" unique_id=832954513]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"AppActionButton"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+disabled = true
+icon = ExtResource("2_f1vnv")
+icon_alignment = 1
+expand_icon = true
+
+[node name="LoopArrangementButton" type="Button" parent="VBoxContainer/BoxContainer/PanelContainer/BoxContainer" unique_id=850653879]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"AppToggleButton"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("3_f3tct")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PrimaryPlayerEnabledButton" type="Button" parent="VBoxContainer/BoxContainer/PanelContainer/BoxContainer" unique_id=1716387684]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"AppToggleButton"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Shortcuts: Off"
+icon_alignment = 1
+expand_icon = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=639081778]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer" unique_id=480062923]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme = ExtResource("arrangement_scroll_theme")
+vertical_scroll_mode = 0
+
+[node name="SectionsOrder" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ScrollContainer" unique_id=984738166]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("lane_style")
+
+[node name="BoxContainer" type="BoxContainer" parent="VBoxContainer/HBoxContainer/ScrollContainer/SectionsOrder" unique_id=1744773925]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SectionsThumbnails" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ScrollContainer/SectionsOrder/BoxContainer" unique_id=1455164999]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+
+[node name="SectionThumbnail" parent="VBoxContainer/HBoxContainer/ScrollContainer/SectionsOrder/BoxContainer/SectionsThumbnails" unique_id=861267133 instance=ExtResource("1_oou5u")]
+layout_mode = 2
+script = null
+
+[node name="AddSectionOptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer/ScrollContainer/SectionsOrder/BoxContainer" unique_id=534681799]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/normal_mirrored = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/hover_mirrored = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/pressed_mirrored = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+theme_override_font_sizes/font_size = 18
+alignment = 1
+selected = 0
+fit_to_longest_item = false
+item_count = 1
+popup/item_0/text = "+"
+popup/item_0/id = 0
+
+[node name="DropToDeleteSection" type="PanelContainer" parent="VBoxContainer/HBoxContainer" unique_id=1720681655]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = ExtResource("lane_style")
+script = ExtResource("delete_script")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/DropToDeleteSection" unique_id=730750490]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_7i5wn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ArrangementAudioSummary" type="Label" parent="VBoxContainer" unique_id=190343198]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Select an arrangement to view its audio clips."
+
+[node name="ArrangementAudioActions" type="HBoxContainer" parent="VBoxContainer" unique_id=190343199]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 3
+
+[node name="ImportArrangementButton" type="Button" parent="VBoxContainer/ArrangementAudioActions" unique_id=190343200]
+layout_mode = 2
+theme_type_variation = &"AppActionButton"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+disabled = true
+text = "Import Arrangement"
+
+[node name="RecordArrangementButton" type="Button" parent="VBoxContainer/ArrangementAudioActions" unique_id=190343201]
+layout_mode = 2
+theme_type_variation = &"AppActionButton"
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+theme_override_styles/normal = ExtResource("arrangement_normal")
+theme_override_styles/hover = ExtResource("arrangement_hover")
+theme_override_styles/pressed = ExtResource("arrangement_pressed")
+theme_override_styles/hover_pressed = ExtResource("arrangement_hover_pressed")
+theme_override_styles/focus = ExtResource("arrangement_focus")
+disabled = true
+text = "Record Arrangement"

@@ -1,0 +1,470 @@
+[gd_scene format=3 uid="uid://c2r4pbk72irqw"]
+
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="1_theme"]
+[ext_resource type="PackedScene" uid="uid://v751kjff7rj6" path="res://Interface/ThemeEditor/ThemeEditor.tscn" id="2_preview"]
+[ext_resource type="Script" uid="uid://c54dolknj8uek" path="res://Interface/ThemeEditor/runtime_theme_editor.gd" id="3_editor"]
+[ext_resource type="Script" uid="uid://dws62dwvsnk1n" path="res://Interface/ThemeEditor/TabThemePreview.gd" id="4_tab_preview"]
+
+[node name="RuntimeThemeEditor" type="Control" unique_id=1318422040]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+script = ExtResource("3_editor")
+
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=51667722]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="Scroll" unique_id=1272901468]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Scroll/Content" unique_id=688351694]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Theme settings"
+
+[node name="Description" type="Label" parent="Scroll/Content" unique_id=770595655]
+layout_mode = 2
+text = "Adjust the palette and preview how it looks across BeachLine controls."
+
+[node name="Controls" type="PanelContainer" parent="Scroll/Content" unique_id=1135165084]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ControlsLayout" type="VBoxContainer" parent="Scroll/Content/Controls" unique_id=1353498694]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="PaletteHeading" type="Label" parent="Scroll/Content/Controls/ControlsLayout" unique_id=1883406884]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Palette"
+
+[node name="PaletteGrid" type="VBoxContainer" parent="Scroll/Content/Controls/ControlsLayout" unique_id=495061738]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="SurfaceSection" type="PanelContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid" unique_id=196259644]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SurfaceContent" type="VBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection" unique_id=1509088916]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SurfaceHeading" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent" unique_id=513761788]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Surfaces & palette"
+
+[node name="SurfaceGrid" type="GridContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent" unique_id=857623422]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="BackgroundRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent/SurfaceGrid" unique_id=376212703]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackgroundLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent/SurfaceGrid/BackgroundRow" unique_id=1759571028]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Background"
+
+[node name="Background" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent/SurfaceGrid/BackgroundRow" unique_id=917568768]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="PanelRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent/SurfaceGrid" unique_id=379640736]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent/SurfaceGrid/PanelRow" unique_id=1793407285]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Panel"
+
+[node name="Panel" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/SurfaceSection/SurfaceContent/SurfaceGrid/PanelRow" unique_id=1858548280]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="TextSection" type="PanelContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid" unique_id=846540601]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextContent" type="VBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection" unique_id=1583001791]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TextHeading" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent" unique_id=601436196]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Text"
+
+[node name="TextGrid" type="GridContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent" unique_id=734758947]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="TextRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent/TextGrid" unique_id=765971641]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent/TextGrid/TextRow" unique_id=875010632]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Text"
+
+[node name="Text" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent/TextGrid/TextRow" unique_id=1459547211]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="MutedRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent/TextGrid" unique_id=1955774536]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MutedLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent/TextGrid/MutedRow" unique_id=1600112516]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Muted text"
+
+[node name="Muted" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/TextSection/TextContent/TextGrid/MutedRow" unique_id=802655454]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="ButtonSection" type="PanelContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid" unique_id=1902337100]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonContent" type="VBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection" unique_id=1548109036]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ButtonHeading" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent" unique_id=274522867]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Buttons & states"
+
+[node name="ButtonGrid" type="GridContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent" unique_id=910243808]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="HighlightRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid" unique_id=1702693182]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HighlightLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/HighlightRow" unique_id=1355276245]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Highlight"
+
+[node name="Highlight" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/HighlightRow" unique_id=149844461]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="MuteRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid" unique_id=160207955]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MuteLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/MuteRow" unique_id=436937546]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mute"
+
+[node name="Mute" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/MuteRow" unique_id=219699600]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="SoloRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid" unique_id=1466942164]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SoloLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/SoloRow" unique_id=574258275]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Solo"
+
+[node name="Solo" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/SoloRow" unique_id=1895289236]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="DestructiveRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid" unique_id=448154539]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DestructiveLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/DestructiveRow" unique_id=1881319113]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Destructive"
+
+[node name="Destructive" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/DestructiveRow" unique_id=1510594390]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="IntensityRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid" unique_id=1029985950]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="IntensityLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/IntensityRow" unique_id=2119847125]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Intensity"
+
+[node name="Intensity" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/ButtonGrid/IntensityRow" unique_id=1688179150]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="DifferenceRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent" unique_id=125668413]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DifferenceLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/DifferenceRow" unique_id=1552609261]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Button highlight difference"
+
+[node name="ButtonHighlightDifference" type="HSlider" parent="Scroll/Content/Controls/ControlsLayout/PaletteGrid/ButtonSection/ButtonContent/DifferenceRow" unique_id=387124528]
+custom_minimum_size = Vector2(160, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 0.5
+step = 0.01
+value = 0.12
+
+[node name="NotationSection" type="PanelContainer" parent="Scroll/Content/Controls/ControlsLayout" unique_id=1018929877]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NotationSettings" type="VBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection" unique_id=1201865036]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="NotationSettingsHeading" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings" unique_id=1303041631]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Notation"
+
+[node name="NotationColorGrid" type="GridContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings" unique_id=207601464]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="TabBackgroundRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid" unique_id=2057332176]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TabBackgroundLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabBackgroundRow" unique_id=1914704715]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Tab background"
+
+[node name="TabBackground" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabBackgroundRow" unique_id=1593162250]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="TabGridRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid" unique_id=1357577966]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TabGridLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabGridRow" unique_id=706416982]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Tab grid"
+
+[node name="TabGrid" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabGridRow" unique_id=1094592846]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="TabStringRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid" unique_id=998756207]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TabStringLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabStringRow" unique_id=868263296]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Tab strings"
+
+[node name="TabString" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabStringRow" unique_id=741810591]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="TabTextRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid" unique_id=850849156]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TabTextLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabTextRow" unique_id=361835331]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Tab text"
+
+[node name="TabText" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/TabTextRow" unique_id=1113922122]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="BeatBackgroundRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid" unique_id=345286496]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BeatBackgroundLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/BeatBackgroundRow" unique_id=1518658559]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Beat background"
+
+[node name="BeatBackground" type="ColorPickerButton" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationColorGrid/BeatBackgroundRow" unique_id=1607743814]
+custom_minimum_size = Vector2(92, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="TabLineThicknessRow" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings" unique_id=969896654]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TabLineThicknessLabel" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/TabLineThicknessRow" unique_id=1536263962]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Line thickness"
+
+[node name="TabLineThickness" type="HSlider" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/TabLineThicknessRow" unique_id=413563820]
+custom_minimum_size = Vector2(180, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 4.0
+value = 1.0
+
+[node name="NotationPreview" type="PanelContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings" unique_id=1630121479]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BeatEditorPanel"
+
+[node name="PreviewContent" type="VBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationPreview" unique_id=1193135377]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NotationPreviewHeading" type="Label" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationPreview/PreviewContent" unique_id=1270466568]
+layout_mode = 2
+text = "Live notation preview"
+
+[node name="BeatControls" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationPreview/PreviewContent" unique_id=1461765597]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BeatToggleButton" type="Button" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationPreview/PreviewContent/BeatControls" unique_id=484975952]
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 2
+theme_type_variation = &"BeatToggleButton"
+text = "Beat enabled"
+
+[node name="BeatDurationButton" type="Button" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationPreview/PreviewContent/BeatControls" unique_id=1395938840]
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+theme_type_variation = &"BeatDurationButton"
+text = "1/4"
+
+[node name="TabPreview" type="Control" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings/NotationPreview/PreviewContent" unique_id=1418866399]
+custom_minimum_size = Vector2(320, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4_tab_preview")
+
+[node name="NotationSettingsDivider" type="HSeparator" parent="Scroll/Content/Controls/ControlsLayout/NotationSection/NotationSettings" unique_id=137498858]
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Scroll/Content/Controls/ControlsLayout" unique_id=1525872481]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="SaveProjectDefault" type="Button" parent="Scroll/Content/Controls/ControlsLayout/Actions" unique_id=1453377210]
+custom_minimum_size = Vector2(190, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save as project default"
+
+[node name="SaveUserPreference" type="Button" parent="Scroll/Content/Controls/ControlsLayout/Actions" unique_id=804100722]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save user preference"
+
+[node name="Reset" type="Button" parent="Scroll/Content/Controls/ControlsLayout/Actions" unique_id=1402247724]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "Reset"
+
+[node name="Status" type="Label" parent="Scroll/Content/Controls/ControlsLayout" unique_id=1323062996]
+layout_mode = 2
+text = "Changes are preview only until saved."
+autowrap_mode = 3
+
+[node name="PreviewHeading" type="Label" parent="Scroll/Content" unique_id=284302285]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Preview"
+
+[node name="PreviewFrame" type="PanelContainer" parent="Scroll/Content" unique_id=556257831]
+custom_minimum_size = Vector2(0, 680)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PreviewInstance" parent="Scroll/Content/PreviewFrame" unique_id=1354374330 instance=ExtResource("2_preview")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

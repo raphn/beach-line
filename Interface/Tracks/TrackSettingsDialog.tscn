@@ -1,0 +1,226 @@
+[gd_scene format=3 uid="uid://dclyluys5gdj2"]
+
+[ext_resource type="Script" uid="uid://be5xbfb7vqmdj" path="res://Interface/Tab/Scripts/TrackSettingsDialog.cs" id="1_script"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="2_theme"]
+
+[node name="TrackSettingsDialog" type="ConfirmationDialog" unique_id=186158830]
+oversampling_override = 1.0
+title = "Track Settings"
+position = Vector2i(0, 28)
+size = Vector2i(720, 900)
+min_size = Vector2i(560, 620)
+theme = ExtResource("2_theme")
+ok_button_text = "Apply"
+script = ExtResource("1_script")
+
+[node name="SettingsMargin" type="MarginContainer" parent="." unique_id=805681466]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="SettingsScroll" type="ScrollContainer" parent="SettingsMargin" unique_id=777866705]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SettingsLayout" type="VBoxContainer" parent="SettingsMargin/SettingsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="InstrumentSection" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="InstrumentHeading" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentSection"]
+layout_mode = 2
+text = "INSTRUMENT"
+theme_override_font_sizes/font_size = 18
+
+[node name="TrackInfo" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentSection" unique_id=728584995]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choose a track family and instrument"
+autowrap_mode = 2
+
+[node name="Category" type="OptionButton" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentSection" unique_id=1092825545]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AppOptionButton"
+
+[node name="InstrumentChoices" type="ItemList" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentSection" unique_id=1654935238]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_selected_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+max_columns = 2
+same_column_width = true
+
+[node name="ProgramRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentSection" unique_id=7649903]
+layout_mode = 2
+
+[node name="ProgramLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentSection/ProgramRow" unique_id=1184809434]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "General MIDI program"
+vertical_alignment = 1
+
+[node name="Program" type="OptionButton" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentSection/ProgramRow" unique_id=1799119013]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AppOptionButton"
+
+[node name="TrackSection" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TrackHeading" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection"]
+layout_mode = 2
+text = "TRACK"
+theme_override_font_sizes/font_size = 18
+
+[node name="NameRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection" unique_id=1356384472]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/NameRow" unique_id=1428116623]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Track name"
+vertical_alignment = 1
+
+[node name="TrackName" type="LineEdit" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/NameRow" unique_id=131568126]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Track name"
+
+[node name="ColorRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection" unique_id=829526867]
+layout_mode = 2
+
+[node name="ColorLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/ColorRow" unique_id=1697228713]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Track color"
+vertical_alignment = 1
+
+[node name="TrackColor" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/ColorRow" unique_id=1470702141]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 32)
+layout_mode = 2
+tooltip_text = "Choose a track color"
+
+[node name="ColorSwatch" type="ColorRect" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/ColorRow/TrackColor" unique_id=543987161]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = -5.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TuningSection" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TuningHeading" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection"]
+layout_mode = 2
+text = "TUNING"
+theme_override_font_sizes/font_size = 18
+
+[node name="TuningHelp" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection" unique_id=1673342110]
+unique_name_in_owner = true
+layout_mode = 2
+text = "String 1 is shown first. Pitches use MIDI notes 0–127."
+autowrap_mode = 2
+
+[node name="StringCountRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection"]
+layout_mode = 2
+
+[node name="StringCountLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/StringCountRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Strings"
+vertical_alignment = 1
+
+[node name="AddHighString" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/StringCountRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add high string"
+tooltip_text = "Add a string five semitones above string 1"
+
+[node name="InitializeTuning" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/StringCountRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Initialize tuning"
+
+[node name="StringRows" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="AddLowString" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add low string"
+tooltip_text = "Add a string seven semitones below the last string"
+
+[node name="RetuningPanel" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RetuningLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/RetuningPanel"]
+layout_mode = 2
+text = "When applying this tuning change"
+
+[node name="RetuningMode" type="OptionButton" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/RetuningPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AppOptionButton"
+
+[node name="RetuningFeedback" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/RetuningPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="ImageSection" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ImageHeading" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/ImageSection"]
+layout_mode = 2
+text = "IMAGE"
+theme_override_font_sizes/font_size = 18
+
+[node name="InstrumentImages" type="ItemList" parent="SettingsMargin/SettingsScroll/SettingsLayout/ImageSection" unique_id=1594798596]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 94)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_selected_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+auto_width = true
+auto_height = true
+max_columns = 7
+same_column_width = true
+icon_mode = 0
+fixed_icon_size = Vector2i(56, 56)

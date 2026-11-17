@@ -1,0 +1,19 @@
+[gd_resource type="Theme" load_steps=6 format=3]
+
+[ext_resource type="StyleBox" path="res://Interface/Themes/Inputs/ArrangementScroll/grabber.tres" id="1_grabber"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Inputs/ArrangementScroll/grabber_hover.tres" id="2_grabber_hover"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Inputs/ArrangementScroll/grabber_pressed.tres" id="3_grabber_pressed"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Inputs/ArrangementScroll/track.tres" id="4_track"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Inputs/ArrangementScroll/focus.tres" id="5_focus"]
+
+[resource]
+HScrollBar/styles/grabber = ExtResource("1_grabber")
+HScrollBar/styles/grabber_highlight = ExtResource("2_grabber_hover")
+HScrollBar/styles/grabber_pressed = ExtResource("3_grabber_pressed")
+HScrollBar/styles/scroll = ExtResource("4_track")
+HScrollBar/styles/scroll_focus = ExtResource("5_focus")
+VScrollBar/styles/grabber = ExtResource("1_grabber")
+VScrollBar/styles/grabber_highlight = ExtResource("2_grabber_hover")
+VScrollBar/styles/grabber_pressed = ExtResource("3_grabber_pressed")
+VScrollBar/styles/scroll = ExtResource("4_track")
+VScrollBar/styles/scroll_focus = ExtResource("5_focus")

@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://bsmenj0ue0hj7"]
+
+[ext_resource type="Texture2D" uid="uid://fnkm8o5wekgw" path="res://Interface/Common/Graphs/audio/scissors_lorc.png" id="1_scissors"]
+[ext_resource type="Texture2D" uid="uid://dyxa4a24tiqvq" path="res://Interface/Common/Graphs/audio/import-wav-to-section.svg" id="2_import"]
+[ext_resource type="Texture2D" uid="uid://wvdr5hnpl12g" path="res://Interface/Common/Graphs/audio/record-section.svg" id="3_record"]
+[ext_resource type="Texture2D" uid="uid://cbu3yugd3p4dy" path="res://Interface/Common/Graphs/audio/stop-recording.svg" id="4_stop"]
+[ext_resource type="Texture2D" uid="uid://pegkgtxd8n5h" path="res://Interface/Common/Graphs/audio/cancel-recording.svg" id="5_cancel"]
+
+[node name="AudioTrackToolbar" type="PanelContainer" unique_id=1501566401]
+size_flags_horizontal = 3
+
+[node name="Controls" type="HFlowContainer" parent="." unique_id=1347615246]
+layout_mode = 2
+
+[node name="GridGuidesButton" type="Button" parent="Controls" unique_id=1415161086]
+layout_mode = 2
+tooltip_text = "Show or hide timeline guides: pale lines mark measures; amber lines mark tempo changes."
+theme_type_variation = &"AppActionButton"
+toggle_mode = true
+text = "Grid"
+
+[node name="AudioCutTool" type="Button" parent="Controls" unique_id=2118224911]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Toggle the cut tool. Move over a clip to choose where to cut."
+theme_type_variation = &"AppActionButton"
+toggle_mode = true
+icon = ExtResource("1_scissors")
+icon_alignment = 1
+expand_icon = true
+
+[node name="FixedSpeedLabel" type="Label" parent="Controls" unique_id=1898303857]
+layout_mode = 2
+tooltip_text = "Audio plays at its original speed. Tempo changes affect the clip's start position, but do not stretch its sound to match the new tempo."
+mouse_filter = 1
+text = "Fixed speed · no time stretching"
+
+[node name="NextImportLabel" type="Label" parent="Controls" unique_id=1972786518]
+layout_mode = 2
+tooltip_text = "Placement for the next imported WAV, in quarter notes. Does not set recording start or move existing clips."
+mouse_filter = 1
+text = "Next import at (quarter notes)"
+
+[node name="NextImportStart" type="SpinBox" parent="Controls" unique_id=1295252207]
+layout_mode = 2
+tooltip_text = "Placement for the next imported WAV, in quarter notes. Does not set recording start or move existing clips."
+theme_type_variation = &"DrumPatternLength"
+max_value = 100000.0
+step = 0.25
+
+[node name="RecordingOffsetLabel" type="Label" parent="Controls" unique_id=138373781]
+layout_mode = 2
+tooltip_text = "Manual recording offset in milliseconds. A positive value shifts the recorded placement later. This is not automatic latency calibration."
+mouse_filter = 1
+text = "Recording offset"
+
+[node name="RecordingOffset" type="SpinBox" parent="Controls" unique_id=704588454]
+layout_mode = 2
+tooltip_text = "Manual recording offset in milliseconds. A positive value shifts the recorded placement later. This is not automatic latency calibration."
+theme_type_variation = &"DrumPatternLength"
+max_value = 1000.0
+suffix = " ms"
+
+[node name="ImportSectionButton" type="Button" parent="Controls" unique_id=1057751625]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Import WAV into selected section."
+theme_type_variation = &"AppActionButton"
+icon = ExtResource("2_import")
+icon_alignment = 1
+expand_icon = true
+
+[node name="InputDevice" type="OptionButton" parent="Controls" unique_id=834002938]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+tooltip_text = "Microphone input device."
+theme_type_variation = &"AppOptionButton"
+
+[node name="RecordingChannels" type="OptionButton" parent="Controls" unique_id=39944178]
+layout_mode = 2
+tooltip_text = "Recorded WAV channel count."
+theme_type_variation = &"AppOptionButton"
+
+[node name="RecordSectionButton" type="Button" parent="Controls" unique_id=1088269839]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Record audio into the selected section."
+theme_type_variation = &"AppActionButton"
+icon = ExtResource("3_record")
+icon_alignment = 1
+expand_icon = true
+
+[node name="StopRecordingButton" type="Button" parent="Controls" unique_id=680338475]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Stop recording and keep the take."
+theme_type_variation = &"AppActionButton"
+disabled = true
+icon = ExtResource("4_stop")
+icon_alignment = 1
+expand_icon = true
+
+[node name="CancelRecordingButton" type="Button" parent="Controls" unique_id=1394387732]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Cancel recording and discard the take."
+theme_type_variation = &"AppActionButton"
+disabled = true
+icon = ExtResource("5_cancel")
+icon_alignment = 1
+expand_icon = true

@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://d8fdedsqrt1u"]
+
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="drum_theme"]
+
+[node name="DrumTrackRow" type="PanelContainer" unique_id=1367661338]
+custom_minimum_size = Vector2(0, 72)
+size_flags_horizontal = 3
+theme = ExtResource("drum_theme")
+theme_type_variation = &"AppTrackPanel"
+
+[node name="Row" type="HBoxContainer" parent="." unique_id=186207304]
+layout_mode = 2
+
+[node name="InstrumentIcon" type="TextureRect" parent="Row" unique_id=1731053406]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TrackName" type="RichTextLabel" parent="Row" unique_id=456107238]
+custom_minimum_size = Vector2(96, 0)
+custom_maximum_size = Vector2(96, -1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Drum[/b]"
+scroll_active = false
+vertical_alignment = 1
+
+[node name="AudioControls" type="VBoxContainer" parent="Row" unique_id=1602727547]
+layout_mode = 2
+
+[node name="SectionControls" type="HBoxContainer" parent="Row/AudioControls" unique_id=214450113]
+layout_mode = 2
+
+[node name="LeadButton" type="Button" parent="Row/AudioControls/SectionControls" unique_id=1891490615]
+toggle_mode = true
+layout_mode = 2
+tooltip_text = "Set this track as the section lead"
+theme_type_variation = &"AppLeadButton"
+text = "Lead"
+
+[node name="PatternLength" type="SpinBox" parent="Row/AudioControls/SectionControls" unique_id=988161622]
+layout_mode = 2
+tooltip_text = "Number of measures in this track's repeating section pattern"
+theme_type_variation = &"DrumPatternLength"
+max_value = 1.0
+
+[node name="TrackVolume" type="HSlider" parent="Row/AudioControls" unique_id=614968872]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_type_variation = &"DrumVolumeSlider"
+min_value = -80.0
+max_value = 20.0
+
+[node name="LowerLayout" type="HBoxContainer" parent="Row/AudioControls" unique_id=1410209002]
+layout_mode = 2
+
+[node name="MuteButton" type="Button" parent="Row/AudioControls/LowerLayout" unique_id=199014723]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+tooltip_text = "Mute this drum track"
+theme_type_variation = &"AppMuteButton"
+text = "M"
+
+[node name="SoloButton" type="Button" parent="Row/AudioControls/LowerLayout" unique_id=399762016]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+tooltip_text = "Solo this drum track"
+theme_type_variation = &"AppSoloButton"
+text = "S"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Row/AudioControls/LowerLayout" unique_id=1885649337]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="VolumeFeedbackLabel" type="Label" parent="Row/AudioControls/LowerLayout" unique_id=1653048830]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DrumVolumeLabel"

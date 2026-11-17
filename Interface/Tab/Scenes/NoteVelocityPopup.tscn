@@ -1,0 +1,161 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Interface/Tab/Scripts/NoteVelocityPopup.cs" id="1_script"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="2_theme"]
+[ext_resource type="StyleBox" uid="uid://cqglgxgj6twcc" path="res://Interface/Themes/Panels/popup.tres" id="3_panel"]
+
+[node name="NoteVelocityPopup" type="PopupPanel"]
+theme = ExtResource("2_theme")
+size = Vector2i(248, 252)
+theme_override_styles/panel = ExtResource("3_panel")
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Row" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Margin/Content/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Velocity"
+vertical_alignment = 1
+
+[node name="LevelSlider" type="HSlider" parent="Margin/Content/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 5.0
+step = 1.0
+value = 3.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="ValueLabel" type="Label" parent="Margin/Content/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(18, 0)
+layout_mode = 2
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SelectionFeedback" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Editing 2 notes"
+visible = false
+
+[node name="TupletRow" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TupletTitle" type="Label" parent="Margin/Content/TupletRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tuplet"
+vertical_alignment = 1
+
+[node name="TupletOption" type="OptionButton" parent="Margin/Content/TupletRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 5
+popup/item_0/text = "Mixed"
+popup/item_0/id = -1
+popup/item_1/text = "Normal"
+popup/item_1/id = 0
+popup/item_2/text = "Triplet (3:2)"
+popup/item_2/id = 3
+popup/item_3/text = "Quintuplet (5:4)"
+popup/item_3/id = 5
+popup/item_4/text = "Sextuplet (6:4)"
+popup/item_4/id = 6
+
+[node name="ArticulationRow" type="HBoxContainer" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ArticulationTitle" type="Label" parent="Margin/Content/ArticulationRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Incoming"
+vertical_alignment = 1
+
+[node name="HammerOnButton" type="Button" parent="Margin/Content/ArticulationRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 28)
+layout_mode = 2
+text = "H"
+tooltip_text = "Hammer on from the previous note on this string"
+
+[node name="PullOffButton" type="Button" parent="Margin/Content/ArticulationRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 28)
+layout_mode = 2
+text = "P"
+tooltip_text = "Pull off from the previous note on this string"
+
+[node name="ClearArticulationButton" type="Button" parent="Margin/Content/ArticulationRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 28)
+layout_mode = 2
+text = "Clear"
+tooltip_text = "Clear the incoming articulation"
+
+[node name="PreviewArticulationButton" type="Button" parent="Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+text = "Preview connected pair"
+
+[node name="VariationRow" type="HBoxContainer" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="VariationTitle" type="Label" parent="Margin/Content/VariationRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound"
+vertical_alignment = 1
+
+[node name="VariationOption" type="OptionButton" parent="Margin/Content/VariationRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EffectsRow" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="EffectsFeedback" type="Label" parent="Margin/Content/EffectsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Note effects"
+vertical_alignment = 1
+
+[node name="EffectsButton" type="Button" parent="Margin/Content/EffectsRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Edit curves…"

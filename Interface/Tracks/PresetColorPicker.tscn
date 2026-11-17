@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://bq8rlf7q1txfy"]
+
+[ext_resource type="Script" path="res://Interface/Tracks/preset_color_picker.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_border"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.48, 0.52, 0.58, 1)
+
+[node name="PresetColorPicker" type="Button" unique_id=1590101848]
+custom_minimum_size = Vector2(32, 32)
+toggle_mode = false
+flat = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_border")
+theme_override_styles/hover = SubResource("StyleBoxFlat_border")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_border")
+script = ExtResource("1")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2068112354]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+

@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://dnconejl1e5g5"]
+
+[ext_resource type="PackedScene" uid="uid://07mapix6umfh" path="res://Interface/DrumKit/Scenes/sectioned_volume.tscn" id="1_vn2v5"]
+[ext_resource type="Texture2D" uid="uid://bdtj5fog6oo07" path="res://Interface/Common/Graphs/plain-circle_delapouite.png" id="2_jg12l"]
+[ext_resource type="Texture2D" uid="uid://cs8a1qe8gxhxo" path="res://Interface/Common/Graphs/note-values/quarter-rest.svg" id="3_37wee"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="4_theme"]
+
+[node name="BeatEditorContainer" type="PanelContainer" unique_id=1301594673]
+editor_description = "Individual beat editor"
+custom_minimum_size = Vector2(76, 0)
+offset_left = 1.0
+offset_right = 77.0
+offset_bottom = 105.0
+size_flags_horizontal = 3
+theme = ExtResource("4_theme")
+theme_type_variation = &"BeatEditorPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=695473548]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1732286878]
+layout_mode = 2
+
+[node name="SectionedVolume" parent="VBoxContainer/HBoxContainer" unique_id=1593590891 instance=ExtResource("1_vn2v5")]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+size_flags_horizontal = 1
+
+[node name="ControlSection" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=109159625]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ControlSection" unique_id=599976767]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="DottetNoteButton" type="Button" parent="VBoxContainer/HBoxContainer/ControlSection/HBoxContainer" unique_id=1204717443]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"BeatDotButton"
+toggle_mode = true
+icon = ExtResource("2_jg12l")
+icon_alignment = 1
+expand_icon = true
+
+[node name="RemoveThisBeatButton" type="Button" parent="VBoxContainer/HBoxContainer/ControlSection/HBoxContainer" unique_id=1183601409]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+theme_type_variation = &"BeatRemoveButton"
+theme_override_font_sizes/font_size = 9
+text = "X"
+
+[node name="OnOffButton" type="Button" parent="VBoxContainer/HBoxContainer/ControlSection" unique_id=1713494545]
+editor_description = "Defines whether this track is played in this beat. The icon shows the rhythmic value; a rest icon means the track is silent."
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"BeatToggleButton"
+icon = ExtResource("3_37wee")
+icon_alignment = 1
+expand_icon = true
+
+[node name="BeatTempoContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1684139371]
+layout_mode = 2
+
+[node name="BeatTimeValueMinusButton" type="Button" parent="VBoxContainer/BeatTempoContainer" unique_id=2061104031]
+custom_minimum_size = Vector2(20, 24)
+layout_mode = 2
+size_flags_vertical = 5
+theme_type_variation = &"BeatDurationButton"
+text = "−"
+
+[node name="BeatTimeValueFeedback" type="Label" parent="VBoxContainer/BeatTempoContainer" unique_id=1772362334]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BeatTimeValuePlusButton" type="Button" parent="VBoxContainer/BeatTempoContainer" unique_id=2061104032]
+custom_minimum_size = Vector2(20, 24)
+layout_mode = 2
+size_flags_vertical = 5
+theme_type_variation = &"BeatDurationButton"
+text = "+"
+
+[node name="RealizeBeatButton" type="Button" parent="." unique_id=927053756]
+visible = false
+layout_mode = 2
+theme_type_variation = &"BeatCreateButton"
+theme_override_font_sizes/font_size = 48
+text = "+"

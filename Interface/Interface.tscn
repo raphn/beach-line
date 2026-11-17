@@ -1,0 +1,313 @@
+[gd_scene format=3 uid="uid://mgy0d5oyp16e"]
+
+[ext_resource type="PackedScene" uid="uid://m7p1t0v0p2w1" path="res://Interface/GuitarFretboard/Scenes/guitar_fret_board.tscn" id="1_7ljt0"]
+[ext_resource type="Texture2D" uid="uid://wohrrpvqbirw" path="res://Interface/Common/Graphs/play-menu/play-button_guard13007.png" id="2_bs6tl"]
+[ext_resource type="PackedScene" uid="uid://csliq1ruwcp00" path="res://Interface/Keyboard/Scenes/keyboard.tscn" id="2_iiqm2"]
+[ext_resource type="Texture2D" uid="uid://77m2fjjg1e65" path="res://Interface/Common/Graphs/play-menu/plain-square_delapouite.png" id="3_bs6tl"]
+[ext_resource type="Script" uid="uid://bdj6rmgwrgxt2" path="res://Interface/DrumKit/Scripts/DrumScorePresenter.cs" id="3_drum_score_presenter"]
+[ext_resource type="Texture2D" uid="uid://dcj3hysgue38v" path="res://Interface/Common/Graphs/play-menu/play-loop.png" id="4_loop"]
+[ext_resource type="PackedScene" uid="uid://bubkeivdai7we" path="res://Interface/Sections/Scenes/sections_navigation.tscn" id="7_vaal7"]
+[ext_resource type="PackedScene" uid="uid://cv5qaibiau3n0" path="res://Interface/Sections/Scenes/sections_arrangement.tscn" id="10_5y088"]
+[ext_resource type="Texture2D" uid="uid://ban4wqqgccvhy" path="res://Interface/Common/Graphs/play-menu/count-in.svg" id="count_in_icon"]
+[ext_resource type="Texture2D" uid="uid://q1nc8al8l1tf" path="res://Interface/Common/Graphs/play-menu/count-in-loop.svg" id="count_in_loop_icon"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="drum_theme"]
+[ext_resource type="Texture2D" uid="uid://gph3a868exc7" path="res://Interface/Common/Graphs/play-menu/play-loop-measure.svg" id="loop_measure"]
+[ext_resource type="Texture2D" uid="uid://bikb8ssslx5ub" path="res://Interface/Common/Graphs/play-menu/play-loop-sections.svg" id="loop_sections"]
+[ext_resource type="Texture2D" uid="uid://crtp4f6glpyvj" path="res://Interface/Common/Graphs/play-menu/metronome.svg" id="metronome_icon"]
+[ext_resource type="Texture2D" uid="uid://be7yom03b4ujr" path="res://Interface/Common/Graphs/note-values/quarter.svg" id="tempo_quarter"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eba0h"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrivr"]
+draw_center = false
+
+[node name="Interface" type="PanelContainer" unique_id=2045840731]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("drum_theme")
+theme_type_variation = &"AppBackgroundContainer"
+theme_override_styles/panel = SubResource("StyleBoxFlat_eba0h")
+script = ExtResource("3_drum_score_presenter")
+
+[node name="MainContainer" type="VBoxContainer" parent="." unique_id=1004807869]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="MainContainer" unique_id=1952427848]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="MainContainer" unique_id=1500184116]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ToolsPanel" type="PanelContainer" parent="MainContainer" unique_id=1321911077]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+theme_type_variation = &"AppWorkspacePanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_xrivr")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/ToolsPanel" unique_id=1807568631]
+layout_mode = 2
+
+[node name="Toolbar" type="HFlowContainer" parent="MainContainer/ToolsPanel/VBoxContainer" unique_id=2127135329]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlaybackControlPanel" type="BoxContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar" unique_id=1698716336]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="PlayOptions" type="HBoxContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel" unique_id=1418500027]
+layout_mode = 2
+
+[node name="PlayPauseButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions" unique_id=1842747149]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"AppToggleButton"
+icon = ExtResource("2_bs6tl")
+icon_alignment = 1
+expand_icon = true
+
+[node name="StopButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions" unique_id=1884842981]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"AppActionButton"
+icon = ExtResource("3_bs6tl")
+icon_alignment = 1
+expand_icon = true
+
+[node name="VSeparator" type="VSeparator" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions" unique_id=1386174353]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LoopOptions" type="PanelContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions" unique_id=1690260374]
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/LoopOptions" unique_id=1638171758]
+layout_mode = 2
+
+[node name="LoopAllButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/LoopOptions/BoxContainer" unique_id=1812680410]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"AppToggleButton"
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("4_loop")
+icon_alignment = 1
+expand_icon = true
+
+[node name="LoopMeasureButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/LoopOptions/BoxContainer" unique_id=1507801212]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"AppToggleButton"
+toggle_mode = true
+icon = ExtResource("loop_measure")
+icon_alignment = 1
+expand_icon = true
+
+[node name="LoopSectionsButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/LoopOptions/BoxContainer" unique_id=466493641]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"AppToggleButton"
+toggle_mode = true
+icon = ExtResource("loop_sections")
+icon_alignment = 1
+expand_icon = true
+
+[node name="CountInOptions" type="PanelContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions" unique_id=742133]
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/CountInOptions" unique_id=742134]
+layout_mode = 2
+
+[node name="MetronomeButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/CountInOptions/BoxContainer" unique_id=351959917]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Toggle the playback metronome."
+theme_type_variation = &"AppToggleButton"
+toggle_mode = true
+icon = ExtResource("metronome_icon")
+icon_alignment = 1
+expand_icon = true
+
+[node name="CountInButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/CountInOptions/BoxContainer" unique_id=742135]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Add a count-in before playback."
+theme_type_variation = &"AppToggleButton"
+toggle_mode = true
+icon = ExtResource("count_in_icon")
+icon_alignment = 1
+expand_icon = true
+
+[node name="CountInEveryLoopButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/PlayOptions/CountInOptions/BoxContainer" unique_id=742136]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Repeat the count-in at each loop."
+theme_type_variation = &"AppToggleButton"
+toggle_mode = true
+icon = ExtResource("count_in_loop_icon")
+icon_alignment = 1
+expand_icon = true
+
+[node name="VSeparator2" type="VSeparator" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel" unique_id=1117129028]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TempoOptions" type="HBoxContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel" unique_id=1130680871]
+layout_mode = 2
+
+[node name="TempoIcon" type="TextureRect" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/TempoOptions" unique_id=1675530994]
+custom_minimum_size = Vector2(20, 24)
+layout_mode = 2
+texture = ExtResource("tempo_quarter")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TempoLabel" type="Label" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/TempoOptions" unique_id=1163457873]
+layout_mode = 2
+text = "BPM"
+vertical_alignment = 1
+
+[node name="TempoEdit" type="LineEdit" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/TempoOptions" unique_id=351959915]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+text = "100"
+placeholder_text = "BPM"
+alignment = 1
+select_all_on_focus = true
+
+[node name="TapTempoButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/TempoOptions" unique_id=351959916]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 32)
+layout_mode = 2
+tooltip_text = "Tap four times to set the score tempo."
+text = "Tap"
+
+[node name="VSeparator3" type="VSeparator" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/PlaybackControlPanel/TempoOptions" unique_id=1791461987]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="VSeparator4" type="VSeparator" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar" unique_id=1086285801]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AddButtons" type="BoxContainer" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar" unique_id=483440795]
+layout_mode = 2
+
+[node name="AddMidiTrackButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/AddButtons" unique_id=1795890483]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+ Add MIDI Track"
+
+[node name="AddAudioTrackButton" type="Button" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar/AddButtons" unique_id=1046169608]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+ Add Audio Track"
+
+[node name="VSeparator3" type="VSeparator" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar" unique_id=1097501668]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AudioFeedback" type="Label" parent="MainContainer/ToolsPanel/VBoxContainer/Toolbar" unique_id=1917283112]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "WAV clips play at fixed speed."
+autowrap_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/ToolsPanel/VBoxContainer" unique_id=1248481607]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SectionsFlowContainer" type="HFlowContainer" parent="MainContainer/ToolsPanel/VBoxContainer" unique_id=1419813200]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Sections" parent="MainContainer/ToolsPanel/VBoxContainer/SectionsFlowContainer" unique_id=1478239377 instance=ExtResource("7_vaal7")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SectionsArrangement" parent="MainContainer/ToolsPanel/VBoxContainer/SectionsFlowContainer" unique_id=1470689308 instance=ExtResource("10_5y088")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator3" type="HSeparator" parent="MainContainer" unique_id=242018098]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CentralControls" type="HBoxContainer" parent="MainContainer" unique_id=568811335]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="NonPercussionTracks" type="PanelContainer" parent="MainContainer/CentralControls" unique_id=525103882]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AppWorkspacePanel"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/CentralControls/NonPercussionTracks" unique_id=338462052]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Tracks" type="VBoxContainer" parent="MainContainer/CentralControls/NonPercussionTracks/ScrollContainer" unique_id=18476845]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="FloatingBoards" type="Control" parent="MainContainer/CentralControls" unique_id=480172924]
+layout_mode = 2
+
+[node name="GuitarFretBoardPopup" parent="MainContainer/CentralControls/FloatingBoards" unique_id=289655933 instance=ExtResource("1_7ljt0")]
+unique_name_in_owner = true
+position = Vector2i(0, 321)
+visible = false
+
+[node name="KeyboardPopup" parent="MainContainer/CentralControls/FloatingBoards" unique_id=232666187 instance=ExtResource("2_iiqm2")]
+unique_name_in_owner = true
+position = Vector2i(446, 364)
+visible = false

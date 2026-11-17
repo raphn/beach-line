@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[node name="MeasureVersionControls" type="HBoxContainer"]
+size_flags_horizontal = 0
+theme_type_variation = &"DrumHeaderPanel"
+
+[node name="Selector" type="OptionButton" parent="."]
+custom_minimum_size = Vector2(78, 0)
+layout_mode = 2
+tooltip_text = "Choose the version for ordinary playback; arrangements use their transition and fallback rules."
+theme_type_variation = &"DrumOptionButton"
+
+[node name="ManageButton" type="Button" parent="."]
+custom_minimum_size = Vector2(28, 24)
+layout_mode = 2
+tooltip_text = "Manage measure versions and arrangement rules"
+theme_type_variation = &"DrumActionButton"
+text = "…"

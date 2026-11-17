@@ -1,0 +1,218 @@
+[gd_scene format=3 uid="uid://bom5ffsbsm3lk"]
+
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="1_7jf17"]
+[ext_resource type="Script" uid="uid://b22pvybsuo2kt" path="res://Interface/GuitarFretboard/Scripts/guitar_fret_editor.gd" id="2_ckfwo"]
+
+[node name="String" type="HBoxContainer" unique_id=364381910]
+custom_minimum_size = Vector2(0, 24)
+size_flags_vertical = 4
+theme = ExtResource("1_7jf17")
+
+[node name="StringLabel" type="Label" parent="." unique_id=1587379642]
+custom_minimum_size = Vector2(62, 0)
+layout_mode = 2
+vertical_alignment = 1
+
+[node name="0" type="Button" parent="." unique_id=1133716471]
+custom_minimum_size = Vector2(18, 0)
+layout_mode = 2
+size_flags_vertical = 5
+theme_type_variation = &"HandFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="1" type="Button" parent="." unique_id=528788625]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="2" type="Button" parent="." unique_id=364804520]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="3" type="Button" parent="." unique_id=1082645203]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="4" type="Button" parent="." unique_id=140676264]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="5" type="Button" parent="." unique_id=144301930]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="6" type="Button" parent="." unique_id=1429693032]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="7" type="Button" parent="." unique_id=2007529090]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="8" type="Button" parent="." unique_id=1708543124]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="9" type="Button" parent="." unique_id=939903935]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="10" type="Button" parent="." unique_id=1060808140]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="11" type="Button" parent="." unique_id=4647914]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="12" type="Button" parent="." unique_id=1880390762]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="13" type="Button" parent="." unique_id=2015129627]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="14" type="Button" parent="." unique_id=307912311]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="15" type="Button" parent="." unique_id=1385252978]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="16" type="Button" parent="." unique_id=689868051]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="17" type="Button" parent="." unique_id=1243030364]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="18" type="Button" parent="." unique_id=1148704317]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="19" type="Button" parent="." unique_id=1606343844]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="20" type="Button" parent="." unique_id=1026136343]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="21" type="Button" parent="." unique_id=1977345361]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="22" type="Button" parent="." unique_id=2064539726]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="23" type="Button" parent="." unique_id=1400309119]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"Fret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="24" type="Button" parent="." unique_id=520405051]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_type_variation = &"MarkFret"
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+
+[node name="Editor" type="Node" parent="." unique_id=1550488997 node_paths=PackedStringArray("root")]
+script = ExtResource("2_ckfwo")
+root = NodePath("..")

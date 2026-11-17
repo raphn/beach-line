@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Interface/Common/Scripts/AudioSectionTimeline.cs" id="1_timeline"]
+
+[node name="AudioTimelineShell" type="VBoxContainer"]
+
+[node name="ContextLabel" type="Label" parent="."]
+layout_mode = 2
+
+[node name="AudioTimelineScroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 90)
+vertical_scroll_mode = 0
+
+[node name="AudioTimeline" type="Control" parent="AudioTimelineScroll"]
+layout_mode = 2
+script = ExtResource("1_timeline")

@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://bchq3c0p2epv4"]
+
+[ext_resource type="Script" uid="uid://jc610jjm5uhb" path="res://Interface/Keyboard/Scripts/key_editor.gd" id="1_qh24l"]
+
+[ext_resource type="Theme" path="res://Interface/Themes/main.tres" id="app_theme"]
+
+[node name="Octave" type="HBoxContainer" unique_id=1327015819]
+theme = ExtResource("app_theme")
+theme_override_constants/separation = 1
+
+[node name="DoReMi" type="MarginContainer" parent="." unique_id=474776546]
+layout_mode = 2
+
+[node name="Whites" type="HBoxContainer" parent="DoReMi" unique_id=1656345354]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Key" type="Button" parent="DoReMi/Whites" unique_id=206881912]
+custom_minimum_size = Vector2(16, 64)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+toggle_mode = true
+
+[node name="Key3" type="Button" parent="DoReMi/Whites" unique_id=1339827633]
+custom_minimum_size = Vector2(16, 64)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+toggle_mode = true
+
+[node name="Key5" type="Button" parent="DoReMi/Whites" unique_id=1611180016]
+custom_minimum_size = Vector2(16, 64)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+toggle_mode = true
+
+[node name="Blacks" type="HBoxContainer" parent="DoReMi" unique_id=399765792]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 1
+
+[node name="Key2" type="Button" parent="DoReMi/Blacks" unique_id=1173235097]
+custom_minimum_size = Vector2(16, 40)
+layout_mode = 2
+theme_type_variation = &"BlackKey"
+toggle_mode = true
+
+[node name="Key4" type="Button" parent="DoReMi/Blacks" unique_id=1339566431]
+custom_minimum_size = Vector2(16, 40)
+layout_mode = 2
+theme_type_variation = &"BlackKey"
+toggle_mode = true
+
+[node name="FaSolLaSi" type="MarginContainer" parent="." unique_id=934607333]
+layout_mode = 2
+
+[node name="Whites" type="HBoxContainer" parent="FaSolLaSi" unique_id=1044113743]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Key6" type="Button" parent="FaSolLaSi/Whites" unique_id=1825144807]
+custom_minimum_size = Vector2(16, 64)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+toggle_mode = true
+
+[node name="Key8" type="Button" parent="FaSolLaSi/Whites" unique_id=2120155073]
+custom_minimum_size = Vector2(16, 64)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+toggle_mode = true
+
+[node name="Key10" type="Button" parent="FaSolLaSi/Whites" unique_id=1790644267]
+custom_minimum_size = Vector2(16, 64)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+toggle_mode = true
+
+[node name="Key12" type="Button" parent="FaSolLaSi/Whites" unique_id=175512667]
+custom_minimum_size = Vector2(16, 64)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+toggle_mode = true
+
+[node name="Blacks" type="HBoxContainer" parent="FaSolLaSi" unique_id=465755659]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 1
+
+[node name="Key7" type="Button" parent="FaSolLaSi/Blacks" unique_id=1455155532]
+custom_minimum_size = Vector2(16, 40)
+layout_mode = 2
+theme_type_variation = &"BlackKey"
+toggle_mode = true
+
+[node name="Key9" type="Button" parent="FaSolLaSi/Blacks" unique_id=1682109043]
+custom_minimum_size = Vector2(16, 40)
+layout_mode = 2
+theme_type_variation = &"BlackKey"
+toggle_mode = true
+
+[node name="Key11" type="Button" parent="FaSolLaSi/Blacks" unique_id=961622517]
+custom_minimum_size = Vector2(16, 40)
+layout_mode = 2
+theme_type_variation = &"BlackKey"
+toggle_mode = true
+
+[node name="Editor" type="Node" parent="." unique_id=621709599 node_paths=PackedStringArray("root", "whites", "blacks", "hboxs")]
+script = ExtResource("1_qh24l")
+h_box_gap = 1
+root = NodePath("..")
+whites = [NodePath("../DoReMi/Whites/Key"), NodePath("../DoReMi/Whites/Key3"), NodePath("../DoReMi/Whites/Key5"), NodePath("../FaSolLaSi/Whites/Key6"), NodePath("../FaSolLaSi/Whites/Key8"), NodePath("../FaSolLaSi/Whites/Key10"), NodePath("../FaSolLaSi/Whites/Key12")]
+blacks = [NodePath("../DoReMi/Blacks/Key2"), NodePath("../DoReMi/Blacks/Key4"), NodePath("../FaSolLaSi/Blacks/Key7"), NodePath("../FaSolLaSi/Blacks/Key9"), NodePath("../FaSolLaSi/Blacks/Key11")]
+hboxs = [NodePath("../DoReMi/Whites"), NodePath("../DoReMi/Blacks"), NodePath("../FaSolLaSi/Whites"), NodePath("../FaSolLaSi/Blacks"), NodePath("..")]

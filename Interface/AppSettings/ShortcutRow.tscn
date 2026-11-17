@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[node name="ShortcutRow" type="HBoxContainer"]
+theme_override_constants/separation = 12
+
+[node name="ActionLabel" type="Label" parent="." unique_id=1681720290]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_alignment = 1
+
+[node name="BindingButton" type="Button" parent="." unique_id=606704951]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(190, 0)
+focus_mode = 2

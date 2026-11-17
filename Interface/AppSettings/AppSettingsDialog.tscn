@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://dpbw0e14fylio"]
+
+[ext_resource type="Script" uid="uid://o78gssqjjwh6" path="res://Interface/AppSettings/AppSettingsDialog.cs" id="1_script"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ps1os"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.14117648, 0.14117648, 0.14117648, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="AppSettingsDialog" type="Window" unique_id=772544700]
+oversampling_override = 1.0
+title = "Settings"
+position = Vector2i(0, 28)
+size = Vector2i(680, 520)
+exclusive = true
+min_size = Vector2i(560, 420)
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=948383075]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=1012824719]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SettingsTabs" type="TabContainer" parent="Margin/Layout" unique_id=1495811103]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ps1os")
+current_tab = 0
+
+[node name="Language" type="VBoxContainer" parent="Margin/Layout/SettingsTabs" unique_id=1639857000]
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 0
+
+[node name="LanguageLabel" type="Label" parent="Margin/Layout/SettingsTabs/Language" unique_id=891773441]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Interface language"
+
+[node name="Locale" type="OptionButton" parent="Margin/Layout/SettingsTabs/Language" unique_id=1339591194]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 2
+popup/item_0/text = "English"
+popup/item_0/id = 0
+popup/item_1/text = "Português (Brasil)"
+popup/item_1/id = 1
+
+[node name="LanguageHelp" type="Label" parent="Margin/Layout/SettingsTabs/Language" unique_id=590961191]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Language changes apply immediately."
+
+[node name="Shortcuts" type="VBoxContainer" parent="Margin/Layout/SettingsTabs" unique_id=1129357315]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+metadata/_tab_index = 1
+
+[node name="ShortcutsScroll" type="ScrollContainer" parent="Margin/Layout/SettingsTabs/Shortcuts" unique_id=262267761]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ShortcutsList" type="VBoxContainer" parent="Margin/Layout/SettingsTabs/Shortcuts/ShortcutsScroll" unique_id=803677822]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="ShortcutFeedback" type="Label" parent="Margin/Layout/SettingsTabs/Shortcuts" unique_id=1415340507]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="Footer" type="HBoxContainer" parent="Margin/Layout" unique_id=594690561]
+layout_mode = 2
+alignment = 2
+
+[node name="Spacer" type="Control" parent="Margin/Layout/Footer" unique_id=1432352204]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResetShortcuts" type="Button" parent="Margin/Layout/Footer" unique_id=1246126981]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset shortcuts"

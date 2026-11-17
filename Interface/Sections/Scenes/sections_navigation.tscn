@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bubkeivdai7we"]
+
+[node name="Sections" type="PanelContainer" unique_id=1478239377]
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"AppWorkspacePanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2071037136]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=197751030]
+layout_mode = 2
+text = "Sections"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1212925174]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer2" unique_id=1212925175]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_scroll_mode = 0
+
+[node name="SectionButtons" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/ScrollContainer" unique_id=1212925176]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddButton" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1116091792]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Add a section"
+theme_type_variation = &"AppActionButton"
+theme_override_font_sizes/font_size = 26
+text = "+"

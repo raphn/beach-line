@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[node name="ExportOptions" type="Window"]
+visible = false
+title = "Export"
+size = Vector2i(580, 300)
+min_size = Vector2i(460, 250)
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="ScopeLabel" type="Label" parent="Margin/Content"]
+layout_mode = 2
+text = "Audio scope"
+
+[node name="Scope" type="OptionButton" parent="Margin/Content"]
+layout_mode = 2
+tooltip_text = "Choose the whole score or the selected arrangement for audio export."
+
+[node name="FormatLabel" type="Label" parent="Margin/Content"]
+layout_mode = 2
+text = "Audio format"
+
+[node name="Format" type="OptionButton" parent="Margin/Content"]
+layout_mode = 2
+tooltip_text = "WAV is built in. FLAC, Ogg Vorbis, and MP3 require FFmpeg installed and available on PATH."
+
+[node name="AudioButton" type="Button" parent="Margin/Content"]
+layout_mode = 2
+text = "Export audio…"
+tooltip_text = "Render the selected scope to an audio file."
+
+[node name="ProjectButton" type="Button" parent="Margin/Content"]
+layout_mode = 2
+text = "Export portable project…"
+tooltip_text = "Save an independent .otab project including its audio media for use on another computer."
+
+[node name="CancelExport" type="Button" parent="Margin/Content"]
+visible = false
+layout_mode = 2
+text = "Cancel export"
+tooltip_text = "Cancel the audio export and remove its temporary files."
+[node name="Status" type="Label" parent="Margin/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Audio export uses the current output sample rate."
+autowrap_mode = 2
+
+[node name="AudioFile" type="FileDialog" parent="."]
+title = "Export audio"
+file_mode = 4
+access = 2
+
+[node name="ProjectFile" type="FileDialog" parent="."]
+title = "Export portable project"
+file_mode = 4
+access = 2
+filters = PackedStringArray("*.otab ; Portable BeachLine project")

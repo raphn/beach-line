@@ -1,0 +1,30 @@
+# Godot, IDE and generated files
+.godot/
+.godot-userdata/
+.codex-temp-godot/
+.vs/
+**/bin/
+**/obj/
+desktop.ini
+_tmp_*
+/android/
+/export_templates/
+/feature_profiles/
+/script_templates/
+/text_editor_themes/
+
+# Local-only creative source files and artwork awaiting redistribution clearance
+*.kra
+*.kra~
+/Interface/Common/Graphs/instruments/*.png
+/Interface/Common/Graphs/instruments/*.png.import
+/Interface/Common/Graphs/instruments/percussion-kit.svg
+/Interface/Common/Graphs/instruments/percussion-kit.svg.import
+/Interface/DrumKit/Graphs/icon-set*
+/Interface/DrumKit/Graphs/*.atlastex
+/Interface/DrumKit/Graphs/*.depren
+/Interface/Common/Graphs/note-values/all-note-values.jpg
+/Interface/Common/Graphs/note-values/all-note-values.jpg.import
+
+# Editor backups
+*~

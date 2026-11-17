@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://c3gogpx2soalo"]
+
+[node name="ClipControls" type="HFlowContainer" unique_id=1834865332]
+
+[node name="AssetFileName" type="Label" parent="." unique_id=1767216335]
+layout_mode = 2
+
+[node name="Start" type="SpinBox" parent="." unique_id=393285784]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+tooltip_text = "Clip start in quarter notes. Changes take effect immediately."
+max_value = 100000.0
+step = 0.001
+update_on_text_changed = true
+prefix = "Start "
+
+[node name="Offset" type="SpinBox" parent="." unique_id=673634733]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+tooltip_text = "First source sample frame. Changes take effect immediately; the original WAV is retained."
+max_value = 1.0
+update_on_text_changed = true
+prefix = "Offset "
+
+[node name="Duration" type="SpinBox" parent="." unique_id=1673995659]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+tooltip_text = "Clip duration in source sample frames. Changes take effect immediately."
+min_value = 1.0
+max_value = 1.0
+value = 1.0
+update_on_text_changed = true
+prefix = "Duration "
+
+[node name="Remove" type="Button" parent="." unique_id=1822178425]
+layout_mode = 2
+tooltip_text = "Remove this clip from the timeline. The source WAV is kept."
+theme_type_variation = &"AppActionButton"
+text = "Remove"
+
+[node name="OutsideTimeline" type="Label" parent="." unique_id=836909989]
+visible = false
+layout_mode = 2
+tooltip_text = "Change Start to move this preserved clip into the section."
+text = "Outside timeline"

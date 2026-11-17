@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://dgwj4r8a67qcx"]
+
+[node name="ChordInsertingOptions" type="BoxContainer" unique_id=1549772661]
+
+[node name="ChordNaming_Composer" type="BoxContainer" parent="." unique_id=456863619]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ChordNaming_Composer" unique_id=921749656]
+layout_mode = 2
+text = "Chord"
+
+[node name="Chord" type="OptionButton" parent="ChordNaming_Composer" unique_id=961457723]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 7
+popup/item_0/text = "A"
+popup/item_0/id = 0
+popup/item_1/text = "B"
+popup/item_1/id = 1
+popup/item_2/text = "C"
+popup/item_2/id = 2
+popup/item_3/text = "D"
+popup/item_3/id = 3
+popup/item_4/text = "E"
+popup/item_4/id = 4
+popup/item_5/text = "F"
+popup/item_5/id = 5
+popup/item_6/text = "G"
+popup/item_6/id = 6
+
+[node name="SharpBemol" type="OptionButton" parent="ChordNaming_Composer" unique_id=1592867469]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+flat = true
+alignment = 1
+selected = 0
+fit_to_longest_item = false
+item_count = 2
+popup/item_0/text = "Nat"
+popup/item_0/id = 0
+popup/item_1/text = "#"
+popup/item_1/id = 1
+
+[node name="MajorMinorselector" type="OptionButton" parent="ChordNaming_Composer" unique_id=1085663999]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 3
+popup/item_0/text = "M"
+popup/item_0/id = 0
+popup/item_1/text = "m"
+popup/item_1/id = 1
+popup/item_2/text = "dim"
+popup/item_2/id = 2
+
+[node name="Alteration1" type="OptionButton" parent="ChordNaming_Composer" unique_id=473923381]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 5
+popup/item_0/text = "_"
+popup/item_0/id = 0
+popup/item_1/text = "7"
+popup/item_1/id = 1
+popup/item_2/text = "7+"
+popup/item_2/id = 2
+popup/item_3/text = "9"
+popup/item_3/id = 3
+popup/item_4/text = "11"
+popup/item_4/id = 4
+
+[node name="Alteration2" type="OptionButton" parent="ChordNaming_Composer" unique_id=1642486006]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 5
+popup/item_0/text = "_"
+popup/item_0/id = 0
+popup/item_1/text = "7"
+popup/item_1/id = 1
+popup/item_2/text = "7+"
+popup/item_2/id = 2
+popup/item_3/text = "9"
+popup/item_3/id = 3
+popup/item_4/text = "11"
+popup/item_4/id = 4
+
+[node name="Control" type="Control" parent="." unique_id=1129828561]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CreateModeToggle" type="Button" parent="." unique_id=2067499267]
+layout_mode = 2
+toggle_mode = true
+text = "Create Mode"
+
+[node name="InsertChordToggle" type="Button" parent="." unique_id=1808367436]
+layout_mode = 2
+toggle_mode = true
+text = "Insert Chord"

@@ -1,0 +1,947 @@
+[gd_resource type="Theme" format=3 uid="uid://b4ged874cqvaq"]
+
+[ext_resource type="StyleBox" uid="uid://c318awgbqouqo" path="res://Interface/DrumKit/Themes/Buttons/OnOff/normal.tres" id="1"]
+[ext_resource type="StyleBox" uid="uid://lvne84yrw3yg" path="res://Interface/DrumKit/Themes/Buttons/OnOff/hover.tres" id="2"]
+[ext_resource type="StyleBox" uid="uid://bk54yjmiq8c3t" path="res://Interface/DrumKit/Themes/Buttons/OnOff/pressed.tres" id="3"]
+[ext_resource type="StyleBox" uid="uid://cv84qx7q7ts17" path="res://Interface/DrumKit/Themes/Buttons/OnOff/hover_pressed.tres" id="4"]
+[ext_resource type="StyleBox" uid="uid://g1hegcf0d4p3" path="res://Interface/DrumKit/Themes/Buttons/OnOff/disabled.tres" id="5"]
+[ext_resource type="StyleBox" uid="uid://upq4dq4owuey" path="res://Interface/DrumKit/Themes/Buttons/OnOff/focus.tres" id="6"]
+[ext_resource type="StyleBox" uid="uid://cfiup5ngomxev" path="res://Interface/DrumKit/Themes/Buttons/BeatDot/normal.tres" id="7"]
+[ext_resource type="StyleBox" uid="uid://db0gfgxdw4kng" path="res://Interface/DrumKit/Themes/Buttons/BeatDot/hover.tres" id="8"]
+[ext_resource type="StyleBox" uid="uid://belrxm64ywmc6" path="res://Interface/DrumKit/Themes/Buttons/BeatDot/pressed.tres" id="9"]
+[ext_resource type="StyleBox" uid="uid://c3bt3vv3nk8sr" path="res://Interface/DrumKit/Themes/Buttons/BeatDot/hover_pressed.tres" id="10"]
+[ext_resource type="StyleBox" uid="uid://kj52a5ydj6a4" path="res://Interface/DrumKit/Themes/Buttons/BeatDot/disabled.tres" id="11"]
+[ext_resource type="StyleBox" uid="uid://fefphmh3qjta" path="res://Interface/DrumKit/Themes/Buttons/BeatDot/focus.tres" id="12"]
+[ext_resource type="StyleBox" uid="uid://y4eh3wkg54gd" path="res://Interface/DrumKit/Themes/Buttons/BeatRemove/normal.tres" id="13"]
+[ext_resource type="StyleBox" uid="uid://dt1e4mgtm28o8" path="res://Interface/DrumKit/Themes/Buttons/BeatRemove/hover.tres" id="14"]
+[ext_resource type="StyleBox" uid="uid://djp0qgwsa7rs4" path="res://Interface/DrumKit/Themes/Buttons/BeatRemove/pressed.tres" id="15"]
+[ext_resource type="StyleBox" uid="uid://cwwsbkjmxkavk" path="res://Interface/DrumKit/Themes/Buttons/BeatRemove/hover_pressed.tres" id="16"]
+[ext_resource type="StyleBox" uid="uid://dntq6pwvabje8" path="res://Interface/DrumKit/Themes/Buttons/BeatRemove/disabled.tres" id="17"]
+[ext_resource type="StyleBox" uid="uid://bxkpwkh05oln5" path="res://Interface/DrumKit/Themes/Buttons/BeatRemove/focus.tres" id="18"]
+[ext_resource type="StyleBox" uid="uid://ylcrkgdtwf38" path="res://Interface/DrumKit/Themes/Buttons/BeatDuration/normal.tres" id="19"]
+[ext_resource type="StyleBox" uid="uid://dkhj21env3w0r" path="res://Interface/DrumKit/Themes/Buttons/BeatDuration/hover.tres" id="20"]
+[ext_resource type="StyleBox" uid="uid://cwy2a5y87uk17" path="res://Interface/DrumKit/Themes/Buttons/BeatDuration/pressed.tres" id="21"]
+[ext_resource type="StyleBox" uid="uid://duerqjq7blhl3" path="res://Interface/DrumKit/Themes/Buttons/BeatDuration/hover_pressed.tres" id="22"]
+[ext_resource type="StyleBox" uid="uid://dryx8rqx0o7xd" path="res://Interface/DrumKit/Themes/Buttons/BeatDuration/disabled.tres" id="23"]
+[ext_resource type="StyleBox" uid="uid://cb8olstyrpou7" path="res://Interface/DrumKit/Themes/Buttons/BeatDuration/focus.tres" id="24"]
+[ext_resource type="StyleBox" uid="uid://80rfo5w7y5ji" path="res://Interface/DrumKit/Themes/Buttons/Realize/normal.tres" id="25"]
+[ext_resource type="StyleBox" uid="uid://m2w1u5dw8hnd" path="res://Interface/DrumKit/Themes/Buttons/Realize/hover.tres" id="26"]
+[ext_resource type="StyleBox" uid="uid://briaiemny0png" path="res://Interface/DrumKit/Themes/Buttons/Realize/pressed.tres" id="27"]
+[ext_resource type="StyleBox" uid="uid://datp3tstyomgx" path="res://Interface/DrumKit/Themes/Buttons/Realize/hover_pressed.tres" id="28"]
+[ext_resource type="StyleBox" uid="uid://dkwu8ebxtbeyl" path="res://Interface/DrumKit/Themes/Buttons/Realize/disabled.tres" id="29"]
+[ext_resource type="StyleBox" uid="uid://bbr5tr1v3ecjt" path="res://Interface/DrumKit/Themes/Buttons/Realize/focus.tres" id="30"]
+[ext_resource type="StyleBox" uid="uid://cj08tql6nleln" path="res://Interface/DrumKit/Themes/Buttons/Volume/normal.tres" id="31"]
+[ext_resource type="StyleBox" uid="uid://176wh3yvr1ha" path="res://Interface/DrumKit/Themes/Buttons/Volume/hover.tres" id="32"]
+[ext_resource type="StyleBox" uid="uid://bbfqsonbs84hh" path="res://Interface/DrumKit/Themes/Buttons/Volume/pressed.tres" id="33"]
+[ext_resource type="StyleBox" uid="uid://5insd0wghvhf" path="res://Interface/DrumKit/Themes/Buttons/Volume/hover_pressed.tres" id="34"]
+[ext_resource type="StyleBox" uid="uid://rkeu2345q7x1" path="res://Interface/DrumKit/Themes/Buttons/Volume/disabled.tres" id="35"]
+[ext_resource type="StyleBox" uid="uid://kwql71xh0g1n" path="res://Interface/DrumKit/Themes/Buttons/Volume/focus.tres" id="36"]
+[ext_resource type="StyleBox" uid="uid://clp67wy1s4uxj" path="res://Interface/DrumKit/Themes/Panels/beat_editor.tres" id="37"]
+[ext_resource type="StyleBox" uid="uid://bka53d3b3i5ua" path="res://Interface/DrumKit/Themes/Panels/drum_panel.tres" id="38"]
+[ext_resource type="StyleBox" uid="uid://byvdye8qe8570" path="res://Interface/DrumKit/Themes/Panels/drum_header_panel.tres" id="39"]
+[ext_resource type="StyleBox" uid="uid://1xrfu1hoo0gm" path="res://Interface/DrumKit/Themes/Panels/fold_title.tres" id="40"]
+[ext_resource type="StyleBox" uid="uid://co0mov3c6emji" path="res://Interface/DrumKit/Themes/Panels/fold_hover.tres" id="41"]
+[ext_resource type="StyleBox" uid="uid://djhi83obns0go" path="res://Interface/DrumKit/Themes/Panels/fold_collapsed.tres" id="42"]
+[ext_resource type="StyleBox" uid="uid://bmu6velxhydtn" path="res://Interface/DrumKit/Themes/Panels/fold_collapsed_hover.tres" id="43"]
+[ext_resource type="StyleBox" uid="uid://oxe2qxh5b14k" path="res://Interface/DrumKit/Themes/Panels/fold_body.tres" id="44"]
+[ext_resource type="StyleBox" uid="uid://c8fgtwa3kbshl" path="res://Interface/DrumKit/Themes/Panels/focus.tres" id="45"]
+[ext_resource type="StyleBox" uid="uid://bhjy0ya7epbec" path="res://Interface/DrumKit/Themes/Inputs/popup_panel.tres" id="49"]
+[ext_resource type="StyleBox" uid="uid://bfbiajsa6lh34" path="res://Interface/DrumKit/Themes/Inputs/popup_hover.tres" id="50"]
+[ext_resource type="StyleBox" uid="uid://l2q7sd3q77yw" path="res://Interface/DrumKit/Themes/Inputs/scroll_track.tres" id="51"]
+[ext_resource type="StyleBox" uid="uid://3pgsanmudbi8" path="res://Interface/DrumKit/Themes/Inputs/scroll_grabber.tres" id="52"]
+[ext_resource type="StyleBox" uid="uid://c5epc3usirmex" path="res://Interface/DrumKit/Themes/Inputs/scroll_grabber_hover.tres" id="53"]
+[ext_resource type="StyleBox" uid="uid://u61kldaighhn" path="res://Interface/DrumKit/Themes/Inputs/scroll_grabber_pressed.tres" id="54"]
+[ext_resource type="StyleBox" uid="uid://hl0eycq4o37c" path="res://Interface/DrumKit/Themes/Inputs/spin_up.tres" id="61"]
+[ext_resource type="StyleBox" uid="uid://56ln7w84obx5" path="res://Interface/DrumKit/Themes/Inputs/spin_hover.tres" id="62"]
+[ext_resource type="StyleBox" uid="uid://dm721yqf4fcrk" path="res://Interface/DrumKit/Themes/Inputs/spin_pressed.tres" id="63"]
+[ext_resource type="StyleBox" uid="uid://dpg5kosyul8mc" path="res://Interface/DrumKit/Themes/Inputs/spin_disabled.tres" id="64"]
+[ext_resource type="StyleBox" uid="uid://bbfgjod2xrhm8" path="res://Interface/DrumKit/Themes/Inputs/separator.tres" id="65"]
+[ext_resource type="StyleBox" uid="uid://ddb78vjgyi4v" path="res://Interface/Themes/Panels/background.tres" id="app_background"]
+[ext_resource type="StyleBox" uid="uid://b3xyme1wu282c" path="res://Interface/Themes/Buttons/Action/disabled.tres" id="app_Buttons_Action_disabled"]
+[ext_resource type="StyleBox" uid="uid://cq7dv2oa2kw5n" path="res://Interface/Themes/Buttons/Action/focus.tres" id="app_Buttons_Action_focus"]
+[ext_resource type="StyleBox" uid="uid://nj6cpkdv0pod" path="res://Interface/Themes/Buttons/Action/hover.tres" id="app_Buttons_Action_hover"]
+[ext_resource type="StyleBox" uid="uid://biltonujhddcc" path="res://Interface/Themes/Buttons/Action/hover_pressed.tres" id="app_Buttons_Action_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://cbbl7bui5ebu7" path="res://Interface/Themes/Buttons/Action/normal.tres" id="app_Buttons_Action_normal"]
+[ext_resource type="StyleBox" uid="uid://m5h5i8037tjx" path="res://Interface/Themes/Buttons/Action/pressed.tres" id="app_Buttons_Action_pressed"]
+[ext_resource type="StyleBox" uid="uid://c2vtw0uoxxdd2" path="res://Interface/Themes/Buttons/Destructive/disabled.tres" id="app_Buttons_Destructive_disabled"]
+[ext_resource type="StyleBox" uid="uid://b6kbe80nqqvkg" path="res://Interface/Themes/Buttons/Destructive/focus.tres" id="app_Buttons_Destructive_focus"]
+[ext_resource type="StyleBox" uid="uid://b5urv38ucqgvd" path="res://Interface/Themes/Buttons/Destructive/hover.tres" id="app_Buttons_Destructive_hover"]
+[ext_resource type="StyleBox" uid="uid://dnbt5b5un5qhp" path="res://Interface/Themes/Buttons/Destructive/hover_pressed.tres" id="app_Buttons_Destructive_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://n4fc6i5nyrqx" path="res://Interface/Themes/Buttons/Destructive/normal.tres" id="app_Buttons_Destructive_normal"]
+[ext_resource type="StyleBox" uid="uid://c5u5jnnx0x2kk" path="res://Interface/Themes/Buttons/Destructive/pressed.tres" id="app_Buttons_Destructive_pressed"]
+[ext_resource type="StyleBox" uid="uid://xacvxnx1ocpm" path="res://Interface/Themes/Inputs/focus.tres" id="app_Inputs_focus"]
+[ext_resource type="StyleBox" uid="uid://r6e0qykoygoq" path="res://Interface/Themes/Inputs/hover.tres" id="app_Inputs_hover"]
+[ext_resource type="StyleBox" uid="uid://dydlovr7474s1" path="res://Interface/Themes/Inputs/normal.tres" id="app_Inputs_normal"]
+[ext_resource type="StyleBox" uid="uid://b3evaujnwrf18" path="res://Interface/Themes/Inputs/readonly.tres" id="app_Inputs_readonly"]
+[ext_resource type="StyleBox" uid="uid://b0wys00shenye" path="res://Interface/Themes/Inputs/selected.tres" id="app_Inputs_selected"]
+[ext_resource type="StyleBox" uid="uid://cp1sa6lckq8g4" path="res://Interface/Themes/Instruments/BlackKey/disabled.tres" id="app_Instruments_BlackKey_disabled"]
+[ext_resource type="StyleBox" uid="uid://chnnrw44aubjv" path="res://Interface/Themes/Instruments/BlackKey/focus.tres" id="app_Instruments_BlackKey_focus"]
+[ext_resource type="StyleBox" uid="uid://clg0pmo03jwjf" path="res://Interface/Themes/Instruments/BlackKey/hover.tres" id="app_Instruments_BlackKey_hover"]
+[ext_resource type="StyleBox" uid="uid://6j3rf7mk4kbo" path="res://Interface/Themes/Instruments/BlackKey/hover_pressed.tres" id="app_Instruments_BlackKey_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://vkescd8cinqn" path="res://Interface/Themes/Instruments/BlackKey/normal.tres" id="app_Instruments_BlackKey_normal"]
+[ext_resource type="StyleBox" uid="uid://cv0tenannvysu" path="res://Interface/Themes/Instruments/BlackKey/pressed.tres" id="app_Instruments_BlackKey_pressed"]
+[ext_resource type="StyleBox" uid="uid://c6t6k5vs2u53q" path="res://Interface/Themes/Instruments/Fret/disabled.tres" id="app_Instruments_Fret_disabled"]
+[ext_resource type="StyleBox" uid="uid://d0snqnuaedg5j" path="res://Interface/Themes/Instruments/Fret/focus.tres" id="app_Instruments_Fret_focus"]
+[ext_resource type="StyleBox" uid="uid://cxehrklskqda3" path="res://Interface/Themes/Instruments/Fret/hover.tres" id="app_Instruments_Fret_hover"]
+[ext_resource type="StyleBox" uid="uid://d0cvlkpr288bn" path="res://Interface/Themes/Instruments/Fret/hover_pressed.tres" id="app_Instruments_Fret_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://cyd18hp1fnyqb" path="res://Interface/Themes/Instruments/Fret/normal.tres" id="app_Instruments_Fret_normal"]
+[ext_resource type="StyleBox" uid="uid://b0ymm1a68yrsq" path="res://Interface/Themes/Instruments/Fret/pressed.tres" id="app_Instruments_Fret_pressed"]
+[ext_resource type="StyleBox" uid="uid://6noubyqwu43l" path="res://Interface/Themes/Instruments/HandFret/disabled.tres" id="app_Instruments_HandFret_disabled"]
+[ext_resource type="StyleBox" uid="uid://cda78334hdcak" path="res://Interface/Themes/Instruments/HandFret/focus.tres" id="app_Instruments_HandFret_focus"]
+[ext_resource type="StyleBox" uid="uid://b2mrmqu85tuvh" path="res://Interface/Themes/Instruments/HandFret/hover.tres" id="app_Instruments_HandFret_hover"]
+[ext_resource type="StyleBox" uid="uid://ciw1y2v7pil0t" path="res://Interface/Themes/Instruments/HandFret/hover_pressed.tres" id="app_Instruments_HandFret_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://wwnx7qf7yta" path="res://Interface/Themes/Instruments/HandFret/normal.tres" id="app_Instruments_HandFret_normal"]
+[ext_resource type="StyleBox" uid="uid://iqylnhqfboky" path="res://Interface/Themes/Instruments/HandFret/pressed.tres" id="app_Instruments_HandFret_pressed"]
+[ext_resource type="StyleBox" uid="uid://c4au4pleq8hqv" path="res://Interface/Themes/Instruments/MarkFret/disabled.tres" id="app_Instruments_MarkFret_disabled"]
+[ext_resource type="StyleBox" uid="uid://bc70mprgdawdd" path="res://Interface/Themes/Instruments/MarkFret/focus.tres" id="app_Instruments_MarkFret_focus"]
+[ext_resource type="StyleBox" uid="uid://bku6lct63qqs6" path="res://Interface/Themes/Instruments/MarkFret/hover.tres" id="app_Instruments_MarkFret_hover"]
+[ext_resource type="StyleBox" uid="uid://d1cdf5m3st2ee" path="res://Interface/Themes/Instruments/MarkFret/hover_pressed.tres" id="app_Instruments_MarkFret_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://clsv4pk31m02l" path="res://Interface/Themes/Instruments/MarkFret/normal.tres" id="app_Instruments_MarkFret_normal"]
+[ext_resource type="StyleBox" uid="uid://be7rawu02su56" path="res://Interface/Themes/Instruments/MarkFret/pressed.tres" id="app_Instruments_MarkFret_pressed"]
+[ext_resource type="StyleBox" uid="uid://c8ahyoq0ak4l3" path="res://Interface/Themes/Instruments/WhiteKey/disabled.tres" id="app_Instruments_WhiteKey_disabled"]
+[ext_resource type="StyleBox" uid="uid://dx816gyp2sog7" path="res://Interface/Themes/Instruments/WhiteKey/focus.tres" id="app_Instruments_WhiteKey_focus"]
+[ext_resource type="StyleBox" uid="uid://bu5yb1agmotwe" path="res://Interface/Themes/Instruments/WhiteKey/hover.tres" id="app_Instruments_WhiteKey_hover"]
+[ext_resource type="StyleBox" uid="uid://dri6s5a0mep8w" path="res://Interface/Themes/Instruments/WhiteKey/hover_pressed.tres" id="app_Instruments_WhiteKey_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://xbp3kabh7wdi" path="res://Interface/Themes/Instruments/WhiteKey/normal.tres" id="app_Instruments_WhiteKey_normal"]
+[ext_resource type="StyleBox" uid="uid://cmd57mnls2ltn" path="res://Interface/Themes/Instruments/WhiteKey/pressed.tres" id="app_Instruments_WhiteKey_pressed"]
+[ext_resource type="StyleBox" uid="uid://dy3jqj28ql3uu" path="res://Interface/Themes/Panels/inset.tres" id="app_layer_inset"]
+[ext_resource type="StyleBox" uid="uid://swgo7geyksl2" path="res://Interface/Themes/Panels/name.tres" id="app_layer_name"]
+[ext_resource type="StyleBox" uid="uid://d4jowu5p3b08t" path="res://Interface/Themes/Panels/track.tres" id="app_layer_track"]
+[ext_resource type="StyleBox" uid="uid://dpng3upffj5kf" path="res://Interface/Themes/Panels/workspace.tres" id="app_layer_workspace"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Lead/disabled.tres" id="app_lead_disabled"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Lead/focus.tres" id="app_lead_focus"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Buttons/Lead/hover.tres" id="app_lead_hover"]
+[ext_resource type="StyleBox" uid="uid://b7x2g4as2pvhd" path="res://Interface/Themes/Buttons/Lead/hover_pressed.tres" id="app_lead_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://l2621md2xhoo" path="res://Interface/Themes/Buttons/Lead/normal.tres" id="app_lead_normal"]
+[ext_resource type="StyleBox" uid="uid://cpf6tjmfthul5" path="res://Interface/Themes/Buttons/Lead/pressed.tres" id="app_lead_pressed"]
+[ext_resource type="StyleBox" uid="uid://dytw64fjuishg" path="res://Interface/Themes/Buttons/Mute/disabled.tres" id="app_mute_disabled"]
+[ext_resource type="StyleBox" uid="uid://dkcjejdfsmkvi" path="res://Interface/Themes/Buttons/Mute/focus.tres" id="app_mute_focus"]
+[ext_resource type="StyleBox" uid="uid://dsg7rbg3jwhpm" path="res://Interface/Themes/Buttons/Mute/hover.tres" id="app_mute_hover"]
+[ext_resource type="StyleBox" uid="uid://cme3ha5uodwls" path="res://Interface/Themes/Buttons/Mute/hover_pressed.tres" id="app_mute_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://2ks77oym5g1o" path="res://Interface/Themes/Buttons/Mute/normal.tres" id="app_mute_normal"]
+[ext_resource type="StyleBox" uid="uid://cq512s03jcisx" path="res://Interface/Themes/Buttons/Mute/pressed.tres" id="app_mute_pressed"]
+[ext_resource type="StyleBox" uid="uid://byrcbt3qk2efh" path="res://Interface/Themes/Panels/header.tres" id="app_Panels_header"]
+[ext_resource type="StyleBox" uid="uid://cjikg5cqwud47" path="res://Interface/Themes/Panels/panel.tres" id="app_Panels_panel"]
+[ext_resource type="StyleBox" uid="uid://cqglgxgj6twcc" path="res://Interface/Themes/Panels/popup.tres" id="app_Panels_popup"]
+[ext_resource type="StyleBox" uid="uid://ctb7jt7xbtuvn" path="res://Interface/Themes/Panels/window.tres" id="app_Panels_window"]
+[ext_resource type="StyleBox" uid="uid://yoylbr2ot2jh" path="res://Interface/Themes/Panels/window_unfocused.tres" id="app_Panels_window_unfocused"]
+[ext_resource type="Texture2D" uid="uid://c5mfybruovotq" path="res://Interface/Themes/Inputs/slider_handle_disabled.tres" id="app_slider_disabled"]
+[ext_resource type="Texture2D" uid="uid://c2n4eujysgtvq" path="res://Interface/Themes/Inputs/slider_handle_hover.tres" id="app_slider_hover"]
+[ext_resource type="Texture2D" uid="uid://bubk4m3ycowqp" path="res://Interface/Themes/Inputs/slider_handle_normal.tres" id="app_slider_normal"]
+[ext_resource type="StyleBox" uid="uid://bvvdp5k65fx2s" path="res://Interface/Themes/Buttons/Solo/disabled.tres" id="app_solo_disabled"]
+[ext_resource type="StyleBox" uid="uid://bf2qpb871rimi" path="res://Interface/Themes/Buttons/Solo/focus.tres" id="app_solo_focus"]
+[ext_resource type="StyleBox" uid="uid://diuob4rqigllf" path="res://Interface/Themes/Buttons/Solo/hover.tres" id="app_solo_hover"]
+[ext_resource type="StyleBox" uid="uid://dnrlpacxv2j3j" path="res://Interface/Themes/Buttons/Solo/hover_pressed.tres" id="app_solo_hover_pressed"]
+[ext_resource type="StyleBox" uid="uid://cemqcqkkl0rii" path="res://Interface/Themes/Buttons/Solo/normal.tres" id="app_solo_normal"]
+[ext_resource type="StyleBox" uid="uid://cxrbce1d0m3w" path="res://Interface/Themes/Buttons/Solo/pressed.tres" id="app_solo_pressed"]
+[ext_resource type="StyleBox" uid="uid://duyhicurkpis" path="res://Interface/Themes/Panels/tab_entry.tres" id="tab_entry"]
+[ext_resource type="StyleBox" uid="uid://bue254a3th01i" path="res://Interface/Themes/Panels/tab_note.tres" id="tab_note"]
+[ext_resource type="StyleBox" uid="uid://dv03p1oppd1oi" path="res://Interface/Themes/Panels/tab_note_error.tres" id="tab_note_error"]
+[ext_resource type="StyleBox" uid="uid://eg2qkv5xhsnk" path="res://Interface/Themes/Panels/tab_note_selected.tres" id="tab_note_selected"]
+[ext_resource type="StyleBox" uid="uid://u8ul8gb8mfhl" path="res://Interface/Themes/Panels/tab_panel.tres" id="tab_panel"]
+[ext_resource type="StyleBox" uid="uid://dn5dy7akso6fy" path="res://Interface/Themes/Inputs/Slider/fill.tres" id="volume_fill_thin"]
+[ext_resource type="StyleBox" uid="uid://dsbqrgwqkolwt" path="res://Interface/Themes/Inputs/Slider/highlight.tres" id="volume_highlight_thin"]
+[ext_resource type="StyleBox" path="res://Interface/Themes/Inputs/Slider/track.tres" id="volume_track_thin"]
+
+[sub_resource type="StyleBoxFlat" id="MeasureVersionSelectorHover"]
+content_margin_left = 7.0
+content_margin_top = 4.0
+content_margin_right = 7.0
+content_margin_bottom = 4.0
+bg_color = Color(0.06, 0.17, 0.19, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.24, 0.88, 0.9, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="MeasureVersionSelectorNormal"]
+content_margin_left = 7.0
+content_margin_top = 4.0
+content_margin_right = 7.0
+content_margin_bottom = 4.0
+bg_color = Color(0.035, 0.105, 0.125, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16, 0.72, 0.76, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[resource]
+AcceptDialog/styles/panel = ExtResource("app_Panels_popup")
+AppActionButton/base_type = &"Button"
+AppActionButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppActionButton/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+AppActionButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppActionButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppActionButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppActionButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppActionButton/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+AppActionButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+AppActionButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+AppActionButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppActionButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+AppActionButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppActionButton/constants/outline_size = 0
+AppActionButton/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+AppActionButton/styles/focus = ExtResource("app_Buttons_Action_focus")
+AppActionButton/styles/hover = ExtResource("app_Buttons_Action_hover")
+AppActionButton/styles/hover_pressed = ExtResource("app_Buttons_Action_hover_pressed")
+AppActionButton/styles/normal = ExtResource("app_Buttons_Action_normal")
+AppActionButton/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+AppArrangementMenuButton/base_type = &"MenuButton"
+AppArrangementMenuButton/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+AppArrangementMenuButton/styles/focus = ExtResource("app_Buttons_Action_focus")
+AppArrangementMenuButton/styles/hover = ExtResource("app_Buttons_Action_hover")
+AppArrangementMenuButton/styles/normal = ExtResource("app_Buttons_Action_normal")
+AppArrangementMenuButton/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+AppBackgroundContainer/base_type = &"PanelContainer"
+AppBackgroundContainer/styles/panel = ExtResource("app_background")
+AppBackgroundPanel/base_type = &"Panel"
+AppBackgroundPanel/styles/panel = ExtResource("app_background")
+AppDestructiveButton/base_type = &"Button"
+AppDestructiveButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppDestructiveButton/colors/font_disabled_color = Color(0.466667, 0.486275, 0.517647, 1)
+AppDestructiveButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppDestructiveButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppDestructiveButton/colors/font_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppDestructiveButton/colors/font_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppDestructiveButton/colors/icon_disabled_color = Color(0.466667, 0.486275, 0.517647, 1)
+AppDestructiveButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+AppDestructiveButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+AppDestructiveButton/colors/icon_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppDestructiveButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+AppDestructiveButton/colors/icon_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppDestructiveButton/constants/outline_size = 0
+AppDestructiveButton/styles/disabled = ExtResource("app_Buttons_Destructive_disabled")
+AppDestructiveButton/styles/focus = ExtResource("app_Buttons_Destructive_focus")
+AppDestructiveButton/styles/hover = ExtResource("app_Buttons_Destructive_hover")
+AppDestructiveButton/styles/hover_pressed = ExtResource("app_Buttons_Destructive_hover_pressed")
+AppDestructiveButton/styles/normal = ExtResource("app_Buttons_Destructive_normal")
+AppDestructiveButton/styles/pressed = ExtResource("app_Buttons_Destructive_pressed")
+AppErrorLabel/base_type = &"Label"
+AppErrorLabel/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppFoldable/base_type = &"FoldableContainer"
+AppFoldable/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppFoldable/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppFoldable/colors/font_outline_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppFoldable/styles/focus = ExtResource("app_Inputs_focus")
+AppFoldable/styles/panel = ExtResource("app_Panels_panel")
+AppFoldable/styles/title_collapsed_hover_panel = ExtResource("app_Inputs_hover")
+AppFoldable/styles/title_collapsed_panel = ExtResource("app_Panels_header")
+AppFoldable/styles/title_hover_panel = ExtResource("app_Inputs_hover")
+AppFoldable/styles/title_panel = ExtResource("app_Panels_header")
+AppHeaderPanel/base_type = &"PanelContainer"
+AppHeaderPanel/styles/panel = ExtResource("app_Panels_header")
+AppIndicators/colors/drop_target_highlight = Color(0.7, 0.55, 1, 1)
+AppIndicators/colors/linked_repeat_color = Color(0.58, 0.79, 1, 1)
+AppIndicators/colors/repeated_beat_modulate = Color(0.75, 0.75, 0.75, 1)
+AppInsetPanel/base_type = &"PanelContainer"
+AppInsetPanel/styles/panel = ExtResource("app_layer_inset")
+AppLeadActiveButton/base_type = &"AppLeadButton"
+AppLeadActiveButton/colors/font_disabled_color = Color(0.062745, 0.031373, 0.098039, 1)
+AppLeadActiveButton/colors/icon_disabled_color = Color(0.062745, 0.031373, 0.098039, 1)
+AppLeadActiveButton/styles/disabled = ExtResource("app_lead_pressed")
+AppLeadButton/base_type = &"Button"
+AppLeadButton/colors/font_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/font_disabled_color = Color(0.45, 0.45, 0.48, 1)
+AppLeadButton/colors/font_focus_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/font_hover_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/font_hover_pressed_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/font_pressed_color = Color(0.062745, 0.031373, 0.098039, 1)
+AppLeadButton/colors/icon_disabled_color = Color(0.45, 0.45, 0.48, 1)
+AppLeadButton/colors/icon_focus_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/icon_hover_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/icon_hover_pressed_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/icon_normal_color = Color(0.96, 0.94, 1, 1)
+AppLeadButton/colors/icon_pressed_color = Color(0.062745, 0.031373, 0.098039, 1)
+AppLeadButton/constants/outline_size = 0
+AppLeadButton/styles/disabled = ExtResource("app_lead_disabled")
+AppLeadButton/styles/focus = ExtResource("app_lead_focus")
+AppLeadButton/styles/hover = ExtResource("app_lead_hover")
+AppLeadButton/styles/hover_pressed = ExtResource("app_lead_hover_pressed")
+AppLeadButton/styles/normal = ExtResource("app_lead_normal")
+AppLeadButton/styles/pressed = ExtResource("app_lead_pressed")
+AppMuteButton/base_type = &"Button"
+AppMuteButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppMuteButton/colors/font_disabled_color = Color(0.466667, 0.466667, 0.466667, 1)
+AppMuteButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppMuteButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppMuteButton/colors/font_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppMuteButton/colors/font_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppMuteButton/colors/icon_disabled_color = Color(0.466667, 0.466667, 0.466667, 1)
+AppMuteButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+AppMuteButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+AppMuteButton/colors/icon_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppMuteButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+AppMuteButton/colors/icon_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppMuteButton/styles/disabled = ExtResource("app_mute_disabled")
+AppMuteButton/styles/focus = ExtResource("app_mute_focus")
+AppMuteButton/styles/hover = ExtResource("app_mute_hover")
+AppMuteButton/styles/hover_pressed = ExtResource("app_mute_hover_pressed")
+AppMuteButton/styles/normal = ExtResource("app_mute_normal")
+AppMuteButton/styles/pressed = ExtResource("app_mute_pressed")
+AppMutedLabel/base_type = &"Label"
+AppMutedLabel/colors/font_color = Color(0.61405, 0.61405, 0.61405, 1)
+AppNamePanel/base_type = &"PanelContainer"
+AppNamePanel/styles/panel = ExtResource("app_layer_name")
+AppOptionButton/base_type = &"OptionButton"
+AppOptionButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppOptionButton/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+AppOptionButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppOptionButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppOptionButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppOptionButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppOptionButton/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+AppOptionButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+AppOptionButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+AppOptionButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppOptionButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+AppOptionButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppOptionButton/constants/outline_size = 0
+AppOptionButton/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+AppOptionButton/styles/disabled_mirrored = ExtResource("app_Buttons_Action_disabled")
+AppOptionButton/styles/focus = ExtResource("app_Buttons_Action_focus")
+AppOptionButton/styles/hover = ExtResource("app_Buttons_Action_hover")
+AppOptionButton/styles/hover_mirrored = ExtResource("app_Buttons_Action_hover")
+AppOptionButton/styles/hover_pressed = ExtResource("app_Buttons_Action_hover_pressed")
+AppOptionButton/styles/normal = ExtResource("app_Buttons_Action_normal")
+AppOptionButton/styles/normal_mirrored = ExtResource("app_Buttons_Action_normal")
+AppOptionButton/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+AppOptionButton/styles/pressed_mirrored = ExtResource("app_Buttons_Action_pressed")
+AppPanel/base_type = &"PanelContainer"
+AppPanel/styles/panel = ExtResource("app_Panels_panel")
+AppSoloButton/base_type = &"Button"
+AppSoloButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppSoloButton/colors/font_disabled_color = Color(0.466667, 0.466667, 0.466667, 1)
+AppSoloButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppSoloButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppSoloButton/colors/font_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppSoloButton/colors/font_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppSoloButton/colors/icon_disabled_color = Color(0.466667, 0.466667, 0.466667, 1)
+AppSoloButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+AppSoloButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+AppSoloButton/colors/icon_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppSoloButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+AppSoloButton/colors/icon_pressed_color = Color(0.055, 0.06, 0.1, 1)
+AppSoloButton/styles/disabled = ExtResource("app_solo_disabled")
+AppSoloButton/styles/focus = ExtResource("app_solo_focus")
+AppSoloButton/styles/hover = ExtResource("app_solo_hover")
+AppSoloButton/styles/hover_pressed = ExtResource("app_solo_hover_pressed")
+AppSoloButton/styles/normal = ExtResource("app_solo_normal")
+AppSoloButton/styles/pressed = ExtResource("app_solo_pressed")
+AppStatus/colors/complete = Color(0.705882, 0.792157, 0.772549, 1)
+AppStatus/colors/error = Color(1, 0.211765, 0.360784, 1)
+AppStatus/colors/muted = Color(0.61405, 0.61405, 0.61405, 1)
+AppStatus/colors/warning = Color(0.91, 0.93, 0.98, 1)
+AppSuccessLabel/base_type = &"Label"
+AppSuccessLabel/colors/font_color = Color(0.91, 0.93, 0.98, 1)
+AppToggleButton/base_type = &"Button"
+AppToggleButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppToggleButton/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+AppToggleButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppToggleButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+AppToggleButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppToggleButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppToggleButton/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+AppToggleButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+AppToggleButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+AppToggleButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppToggleButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+AppToggleButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+AppToggleButton/constants/outline_size = 0
+AppToggleButton/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+AppToggleButton/styles/focus = ExtResource("app_Buttons_Action_focus")
+AppToggleButton/styles/hover = ExtResource("app_Buttons_Action_hover")
+AppToggleButton/styles/hover_pressed = ExtResource("app_Buttons_Action_hover_pressed")
+AppToggleButton/styles/normal = ExtResource("app_Buttons_Action_normal")
+AppToggleButton/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+AppTrackPanel/base_type = &"PanelContainer"
+AppTrackPanel/styles/panel = ExtResource("app_layer_track")
+AppWorkspacePanel/base_type = &"PanelContainer"
+AppWorkspacePanel/styles/panel = ExtResource("app_layer_workspace")
+BeatCreateButton/base_type = &"Button"
+BeatCreateButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatCreateButton/colors/font_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatCreateButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatCreateButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatCreateButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatCreateButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatCreateButton/colors/icon_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatCreateButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+BeatCreateButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+BeatCreateButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatCreateButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+BeatCreateButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatCreateButton/constants/h_separation = 0
+BeatCreateButton/constants/outline_size = 0
+BeatCreateButton/styles/disabled = ExtResource("29")
+BeatCreateButton/styles/focus = ExtResource("30")
+BeatCreateButton/styles/hover = ExtResource("26")
+BeatCreateButton/styles/hover_pressed = ExtResource("28")
+BeatCreateButton/styles/normal = ExtResource("25")
+BeatCreateButton/styles/pressed = ExtResource("27")
+BeatDotButton/base_type = &"Button"
+BeatDotButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatDotButton/colors/font_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatDotButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatDotButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatDotButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDotButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDotButton/colors/icon_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatDotButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+BeatDotButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+BeatDotButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDotButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+BeatDotButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDotButton/constants/h_separation = 0
+BeatDotButton/constants/outline_size = 0
+BeatDotButton/styles/disabled = ExtResource("11")
+BeatDotButton/styles/focus = ExtResource("12")
+BeatDotButton/styles/hover = ExtResource("8")
+BeatDotButton/styles/hover_pressed = ExtResource("10")
+BeatDotButton/styles/normal = ExtResource("7")
+BeatDotButton/styles/pressed = ExtResource("9")
+BeatDurationButton/base_type = &"Button"
+BeatDurationButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatDurationButton/colors/font_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatDurationButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatDurationButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatDurationButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDurationButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDurationButton/colors/icon_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatDurationButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+BeatDurationButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+BeatDurationButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDurationButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+BeatDurationButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatDurationButton/constants/h_separation = 0
+BeatDurationButton/constants/outline_size = 0
+BeatDurationButton/styles/disabled = ExtResource("23")
+BeatDurationButton/styles/focus = ExtResource("24")
+BeatDurationButton/styles/hover = ExtResource("20")
+BeatDurationButton/styles/hover_pressed = ExtResource("22")
+BeatDurationButton/styles/normal = ExtResource("19")
+BeatDurationButton/styles/pressed = ExtResource("21")
+BeatEditorPanel/base_type = &"PanelContainer"
+BeatEditorPanel/styles/panel = ExtResource("37")
+BeatIntensityButton/base_type = &"Button"
+BeatIntensityButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatIntensityButton/colors/font_disabled_color = Color(0.384314, 0.4, 0.427451, 1)
+BeatIntensityButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatIntensityButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatIntensityButton/colors/font_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatIntensityButton/colors/font_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatIntensityButton/colors/icon_disabled_color = Color(0.384314, 0.4, 0.427451, 1)
+BeatIntensityButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+BeatIntensityButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+BeatIntensityButton/colors/icon_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatIntensityButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+BeatIntensityButton/colors/icon_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatIntensityButton/constants/h_separation = 0
+BeatIntensityButton/constants/outline_size = 0
+BeatIntensityButton/styles/disabled = ExtResource("35")
+BeatIntensityButton/styles/focus = ExtResource("36")
+BeatIntensityButton/styles/hover = ExtResource("32")
+BeatIntensityButton/styles/hover_pressed = ExtResource("34")
+BeatIntensityButton/styles/normal = ExtResource("31")
+BeatIntensityButton/styles/pressed = ExtResource("33")
+BeatRemoveButton/base_type = &"Button"
+BeatRemoveButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatRemoveButton/colors/font_disabled_color = Color(0.384314, 0.4, 0.427451, 1)
+BeatRemoveButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatRemoveButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatRemoveButton/colors/font_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatRemoveButton/colors/font_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatRemoveButton/colors/icon_disabled_color = Color(0.384314, 0.4, 0.427451, 1)
+BeatRemoveButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+BeatRemoveButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+BeatRemoveButton/colors/icon_hover_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatRemoveButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+BeatRemoveButton/colors/icon_pressed_color = Color(0.055, 0.06, 0.1, 1)
+BeatRemoveButton/constants/h_separation = 0
+BeatRemoveButton/constants/outline_size = 0
+BeatRemoveButton/styles/disabled = ExtResource("17")
+BeatRemoveButton/styles/focus = ExtResource("18")
+BeatRemoveButton/styles/hover = ExtResource("14")
+BeatRemoveButton/styles/hover_pressed = ExtResource("16")
+BeatRemoveButton/styles/normal = ExtResource("13")
+BeatRemoveButton/styles/pressed = ExtResource("15")
+BeatToggleButton/base_type = &"Button"
+BeatToggleButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatToggleButton/colors/font_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatToggleButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatToggleButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BeatToggleButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatToggleButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatToggleButton/colors/icon_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+BeatToggleButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+BeatToggleButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+BeatToggleButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatToggleButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+BeatToggleButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BeatToggleButton/constants/h_separation = 0
+BeatToggleButton/constants/outline_size = 0
+BeatToggleButton/styles/disabled = ExtResource("5")
+BeatToggleButton/styles/focus = ExtResource("6")
+BeatToggleButton/styles/hover = ExtResource("2")
+BeatToggleButton/styles/hover_pressed = ExtResource("4")
+BeatToggleButton/styles/normal = ExtResource("1")
+BeatToggleButton/styles/pressed = ExtResource("3")
+BlackKey/base_type = &"Button"
+BlackKey/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BlackKey/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+BlackKey/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BlackKey/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BlackKey/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BlackKey/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BlackKey/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+BlackKey/colors/icon_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BlackKey/colors/icon_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BlackKey/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BlackKey/colors/icon_normal_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+BlackKey/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+BlackKey/constants/outline_size = 0
+BlackKey/styles/disabled = ExtResource("app_Instruments_BlackKey_disabled")
+BlackKey/styles/focus = ExtResource("app_Instruments_BlackKey_focus")
+BlackKey/styles/hover = ExtResource("app_Instruments_BlackKey_hover")
+BlackKey/styles/hover_pressed = ExtResource("app_Instruments_BlackKey_hover_pressed")
+BlackKey/styles/normal = ExtResource("app_Instruments_BlackKey_normal")
+BlackKey/styles/pressed = ExtResource("app_Instruments_BlackKey_pressed")
+BoxContainer/constants/separation = 1
+Button/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Button/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+Button/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Button/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Button/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Button/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Button/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+Button/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+Button/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+Button/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Button/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+Button/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Button/constants/outline_size = 0
+Button/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+Button/styles/focus = ExtResource("app_Buttons_Action_focus")
+Button/styles/hover = ExtResource("app_Buttons_Action_hover")
+Button/styles/hover_pressed = ExtResource("app_Buttons_Action_hover_pressed")
+Button/styles/normal = ExtResource("app_Buttons_Action_normal")
+Button/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+DrumActionButton/base_type = &"Button"
+DrumActionButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumActionButton/colors/font_disabled_color = Color(0.402836, 0.402836, 0.402836, 1)
+DrumActionButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumActionButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumActionButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumActionButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumActionButton/colors/icon_disabled_color = Color(0.402836, 0.402836, 0.402836, 1)
+DrumActionButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+DrumActionButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+DrumActionButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumActionButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+DrumActionButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumActionButton/styles/disabled = ExtResource("29")
+DrumActionButton/styles/focus = ExtResource("30")
+DrumActionButton/styles/hover = ExtResource("26")
+DrumActionButton/styles/hover_pressed = ExtResource("28")
+DrumActionButton/styles/normal = ExtResource("25")
+DrumActionButton/styles/pressed = ExtResource("27")
+DrumFoldable/base_type = &"FoldableContainer"
+DrumFoldable/colors/collapsed_font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumFoldable/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumFoldable/colors/hover_font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumFoldable/styles/focus = ExtResource("45")
+DrumFoldable/styles/panel = ExtResource("44")
+DrumFoldable/styles/title_collapsed_hover_panel = ExtResource("43")
+DrumFoldable/styles/title_collapsed_panel = ExtResource("42")
+DrumFoldable/styles/title_hover_panel = ExtResource("41")
+DrumFoldable/styles/title_panel = ExtResource("40")
+DrumHeaderPanel/base_type = &"PanelContainer"
+DrumHeaderPanel/styles/panel = ExtResource("39")
+DrumOptionButton/base_type = &"OptionButton"
+DrumOptionButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumOptionButton/colors/font_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+DrumOptionButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumOptionButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumOptionButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumOptionButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumOptionButton/colors/icon_disabled_color = Color(0.398647, 0.398647, 0.398647, 1)
+DrumOptionButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+DrumOptionButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+DrumOptionButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumOptionButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+DrumOptionButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumOptionButton/styles/disabled = ExtResource("23")
+DrumOptionButton/styles/disabled_mirrored = ExtResource("23")
+DrumOptionButton/styles/focus = ExtResource("24")
+DrumOptionButton/styles/hover = ExtResource("20")
+DrumOptionButton/styles/hover_mirrored = ExtResource("20")
+DrumOptionButton/styles/normal = ExtResource("19")
+DrumOptionButton/styles/normal_mirrored = ExtResource("19")
+DrumOptionButton/styles/pressed = ExtResource("21")
+DrumOptionButton/styles/pressed_mirrored = ExtResource("21")
+DrumPanel/base_type = &"PanelContainer"
+DrumPanel/styles/panel = ExtResource("38")
+DrumPatternLength/base_type = &"SpinBox"
+DrumPatternLength/colors/down_disabled_icon_modulate = Color(0.402836, 0.402836, 0.402836, 1)
+DrumPatternLength/colors/down_hover_icon_modulate = Color(1, 1, 1, 1)
+DrumPatternLength/colors/down_icon_modulate = Color(0.802286, 0.802286, 0.802286, 1)
+DrumPatternLength/colors/down_pressed_icon_modulate = Color(0.132798, 0.132798, 0.132798, 1)
+DrumPatternLength/colors/up_disabled_icon_modulate = Color(0.402836, 0.402836, 0.402836, 1)
+DrumPatternLength/colors/up_hover_icon_modulate = Color(1, 1, 1, 1)
+DrumPatternLength/colors/up_icon_modulate = Color(0.802286, 0.802286, 0.802286, 1)
+DrumPatternLength/colors/up_pressed_icon_modulate = Color(0.132798, 0.132798, 0.132798, 1)
+DrumPatternLength/styles/down_background = ExtResource("61")
+DrumPatternLength/styles/down_background_disabled = ExtResource("64")
+DrumPatternLength/styles/down_background_hovered = ExtResource("62")
+DrumPatternLength/styles/down_background_pressed = ExtResource("63")
+DrumPatternLength/styles/field_and_buttons_separator = ExtResource("65")
+DrumPatternLength/styles/up_background = ExtResource("61")
+DrumPatternLength/styles/up_background_disabled = ExtResource("64")
+DrumPatternLength/styles/up_background_hovered = ExtResource("62")
+DrumPatternLength/styles/up_background_pressed = ExtResource("63")
+DrumPatternLength/styles/up_down_buttons_separator = ExtResource("65")
+DrumToggleButton/base_type = &"Button"
+DrumToggleButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumToggleButton/colors/font_disabled_color = Color(0.402836, 0.402836, 0.402836, 1)
+DrumToggleButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumToggleButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumToggleButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumToggleButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumToggleButton/colors/icon_disabled_color = Color(0.402836, 0.402836, 0.402836, 1)
+DrumToggleButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+DrumToggleButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+DrumToggleButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumToggleButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+DrumToggleButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+DrumToggleButton/styles/disabled = ExtResource("5")
+DrumToggleButton/styles/focus = ExtResource("6")
+DrumToggleButton/styles/hover = ExtResource("2")
+DrumToggleButton/styles/hover_pressed = ExtResource("4")
+DrumToggleButton/styles/normal = ExtResource("1")
+DrumToggleButton/styles/pressed = ExtResource("3")
+DrumVolumeLabel/base_type = &"Label"
+DrumVolumeLabel/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+DrumVolumeLabel/colors/font_disabled_color = Color(0.402836, 0.402836, 0.402836, 1)
+DrumVolumeSlider/base_type = &"HSlider"
+DrumVolumeSlider/icons/grabber = ExtResource("app_slider_normal")
+DrumVolumeSlider/icons/grabber_disabled = ExtResource("app_slider_disabled")
+DrumVolumeSlider/icons/grabber_highlight = ExtResource("app_slider_hover")
+DrumVolumeSlider/styles/grabber_area = ExtResource("volume_fill_thin")
+DrumVolumeSlider/styles/grabber_area_highlight = ExtResource("volume_highlight_thin")
+DrumVolumeSlider/styles/slider = ExtResource("volume_track_thin")
+FileDialog/colors/file_icon_color = Color(0.91, 0.93, 0.98, 1)
+FileDialog/colors/files_disabled = Color(0.484371, 0.484371, 0.484371, 1)
+FileDialog/colors/folder_icon_color = Color(0.705882, 0.792157, 0.772549, 1)
+FileDialog/styles/panel = ExtResource("app_Panels_popup")
+FoldableContainer/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+FoldableContainer/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+FoldableContainer/colors/font_outline_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+FoldableContainer/styles/focus = ExtResource("app_Inputs_focus")
+FoldableContainer/styles/panel = ExtResource("app_Panels_panel")
+FoldableContainer/styles/title_collapsed_hover_panel = ExtResource("app_Inputs_hover")
+FoldableContainer/styles/title_collapsed_panel = ExtResource("app_Panels_header")
+FoldableContainer/styles/title_hover_panel = ExtResource("app_Inputs_hover")
+FoldableContainer/styles/title_panel = ExtResource("app_Panels_header")
+Fret/base_type = &"Button"
+Fret/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Fret/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+Fret/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Fret/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Fret/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Fret/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Fret/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+Fret/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+Fret/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+Fret/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Fret/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+Fret/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+Fret/constants/outline_size = 0
+Fret/styles/disabled = ExtResource("app_Instruments_Fret_disabled")
+Fret/styles/focus = ExtResource("app_Instruments_Fret_focus")
+Fret/styles/hover = ExtResource("app_Instruments_Fret_hover")
+Fret/styles/hover_pressed = ExtResource("app_Instruments_Fret_hover_pressed")
+Fret/styles/normal = ExtResource("app_Instruments_Fret_normal")
+Fret/styles/pressed = ExtResource("app_Instruments_Fret_pressed")
+HScrollBar/styles/grabber = ExtResource("52")
+HScrollBar/styles/grabber_highlight = ExtResource("53")
+HScrollBar/styles/grabber_pressed = ExtResource("54")
+HScrollBar/styles/scroll = ExtResource("51")
+HScrollBar/styles/scroll_focus = ExtResource("app_Inputs_focus")
+HSlider/icons/grabber = ExtResource("app_slider_normal")
+HSlider/icons/grabber_disabled = ExtResource("app_slider_disabled")
+HSlider/icons/grabber_highlight = ExtResource("app_slider_hover")
+HSlider/styles/grabber_area = ExtResource("volume_fill_thin")
+HSlider/styles/grabber_area_highlight = ExtResource("volume_highlight_thin")
+HSlider/styles/slider = ExtResource("volume_track_thin")
+HSplitContainer/styles/split_bar_background = ExtResource("65")
+HandFret/base_type = &"Button"
+HandFret/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+HandFret/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+HandFret/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+HandFret/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+HandFret/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+HandFret/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+HandFret/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+HandFret/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+HandFret/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+HandFret/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+HandFret/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+HandFret/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+HandFret/constants/outline_size = 0
+HandFret/styles/disabled = ExtResource("app_Instruments_HandFret_disabled")
+HandFret/styles/focus = ExtResource("app_Instruments_HandFret_focus")
+HandFret/styles/hover = ExtResource("app_Instruments_HandFret_hover")
+HandFret/styles/hover_pressed = ExtResource("app_Instruments_HandFret_hover_pressed")
+HandFret/styles/normal = ExtResource("app_Instruments_HandFret_normal")
+HandFret/styles/pressed = ExtResource("app_Instruments_HandFret_pressed")
+ItemList/colors/children_hl_line_color = Color(0.484371, 0.484371, 0.484371, 1)
+ItemList/colors/drop_position_color = Color(1, 1, 1, 1)
+ItemList/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+ItemList/colors/font_selected_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+ItemList/colors/guide_color = Color(0.265865, 0.265865, 0.265865, 1)
+ItemList/colors/parent_hl_line_color = Color(0.61405, 0.61405, 0.61405, 1)
+ItemList/styles/cursor = ExtResource("app_Inputs_focus")
+ItemList/styles/cursor_unfocused = ExtResource("app_Inputs_focus")
+ItemList/styles/focus = ExtResource("app_Inputs_focus")
+ItemList/styles/hovered = ExtResource("app_Inputs_hover")
+ItemList/styles/hovered_selected = ExtResource("app_Inputs_selected")
+ItemList/styles/panel = ExtResource("app_Inputs_normal")
+ItemList/styles/selected = ExtResource("app_Inputs_selected")
+ItemList/styles/selected_focus = ExtResource("app_Inputs_selected")
+Label/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.5058824)
+LineEdit/colors/caret_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+LineEdit/colors/font_placeholder_color = Color(0.61405, 0.61405, 0.61405, 1)
+LineEdit/colors/font_selected_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+LineEdit/colors/font_uneditable_color = Color(0.61405, 0.61405, 0.61405, 1)
+LineEdit/colors/selection_color = Color(0.643, 0.6293529, 0.60888237, 1)
+LineEdit/styles/focus = ExtResource("app_Inputs_focus")
+LineEdit/styles/normal = ExtResource("app_Inputs_normal")
+LineEdit/styles/read_only = ExtResource("app_Inputs_readonly")
+MarkFret/base_type = &"Button"
+MarkFret/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MarkFret/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+MarkFret/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MarkFret/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MarkFret/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MarkFret/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MarkFret/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+MarkFret/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+MarkFret/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+MarkFret/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MarkFret/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+MarkFret/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MarkFret/constants/outline_size = 0
+MarkFret/styles/disabled = ExtResource("app_Instruments_MarkFret_disabled")
+MarkFret/styles/focus = ExtResource("app_Instruments_MarkFret_focus")
+MarkFret/styles/hover = ExtResource("app_Instruments_MarkFret_hover")
+MarkFret/styles/hover_pressed = ExtResource("app_Instruments_MarkFret_hover_pressed")
+MarkFret/styles/normal = ExtResource("app_Instruments_MarkFret_normal")
+MarkFret/styles/pressed = ExtResource("app_Instruments_MarkFret_pressed")
+MeasureVersionOptionButton/base_type = &"DrumOptionButton"
+MeasureVersionOptionButton/colors/font_color = Color(0.94, 0.99, 1, 1)
+MeasureVersionOptionButton/colors/font_hover_color = Color(1, 1, 1, 1)
+MeasureVersionOptionButton/styles/hover = SubResource("MeasureVersionSelectorHover")
+MeasureVersionOptionButton/styles/hover_mirrored = SubResource("MeasureVersionSelectorHover")
+MeasureVersionOptionButton/styles/normal = SubResource("MeasureVersionSelectorNormal")
+MeasureVersionOptionButton/styles/normal_mirrored = SubResource("MeasureVersionSelectorNormal")
+MenuBar/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MenuBar/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+MenuBar/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MenuBar/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MenuBar/colors/font_hover_pressed_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+MenuBar/colors/font_pressed_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+MenuBar/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+MenuBar/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+MenuBar/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+MenuBar/colors/icon_hover_pressed_color = Color(0.073975, 0.073975, 0.073975, 1)
+MenuBar/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+MenuBar/colors/icon_pressed_color = Color(0.073975, 0.073975, 0.073975, 1)
+MenuBar/constants/outline_size = 0
+MenuBar/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+MenuBar/styles/focus = ExtResource("app_Buttons_Action_focus")
+MenuBar/styles/hover = ExtResource("app_Buttons_Action_hover")
+MenuBar/styles/hover_pressed = ExtResource("app_Buttons_Action_hover_pressed")
+MenuBar/styles/normal = ExtResource("app_Buttons_Action_normal")
+MenuBar/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+MenuButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MenuButton/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+MenuButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MenuButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+MenuButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MenuButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MenuButton/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+MenuButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+MenuButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+MenuButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MenuButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+MenuButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+MenuButton/constants/outline_size = 0
+MenuButton/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+MenuButton/styles/focus = ExtResource("app_Buttons_Action_focus")
+MenuButton/styles/hover = ExtResource("app_Buttons_Action_hover")
+MenuButton/styles/hover_pressed = ExtResource("app_Buttons_Action_hover_pressed")
+MenuButton/styles/normal = ExtResource("app_Buttons_Action_normal")
+MenuButton/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+OptionButton/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+OptionButton/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+OptionButton/colors/font_focus_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+OptionButton/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+OptionButton/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+OptionButton/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+OptionButton/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+OptionButton/colors/icon_focus_color = Color(0.91, 0.93, 0.98, 1)
+OptionButton/colors/icon_hover_color = Color(0.91, 0.93, 0.98, 1)
+OptionButton/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+OptionButton/colors/icon_normal_color = Color(0.91, 0.93, 0.98, 1)
+OptionButton/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+OptionButton/constants/outline_size = 0
+OptionButton/styles/disabled = ExtResource("app_Buttons_Action_disabled")
+OptionButton/styles/disabled_mirrored = ExtResource("app_Buttons_Action_disabled")
+OptionButton/styles/focus = ExtResource("app_Buttons_Action_focus")
+OptionButton/styles/hover = ExtResource("app_Buttons_Action_hover")
+OptionButton/styles/hover_mirrored = ExtResource("app_Buttons_Action_hover")
+OptionButton/styles/hover_pressed = ExtResource("app_Buttons_Action_hover_pressed")
+OptionButton/styles/normal = ExtResource("app_Buttons_Action_normal")
+OptionButton/styles/normal_mirrored = ExtResource("app_Buttons_Action_normal")
+OptionButton/styles/pressed = ExtResource("app_Buttons_Action_pressed")
+OptionButton/styles/pressed_mirrored = ExtResource("app_Buttons_Action_pressed")
+Panel/styles/panel = ExtResource("app_background")
+PanelContainer/styles/panel = ExtResource("app_Panels_panel")
+PopupMenu/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+PopupMenu/colors/font_disabled_color = Color(0.397914, 0.397914, 0.397914, 1)
+PopupMenu/colors/font_hover_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+PopupMenu/styles/hover = ExtResource("50")
+PopupMenu/styles/labeled_separator_left = ExtResource("65")
+PopupMenu/styles/labeled_separator_right = ExtResource("65")
+PopupMenu/styles/panel = ExtResource("49")
+PopupMenu/styles/separator = ExtResource("65")
+PopupPanel/styles/panel = ExtResource("app_Panels_popup")
+RichTextLabel/colors/default_color = Color(0.886275, 0.870588, 0.811765, 1)
+RichTextLabel/colors/font_selected_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+RichTextLabel/colors/selection_color = Color(0.643, 0.6293529, 0.60888237, 1)
+SpinBox/colors/down_disabled_icon_modulate = Color(0.402836, 0.402836, 0.402836, 1)
+SpinBox/colors/down_hover_icon_modulate = Color(0.9098039, 0.92941177, 0.9764706, 1)
+SpinBox/colors/down_icon_modulate = Color(0.9098039, 0.92941177, 0.9764706, 1)
+SpinBox/colors/down_pressed_icon_modulate = Color(0.9098039, 0.92941177, 0.9764706, 1)
+SpinBox/colors/up_disabled_icon_modulate = Color(0.402836, 0.402836, 0.402836, 1)
+SpinBox/colors/up_hover_icon_modulate = Color(0.9098039, 0.92941177, 0.9764706, 1)
+SpinBox/colors/up_icon_modulate = Color(0.9098039, 0.92941177, 0.9764706, 1)
+SpinBox/colors/up_pressed_icon_modulate = Color(0.9098039, 0.92941177, 0.9764706, 1)
+SpinBox/styles/down_background = ExtResource("61")
+SpinBox/styles/down_background_disabled = ExtResource("64")
+SpinBox/styles/down_background_hovered = ExtResource("62")
+SpinBox/styles/down_background_pressed = ExtResource("63")
+SpinBox/styles/field_and_buttons_separator = ExtResource("65")
+SpinBox/styles/up_background = ExtResource("61")
+SpinBox/styles/up_background_disabled = ExtResource("64")
+SpinBox/styles/up_background_hovered = ExtResource("62")
+SpinBox/styles/up_background_pressed = ExtResource("63")
+SpinBox/styles/up_down_buttons_separator = ExtResource("65")
+TabMeasureView/base_type = &"Control"
+TabMeasureView/colors/background = Color(0.0534, 0.0556, 0.06, 1)
+TabMeasureView/colors/bar_line = Color(0.97, 0.97, 0.97, 1)
+TabMeasureView/colors/beat_text = Color(1, 1, 1, 1)
+TabMeasureView/colors/caret = Color(0.32, 0.89, 0.96, 1)
+TabMeasureView/colors/continuation = Color(0.7254902, 0.932549, 0.94803923, 1)
+TabMeasureView/colors/entry_background = Color(0.115224004, 0.116016, 0.11760001, 1)
+TabMeasureView/colors/entry_border = Color(0.22352941, 0.78039217, 0.79607844, 1)
+TabMeasureView/colors/error = Color(1, 0.36, 0.45, 1)
+TabMeasureView/colors/grid = Color(0.86, 0.86, 0.86, 1)
+TabMeasureView/colors/hint = Color(0.98, 0.98, 0.98, 1)
+TabMeasureView/colors/note = Color(0.115224004, 0.116016, 0.11760001, 1)
+TabMeasureView/colors/note_border = Color(0.4, 0.48, 0.66, 1)
+TabMeasureView/colors/note_selected = Color(0.22352941, 0.78039217, 0.79607844, 1)
+TabMeasureView/colors/note_selected_border = Color(0.22352941, 0.78039217, 0.79607844, 1)
+TabMeasureView/colors/playback_cursor_color = Color(1, 0.72, 0.32, 0.96)
+TabMeasureView/colors/playback_start_cursor_color = Color(0.28, 0.86, 0.91, 0.9)
+TabMeasureView/colors/repeat_overlay_label_color = Color(1, 1, 1, 1)
+TabMeasureView/colors/repeat_overlay_outline = Color(0.86, 0.86, 0.86, 1)
+TabMeasureView/colors/repeat_overlay_tint = Color(0.31, 0.31, 0.31, 1)
+TabMeasureView/colors/selected_text = Color(0.035, 0.04, 0.07, 1)
+TabMeasureView/colors/string_line = Color(0.6, 0.6, 0.6, 1)
+TabMeasureView/colors/string_text = Color(0.98, 0.98, 0.98, 1)
+TabMeasureView/colors/subdivision = Color(0.86, 0.86, 0.86, 1)
+TabMeasureView/colors/text = Color(0.98, 0.98, 0.98, 1)
+TabMeasureView/colors/timeline = Color(0.86, 0.86, 0.86, 1)
+TabMeasureView/constants/line_thickness = 3
+TabMeasureView/constants/minimum_cell_width = 24
+TabMeasureView/constants/minimum_measure_width = 180
+TabMeasureView/constants/note_height = 20
+TabMeasureView/constants/percussion_row_height = 42
+TabMeasureView/constants/row_height = 28
+TabMeasureView/styles/entry = ExtResource("tab_entry")
+TabMeasureView/styles/note = ExtResource("tab_note")
+TabMeasureView/styles/note_error = ExtResource("tab_note_error")
+TabMeasureView/styles/note_selected = ExtResource("tab_note_selected")
+TabMeasureView/styles/panel = ExtResource("tab_panel")
+TextEdit/colors/caret_color = Color(1, 1, 1, 1)
+TextEdit/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+TextEdit/colors/font_placeholder_color = Color(0.61405, 0.61405, 0.61405, 1)
+TextEdit/colors/font_selected_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+TextEdit/colors/font_uneditable_color = Color(0.61405, 0.61405, 0.61405, 1)
+TextEdit/colors/selection_color = Color(0.643, 0.6293529, 0.60888237, 1)
+TextEdit/styles/focus = ExtResource("app_Inputs_focus")
+TextEdit/styles/normal = ExtResource("app_Inputs_normal")
+TextEdit/styles/read_only = ExtResource("app_Inputs_readonly")
+TooltipLabel/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+TooltipPanel/styles/panel = ExtResource("app_Panels_popup")
+Tree/colors/children_hl_line_color = Color(0.484371, 0.484371, 0.484371, 1)
+Tree/colors/drop_position_color = Color(1, 1, 1, 1)
+Tree/colors/font_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Tree/colors/font_selected_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+Tree/colors/guide_color = Color(0.265865, 0.265865, 0.265865, 1)
+Tree/colors/parent_hl_line_color = Color(0.61405, 0.61405, 0.61405, 1)
+Tree/styles/cursor = ExtResource("app_Inputs_focus")
+Tree/styles/cursor_unfocused = ExtResource("app_Inputs_focus")
+Tree/styles/focus = ExtResource("app_Inputs_focus")
+Tree/styles/hovered = ExtResource("app_Inputs_hover")
+Tree/styles/hovered_selected = ExtResource("app_Inputs_selected")
+Tree/styles/panel = ExtResource("app_Inputs_normal")
+Tree/styles/selected = ExtResource("app_Inputs_selected")
+Tree/styles/selected_focus = ExtResource("app_Inputs_selected")
+Tree/styles/title_button_hover = ExtResource("app_Panels_header")
+Tree/styles/title_button_normal = ExtResource("app_Panels_header")
+Tree/styles/title_button_pressed = ExtResource("app_Panels_header")
+VScrollBar/styles/grabber = ExtResource("52")
+VScrollBar/styles/grabber_highlight = ExtResource("53")
+VScrollBar/styles/grabber_pressed = ExtResource("54")
+VScrollBar/styles/scroll = ExtResource("51")
+VScrollBar/styles/scroll_focus = ExtResource("app_Inputs_focus")
+VSplitContainer/styles/split_bar_background = ExtResource("65")
+WhiteKey/base_type = &"Button"
+WhiteKey/colors/font_color = Color(0.07722, 0.078935996, 0.0858, 1)
+WhiteKey/colors/font_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+WhiteKey/colors/font_focus_color = Color(0.07722, 0.078935996, 0.0858, 1)
+WhiteKey/colors/font_hover_color = Color(0.07722, 0.078935996, 0.0858, 1)
+WhiteKey/colors/font_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+WhiteKey/colors/font_pressed_color = Color(0.035, 0.04, 0.07, 1)
+WhiteKey/colors/icon_disabled_color = Color(0.484371, 0.484371, 0.484371, 1)
+WhiteKey/colors/icon_focus_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+WhiteKey/colors/icon_hover_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+WhiteKey/colors/icon_hover_pressed_color = Color(0.035, 0.04, 0.07, 1)
+WhiteKey/colors/icon_normal_color = Color(0.041651998, 0.043367997, 0.0468, 1)
+WhiteKey/colors/icon_pressed_color = Color(0.035, 0.04, 0.07, 1)
+WhiteKey/constants/outline_size = 0
+WhiteKey/styles/disabled = ExtResource("app_Instruments_WhiteKey_disabled")
+WhiteKey/styles/focus = ExtResource("app_Instruments_WhiteKey_focus")
+WhiteKey/styles/hover = ExtResource("app_Instruments_WhiteKey_hover")
+WhiteKey/styles/hover_pressed = ExtResource("app_Instruments_WhiteKey_hover_pressed")
+WhiteKey/styles/normal = ExtResource("app_Instruments_WhiteKey_normal")
+WhiteKey/styles/pressed = ExtResource("app_Instruments_WhiteKey_pressed")
+Window/colors/title_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+Window/colors/title_outline_modulate = Color(0.073975, 0.073975, 0.073975, 1)
+Window/constants/title_height = 28
+Window/styles/embedded_border = ExtResource("app_Panels_window")
+Window/styles/embedded_unfocused_border = ExtResource("app_Panels_window_unfocused")

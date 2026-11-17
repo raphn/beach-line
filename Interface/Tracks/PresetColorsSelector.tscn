@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://fq6fxxud23oo"]
+
+[ext_resource type="PackedScene" uid="uid://bq8rlf7q1txfy" path="res://Interface/Tracks/PresetColorPicker.tscn" id="1_i22qm"]
+[ext_resource type="Script" uid="uid://bexgj3upx5wx4" path="res://Interface/Tracks/preset_colors_selector.gd" id="2"]
+
+[node name="PresetColorsPopupWindow" type="Window" unique_id=359690716]
+oversampling_override = 1.0
+size = Vector2i(164, 164)
+visible = false
+unresizable = true
+borderless = true
+script = ExtResource("2")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=799887861]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Colors" type="GridContainer" parent="PanelContainer" unique_id=1443435557]
+layout_mode = 2
+columns = 4
+
+[node name="PresetColorPicker" parent="PanelContainer/Colors" unique_id=1590101848 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+
+[node name="PresetColorPicker2" parent="PanelContainer/Colors" unique_id=231385186 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.90588236, 0.5137255, 0.29803923, 1)
+
+[node name="PresetColorPicker3" parent="PanelContainer/Colors" unique_id=1799560624 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.7882353, 0.36862746, 0.4745098, 1)
+
+[node name="PresetColorPicker4" parent="PanelContainer/Colors" unique_id=771538105 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.8509804, 0.36862746, 0.34901962, 1)
+
+[node name="PresetColorPicker5" parent="PanelContainer/Colors" unique_id=603021883 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.33333334, 0.72156864, 0.4745098, 1)
+
+[node name="PresetColorPicker6" parent="PanelContainer/Colors" unique_id=1514082055 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.29411766, 0.654902, 0.627451, 1)
+
+[node name="PresetColorPicker7" parent="PanelContainer/Colors" unique_id=555373591 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.3372549, 0.54901963, 0.7921569, 1)
+
+[node name="PresetColorPicker8" parent="PanelContainer/Colors" unique_id=1709956849 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.22352941, 0.4745098, 0.7411765, 1)
+
+[node name="PresetColorPicker9" parent="PanelContainer/Colors" unique_id=173032184 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.50980395, 0.44705883, 0.78431374, 1)
+
+[node name="PresetColorPicker10" parent="PanelContainer/Colors" unique_id=665794113 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.654902, 0.41960785, 0.7529412, 1)
+
+[node name="PresetColorPicker11" parent="PanelContainer/Colors" unique_id=1842513378 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.7647059, 0.3882353, 0.64705884, 1)
+
+[node name="PresetColorPicker12" parent="PanelContainer/Colors" unique_id=406944188 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.7372549, 0.4392157, 0.53333336, 1)
+
+[node name="PresetColorPicker13" parent="PanelContainer/Colors" unique_id=1967835168 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.6627451, 0.47058824, 0.4, 1)
+
+[node name="PresetColorPicker14" parent="PanelContainer/Colors" unique_id=2105601918 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.46666667, 0.56078434, 0.38039216, 1)
+
+[node name="PresetColorPicker15" parent="PanelContainer/Colors" unique_id=112534994 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.54901963, 0.5294118, 0.49019608, 1)
+
+[node name="PresetColorPicker16" parent="PanelContainer/Colors" unique_id=1502484092 instance=ExtResource("1_i22qm")]
+layout_mode = 2
+picker_color = Color(0.90588236, 0.72156864, 0.29411766, 1)

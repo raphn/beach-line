@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://qqbn1tf7a1qp"]
+
+[ext_resource type="Script" uid="uid://bmy360rcywv4f" path="res://Interface/Sections/Scripts/SectionThumbnail.cs" id="thumbnail_script"]
+[ext_resource type="StyleBox" uid="uid://ggycg4fts7cp" path="res://Interface/Themes/Panels/arrangement_thumbnail.tres" id="thumbnail_style"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jb8uf"]
+
+[sub_resource type="Gradient" id="Gradient_jb8uf"]
+colors = PackedColorArray(0.9, 0.92, 0.88, 0, 0.9, 0.92, 0.88, 0.36)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_13qdw"]
+gradient = SubResource("Gradient_jb8uf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xrivr"]
+texture = SubResource("GradientTexture1D_13qdw")
+expand_margin_left = 4.0
+expand_margin_top = 2.0
+expand_margin_right = 4.0
+expand_margin_bottom = 2.0
+
+[node name="SectionThumbnail" type="PanelContainer" unique_id=861267133]
+clip_children = 2
+custom_minimum_size = Vector2(56, 44)
+theme_type_variation = &"AppNamePanel"
+theme_override_styles/panel = ExtResource("thumbnail_style")
+script = ExtResource("thumbnail_script")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=305712181]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_jb8uf")
+theme_override_styles/fill = SubResource("StyleBoxTexture_xrivr")
+show_percentage = false
+
+[node name="SectionSymbol" type="Label" parent="." unique_id=1312165319]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.90405333, 0.92, 0.90160006, 1)
+theme_override_font_sizes/font_size = 23
+text = "A"
+vertical_alignment = 1
+clip_text = true
+
+[node name="Repetitions" type="Label" parent="." unique_id=619337228]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.7882353, 0.92156863, 0.76862746, 1)
+theme_override_font_sizes/font_size = 14
+text = "1x"

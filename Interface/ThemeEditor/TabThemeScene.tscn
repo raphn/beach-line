@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://d4nhye0cpweq0"]
+
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://c2gdgcvby3enw" path="res://Interface/ThemeEditor/TabThemeScenePreview.gd" id="2_preview"]
+[ext_resource type="StyleBox" uid="uid://u8ul8gb8mfhl" path="res://Interface/Themes/Panels/tab_panel.tres" id="3_panel"]
+[ext_resource type="StyleBox" uid="uid://duyhicurkpis" path="res://Interface/Themes/Panels/tab_entry.tres" id="4_entry"]
+[ext_resource type="StyleBox" uid="uid://bue254a3th01i" path="res://Interface/Themes/Panels/tab_note.tres" id="5_note"]
+[ext_resource type="StyleBox" uid="uid://eg2qkv5xhsnk" path="res://Interface/Themes/Panels/tab_note_selected.tres" id="6_selected"]
+[ext_resource type="StyleBox" uid="uid://dv03p1oppd1oi" path="res://Interface/Themes/Panels/tab_note_error.tres" id="7_error"]
+
+[node name="TabThemeScene" type="Control" unique_id=790959805]
+custom_minimum_size = Vector2(720, 390)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+script = ExtResource("2_preview")
+shared_theme = ExtResource("1_theme")
+tab_panel = ExtResource("3_panel")
+tab_entry = ExtResource("4_entry")
+tab_note = ExtResource("5_note")
+tab_note_selected = ExtResource("6_selected")
+tab_note_error = ExtResource("7_error")

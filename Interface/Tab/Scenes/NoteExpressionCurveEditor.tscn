@@ -1,0 +1,244 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Interface/Tab/Scripts/NoteExpressionCurveEditor.cs" id="1_editor"]
+[ext_resource type="Script" path="res://Interface/Tab/Scripts/ExpressionCurveGraph.cs" id="2_graph"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="3_theme"]
+
+[node name="NoteExpressionCurveEditor" type="Window"]
+theme = ExtResource("3_theme")
+title = "Note expression"
+size = Vector2i(350, 370)
+min_size = Vector2i(350, 370)
+transient = true
+exclusive = false
+unresizable = false
+script = ExtResource("1_editor")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = -6.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TitleRow" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="Margin/Content/TitleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Note expression"
+
+[node name="KindOption" type="OptionButton" parent="Margin/Content/TitleRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 23)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+item_count = 4
+popup/item_0/text = "Pitch / bend"
+popup/item_1/text = "Vibrato"
+popup/item_2/text = "Tremolo"
+popup/item_3/text = "Velocity"
+
+[node name="Status" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No curve assigned"
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="PitchRangeRow" type="HBoxContainer" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="PitchRangeLabel" type="Label" parent="Margin/Content/PitchRangeRow"]
+layout_mode = 2
+text = "Pitch range"
+vertical_alignment = 1
+
+[node name="PitchMin" type="SpinBox" parent="Margin/Content/PitchRangeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 23)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+min_value = -24.0
+max_value = 24.0
+step = 0.5
+value = -2.0
+suffix = " st"
+
+[node name="PitchToLabel" type="Label" parent="Margin/Content/PitchRangeRow"]
+layout_mode = 2
+text = "to"
+
+[node name="PitchMax" type="SpinBox" parent="Margin/Content/PitchRangeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 23)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+min_value = -24.0
+max_value = 24.0
+step = 0.5
+value = 2.0
+suffix = " st"
+
+[node name="Graph" type="Control" parent="Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(310, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+script = ExtResource("2_graph")
+
+[node name="Legend" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pitch · semitones (−2 to +2) · X = note progress"
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 11
+
+[node name="GraphHint" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Left-click to add/drag · right-click a point to remove"
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 11
+
+[node name="ToolRow" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PresetLabel" type="Label" parent="Margin/Content/ToolRow"]
+layout_mode = 2
+text = "Preset"
+vertical_alignment = 1
+
+[node name="PresetOption" type="OptionButton" parent="Margin/Content/ToolRow"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+item_count = 4
+popup/item_0/text = "Choose…"
+popup/item_1/text = "Bend / rise"
+popup/item_2/text = "Release / fall"
+popup/item_3/text = "Slide / pulse"
+
+[node name="PointValueLabel" type="Label" parent="Margin/Content/ToolRow"]
+layout_mode = 2
+text = "Value"
+vertical_alignment = 1
+
+[node name="PointValue" type="SpinBox" parent="Margin/Content/ToolRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 23)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+min_value = -2.0
+max_value = 2.0
+step = 0.05
+value = 0.0
+
+[node name="TimingRow" type="HBoxContainer" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="DivisionLabel" type="Label" parent="Margin/Content/TimingRow"]
+layout_mode = 2
+text = "Horizontal division"
+vertical_alignment = 1
+
+[node name="HorizontalDivision" type="OptionButton" parent="Margin/Content/TimingRow"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+item_count = 7
+popup/item_0/text = "Quarter notes"
+popup/item_1/text = "Eighth notes"
+popup/item_2/text = "Sixteenth notes"
+popup/item_3/text = "Thirty-second notes"
+popup/item_4/text = "Sixty-fourth notes"
+popup/item_5/text = "Eighth note triplets"
+popup/item_6/text = "Sixteenth note triplets"
+
+[node name="CurveOptionsRow" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Snap" type="CheckBox" parent="Margin/Content/CurveOptionsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Snap time"
+button_pressed = true
+theme_override_font_sizes/font_size = 12
+
+[node name="SnapPitch" type="CheckBox" parent="Margin/Content/CurveOptionsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Snap pitch"
+button_pressed = true
+theme_override_font_sizes/font_size = 12
+
+[node name="StepSegment" type="CheckBox" parent="Margin/Content/CurveOptionsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Step"
+tooltip_text = "Hold this point's value until the next point."
+theme_override_font_sizes/font_size = 12
+
+[node name="PreviewRow" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PreviewButton" type="Button" parent="Margin/Content/PreviewRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Preview"
+theme_override_font_sizes/font_size = 12
+
+[node name="LoopButton" type="CheckBox" parent="Margin/Content/PreviewRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Loop"
+tooltip_text = "Repeat after a pause of one beat at the current tempo."
+button_pressed = true
+theme_override_font_sizes/font_size = 12
+
+[node name="ActionRow" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RemoveButton" type="Button" parent="Margin/Content/ActionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Remove effect"
+theme_override_font_sizes/font_size = 12
+
+[node name="Spacer" type="Control" parent="Margin/Content/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CancelButton" type="Button" parent="Margin/Content/ActionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Cancel"
+theme_override_font_sizes/font_size = 12
+
+[node name="ApplyButton" type="Button" parent="Margin/Content/ActionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply to selection"
+theme_override_font_sizes/font_size = 12

@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://gjux8aj3pyek" path="res://Interface/Tracks/NotePitchSelector.cs" id="1_script"]
+
+[node name="NotePitchSelector" type="HBoxContainer"]
+script = ExtResource("1_script")
+
+[node name="PitchEdit" type="LineEdit" parent="."]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(72, 0)
+select_all_on_focus = true
+
+[node name="StepButtons" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(22, 0)
+size_flags_vertical = 4
+
+[node name="StepUp" type="Button" parent="StepButtons"]
+custom_minimum_size = Vector2(22, 14)
+size_flags_vertical = 3
+focus_mode = 0
+text = "▴"
+tooltip_text = "Raise by one semitone"
+
+[node name="StepDown" type="Button" parent="StepButtons"]
+custom_minimum_size = Vector2(22, 14)
+size_flags_vertical = 3
+focus_mode = 0
+text = "▾"
+tooltip_text = "Lower by one semitone"

@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[node name="MeasureVersionManager" type="VBoxContainer"]
+custom_minimum_size = Vector2(420, 360)
+size_flags_horizontal = 3
+
+[node name="Name" type="LineEdit" parent="."]
+layout_mode = 2
+placeholder_text = "Version name"
+
+[node name="Actions" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Copy" type="Button" parent="Actions"]
+layout_mode = 2
+text = "Create from original"
+
+[node name="Empty" type="Button" parent="Actions"]
+layout_mode = 2
+text = "Create empty"
+
+[node name="Rename" type="Button" parent="Actions"]
+layout_mode = 2
+text = "Rename selected"
+
+[node name="Delete" type="Button" parent="Actions"]
+layout_mode = 2
+text = "Delete selected"
+
+[node name="RuleLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Arrangement transition: choose the next section and version"
+tooltip_text = "Arrangement transition rules choose this measure's version according to the next section."
+
+[node name="RuleRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Section" type="OptionButton" parent="RuleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose the destination section for this arrangement transition"
+
+[node name="RuleVersion" type="OptionButton" parent="RuleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this measure's version when the selected section comes next"
+
+[node name="SetRule" type="Button" parent="."]
+layout_mode = 2
+text = "Set transition rule"
+tooltip_text = "Save the version played in this measure when the selected section comes next"
+
+[node name="TransitionRules" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="AlternationLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Arrangement fallback alternation order"
+tooltip_text = "Fallback version order used by arrangements when no destination transition rule applies."
+
+[node name="AlternationChoice" type="OptionButton" parent="."]
+layout_mode = 2
+
+[node name="AlternationList" type="ItemList" parent="."]
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+select_mode = 1
+
+[node name="AlternationActions" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="AddChoice" type="Button" parent="AlternationActions"]
+layout_mode = 2
+text = "Add"
+
+[node name="MoveUp" type="Button" parent="AlternationActions"]
+layout_mode = 2
+text = "Up"
+
+[node name="MoveDown" type="Button" parent="AlternationActions"]
+layout_mode = 2
+text = "Down"
+
+[node name="RemoveChoice" type="Button" parent="AlternationActions"]
+layout_mode = 2
+text = "Remove"
+
+[node name="SaveAlternation" type="Button" parent="."]
+layout_mode = 2
+text = "Save alternation"

@@ -1,0 +1,1018 @@
+[gd_scene format=3 uid="uid://v751kjff7rj6"]
+
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://dws62dwvsnk1n" path="res://Interface/ThemeEditor/TabThemePreview.gd" id="2_tab"]
+[ext_resource type="Script" uid="uid://bgn8vrm5fvnvq" path="res://Interface/ThemeEditor/StatusTokenPreview.gd" id="3_status"]
+[ext_resource type="StyleBox" uid="uid://u8ul8gb8mfhl" path="res://Interface/Themes/Panels/tab_panel.tres" id="4_tab_panel"]
+[ext_resource type="StyleBox" uid="uid://clp67wy1s4uxj" path="res://Interface/DrumKit/Themes/Panels/beat_editor.tres" id="5_beat_panel"]
+[ext_resource type="Script" uid="uid://dkvvyc4lndonx" path="res://Interface/ThemeEditor/BeatEditorPanelPreview.gd" id="6_beat_preview"]
+[ext_resource type="Script" uid="uid://5qjwe30xqllc" path="res://Interface/ThemeEditor/IndicatorPreview.gd" id="indicators_preview"]
+
+[node name="ThemeEditor" type="Control" unique_id=1142003115]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=1227195276]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="Scroll" unique_id=1972273261]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Scroll/Content" unique_id=1428088072]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "BeachLine Theme Preview"
+
+[node name="Description" type="Label" parent="Scroll/Content" unique_id=1043326651]
+layout_mode = 2
+text = "Shared theme controls and variations from Interface/Themes/main.tres"
+
+[node name="Group0" type="PanelContainer" parent="Scroll/Content" unique_id=209050438]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group0" unique_id=181662926]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group0/Stack" unique_id=735114500]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "AcceptDialog"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group0/Stack" unique_id=1665603806]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample0_0" type="AcceptDialog" parent="Scroll/Content/Group0/Stack/Samples" unique_id=117238754]
+oversampling_override = 1.0
+position = Vector2i(819, 28)
+
+[node name="Group1" type="PanelContainer" parent="Scroll/Content" unique_id=1568428155]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group1" unique_id=796805382]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group1/Stack" unique_id=1988638158]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "AppStatus"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group1/Stack" unique_id=1617762867]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample1_0" type="HBoxContainer" parent="Scroll/Content/Group1/Stack/Samples" unique_id=1061115837]
+custom_minimum_size = Vector2(600, 36)
+layout_mode = 2
+theme_override_constants/separation = 12
+script = ExtResource("3_status")
+
+[node name="Group2" type="PanelContainer" parent="Scroll/Content" unique_id=1606884986]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group2" unique_id=137444314]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group2/Stack" unique_id=76305827]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "BoxContainer"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group2/Stack" unique_id=1918710459]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample2_0" type="BoxContainer" parent="Scroll/Content/Group2/Stack/Samples" unique_id=1002605665]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group3" type="PanelContainer" parent="Scroll/Content" unique_id=1509186034]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group3" unique_id=200172547]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group3/Stack" unique_id=1500549827]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Button"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group3/Stack" unique_id=44406670]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample3_0" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1170648768]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppActionButton"
+text = "AppActionButton"
+
+[node name="Sample3_1" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=38040117]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppDestructiveButton"
+text = "AppDestructiveButton"
+
+[node name="Sample3_2" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1421939252]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppMuteButton"
+text = "AppMuteButton"
+
+[node name="Sample3_3" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1019541404]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppSoloButton"
+text = "AppSoloButton"
+
+[node name="Sample3_4" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1482931220]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppToggleButton"
+text = "AppToggleButton"
+
+[node name="Sample3_5" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=714105279]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"BeatCreateButton"
+text = "BeatCreateButton"
+
+[node name="Sample3_6" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=494227085]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"BeatDotButton"
+text = "BeatDotButton"
+
+[node name="Sample3_7" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1257814597]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"BeatDurationButton"
+text = "BeatDurationButton"
+
+[node name="Sample3_8" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1484706944]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"BeatIntensityButton"
+text = "BeatIntensityButton"
+
+[node name="Sample3_9" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=745840100]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"BeatRemoveButton"
+text = "BeatRemoveButton"
+
+[node name="Sample3_10" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=361537824]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"BeatToggleButton"
+text = "BeatToggleButton"
+
+[node name="Sample3_11" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1071609915]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"BlackKey"
+text = "BlackKey"
+
+[node name="Sample3_12" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1792593031]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+text = "Button"
+
+[node name="Sample3_13" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=256426516]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumActionButton"
+text = "DrumActionButton"
+
+[node name="Sample3_14" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=78920875]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumToggleButton"
+text = "DrumToggleButton"
+
+[node name="Sample3_15" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=722139801]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"Fret"
+text = "Fret"
+
+[node name="Sample3_16" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1630756016]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"HandFret"
+text = "HandFret"
+
+[node name="Sample3_17" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=378398252]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"MarkFret"
+text = "MarkFret"
+
+[node name="Sample3_18" type="Button" parent="Scroll/Content/Group3/Stack/Samples" unique_id=1491217492]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"WhiteKey"
+text = "WhiteKey"
+
+[node name="Group4" type="PanelContainer" parent="Scroll/Content" unique_id=1535279903]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group4" unique_id=101642848]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group4/Stack" unique_id=1803210503]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Control"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group4/Stack" unique_id=1651767124]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample4_0" type="Control" parent="Scroll/Content/Group4/Stack/Samples" unique_id=351408979]
+custom_minimum_size = Vector2(420, 232)
+layout_mode = 2
+theme_type_variation = &"TabMeasureView"
+script = ExtResource("2_tab")
+tab_panel = ExtResource("4_tab_panel")
+shared_theme = ExtResource("1_theme")
+
+[node name="Group5" type="PanelContainer" parent="Scroll/Content" unique_id=572940335]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group5" unique_id=1792777560]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group5/Stack" unique_id=1485549630]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "FileDialog"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group5/Stack" unique_id=1384388986]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample5_0" type="FileDialog" parent="Scroll/Content/Group5/Stack/Samples" unique_id=357241048]
+oversampling_override = 1.0
+position = Vector2i(607, 274)
+keep_title_visible = false
+
+[node name="Group6" type="PanelContainer" parent="Scroll/Content" unique_id=1572801890]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group6" unique_id=949803625]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group6/Stack" unique_id=344793212]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "FoldableContainer"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group6/Stack" unique_id=307863687]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample6_0" type="FoldableContainer" parent="Scroll/Content/Group6/Stack/Samples" unique_id=1669415693]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppFoldable"
+
+[node name="Sample6_1" type="FoldableContainer" parent="Scroll/Content/Group6/Stack/Samples" unique_id=1032588425]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumFoldable"
+
+[node name="Sample6_2" type="FoldableContainer" parent="Scroll/Content/Group6/Stack/Samples" unique_id=1520680505]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group7" type="PanelContainer" parent="Scroll/Content" unique_id=1588593168]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group7" unique_id=273326731]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group7/Stack" unique_id=634926587]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "HScrollBar"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group7/Stack" unique_id=1902280465]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample7_0" type="HScrollBar" parent="Scroll/Content/Group7/Stack/Samples" unique_id=1750714348]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group8" type="PanelContainer" parent="Scroll/Content" unique_id=488372590]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group8" unique_id=1315717862]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group8/Stack" unique_id=1596535893]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "HSlider"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group8/Stack" unique_id=312199527]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample8_0" type="HSlider" parent="Scroll/Content/Group8/Stack/Samples" unique_id=1231706487]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DrumVolumeSlider"
+value = 65.0
+
+[node name="Sample8_1" type="HSlider" parent="Scroll/Content/Group8/Stack/Samples" unique_id=1282635554]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 65.0
+
+[node name="Group9" type="PanelContainer" parent="Scroll/Content" unique_id=1164938521]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group9" unique_id=361969605]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group9/Stack" unique_id=869767857]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "HSplitContainer"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group9/Stack" unique_id=1106476780]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample9_0" type="HSplitContainer" parent="Scroll/Content/Group9/Stack/Samples" unique_id=1657359094]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group10" type="PanelContainer" parent="Scroll/Content" unique_id=1599851233]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group10" unique_id=1431547032]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group10/Stack" unique_id=2108593486]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "ItemList"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group10/Stack" unique_id=346682722]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample10_0" type="ItemList" parent="Scroll/Content/Group10/Stack/Samples" unique_id=153566951]
+custom_minimum_size = Vector2(150, 65)
+layout_mode = 2
+
+[node name="Group11" type="PanelContainer" parent="Scroll/Content" unique_id=562783428]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group11" unique_id=1008524704]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group11/Stack" unique_id=961868719]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Label"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group11/Stack" unique_id=1368967357]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample11_0" type="Label" parent="Scroll/Content/Group11/Stack/Samples" unique_id=1384117075]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppErrorLabel"
+text = "AppErrorLabel"
+
+[node name="Sample11_1" type="Label" parent="Scroll/Content/Group11/Stack/Samples" unique_id=1251622108]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppMutedLabel"
+text = "AppMutedLabel"
+
+[node name="Sample11_2" type="Label" parent="Scroll/Content/Group11/Stack/Samples" unique_id=1121049048]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppSuccessLabel"
+text = "AppSuccessLabel"
+
+[node name="Sample11_3" type="Label" parent="Scroll/Content/Group11/Stack/Samples" unique_id=1297685243]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumVolumeLabel"
+text = "DrumVolumeLabel"
+
+[node name="Sample11_4" type="Label" parent="Scroll/Content/Group11/Stack/Samples" unique_id=1021843741]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+text = "Label"
+
+[node name="Group12" type="PanelContainer" parent="Scroll/Content" unique_id=166738266]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group12" unique_id=480127345]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group12/Stack" unique_id=602586341]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "LineEdit"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group12/Stack" unique_id=1026408445]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample12_0" type="LineEdit" parent="Scroll/Content/Group12/Stack/Samples" unique_id=1546866190]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+text = "Sample text"
+placeholder_text = "Placeholder"
+
+[node name="Group13" type="PanelContainer" parent="Scroll/Content" unique_id=616038064]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group13" unique_id=2099344606]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group13/Stack" unique_id=1029352619]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "MenuBar"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group13/Stack" unique_id=1406633762]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample13_0" type="MenuBar" parent="Scroll/Content/Group13/Stack/Samples" unique_id=353502371]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group14" type="PanelContainer" parent="Scroll/Content" unique_id=684079260]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group14" unique_id=142457984]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group14/Stack" unique_id=1907212011]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "MenuButton"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group14/Stack" unique_id=1838407803]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample14_0" type="MenuButton" parent="Scroll/Content/Group14/Stack/Samples" unique_id=1556311213]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppArrangementMenuButton"
+text = "AppArrangementMenuButton"
+
+[node name="Sample14_1" type="MenuButton" parent="Scroll/Content/Group14/Stack/Samples" unique_id=897559280]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+text = "MenuButton"
+
+[node name="Group15" type="PanelContainer" parent="Scroll/Content" unique_id=585565832]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group15" unique_id=1399414003]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group15/Stack" unique_id=110342299]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "OptionButton"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group15/Stack" unique_id=56926632]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample15_0" type="OptionButton" parent="Scroll/Content/Group15/Stack/Samples" unique_id=1731484311]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppOptionButton"
+
+[node name="Sample15_1" type="OptionButton" parent="Scroll/Content/Group15/Stack/Samples" unique_id=1798596772]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumOptionButton"
+
+[node name="Sample15_2" type="OptionButton" parent="Scroll/Content/Group15/Stack/Samples" unique_id=1903109491]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group16" type="PanelContainer" parent="Scroll/Content" unique_id=933780737]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group16" unique_id=679997857]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group16/Stack" unique_id=560564304]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Panel"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group16/Stack" unique_id=1111759636]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample16_0" type="Panel" parent="Scroll/Content/Group16/Stack/Samples" unique_id=259319771]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppBackgroundPanel"
+
+[node name="Sample16_1" type="Panel" parent="Scroll/Content/Group16/Stack/Samples" unique_id=1137881890]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group17" type="PanelContainer" parent="Scroll/Content" unique_id=1899105082]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group17" unique_id=1110857562]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group17/Stack" unique_id=531916986]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "PanelContainer"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group17/Stack" unique_id=860835259]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample17_0" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=729620741]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppHeaderPanel"
+
+[node name="Sample17_1" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=483119154]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppInsetPanel"
+
+[node name="Sample17_2" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=111273313]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppNamePanel"
+
+[node name="Sample17_3" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=570427591]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppPanel"
+
+[node name="Sample17_4" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=462225948]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppTrackPanel"
+
+[node name="Sample17_5" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=879887037]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"AppWorkspacePanel"
+
+[node name="Sample17_6" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=1333150647]
+custom_minimum_size = Vector2(260, 112)
+layout_mode = 2
+theme_type_variation = &"BeatEditorPanel"
+script = ExtResource("6_beat_preview")
+beat_style = ExtResource("5_beat_panel")
+
+[node name="PreviewContent" type="VBoxContainer" parent="Scroll/Content/Group17/Stack/Samples/Sample17_6" unique_id=938476281]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="Scroll/Content/Group17/Stack/Samples/Sample17_6/PreviewContent" unique_id=999311671]
+layout_mode = 2
+text = "Beat editor panel"
+
+[node name="Actions" type="HBoxContainer" parent="Scroll/Content/Group17/Stack/Samples/Sample17_6/PreviewContent" unique_id=114811538]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Beat" type="Button" parent="Scroll/Content/Group17/Stack/Samples/Sample17_6/PreviewContent/Actions" unique_id=205841317]
+custom_minimum_size = Vector2(54, 30)
+layout_mode = 2
+theme_type_variation = &"BeatToggleButton"
+text = "1"
+
+[node name="Create" type="Button" parent="Scroll/Content/Group17/Stack/Samples/Sample17_6/PreviewContent/Actions" unique_id=158680774]
+custom_minimum_size = Vector2(64, 30)
+layout_mode = 2
+theme_type_variation = &"BeatCreateButton"
+text = "+ Beat"
+
+[node name="Sample17_7" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=1300082463]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumHeaderPanel"
+
+[node name="Sample17_8" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=1755825969]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumPanel"
+
+[node name="Sample17_9" type="PanelContainer" parent="Scroll/Content/Group17/Stack/Samples" unique_id=1226764585]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group18" type="PanelContainer" parent="Scroll/Content" unique_id=587486565]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group18" unique_id=2005713874]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group18/Stack" unique_id=1133365557]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "PopupMenu"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group18/Stack" unique_id=582593156]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample18_0" type="PopupMenu" parent="Scroll/Content/Group18/Stack/Samples" unique_id=1678942718]
+oversampling_override = 1.0
+position = Vector2i(1001, 0)
+
+[node name="Group19" type="PanelContainer" parent="Scroll/Content" unique_id=918695387]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group19" unique_id=498546949]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group19/Stack" unique_id=1910947655]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "PopupPanel"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group19/Stack" unique_id=136114906]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample19_0" type="PopupPanel" parent="Scroll/Content/Group19/Stack/Samples" unique_id=829609931]
+oversampling_override = 1.0
+position = Vector2i(1114, 0)
+
+[node name="Group20" type="PanelContainer" parent="Scroll/Content" unique_id=1001623541]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group20" unique_id=684308469]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group20/Stack" unique_id=1247680654]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "RichTextLabel"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group20/Stack" unique_id=2019825788]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample20_0" type="RichTextLabel" parent="Scroll/Content/Group20/Stack/Samples" unique_id=1534744567]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group21" type="PanelContainer" parent="Scroll/Content" unique_id=1333308833]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group21" unique_id=826551746]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group21/Stack" unique_id=1184835584]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "SpinBox"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group21/Stack" unique_id=1226439098]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample21_0" type="SpinBox" parent="Scroll/Content/Group21/Stack/Samples" unique_id=1641104831]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"DrumPatternLength"
+value = 8.0
+
+[node name="Sample21_1" type="SpinBox" parent="Scroll/Content/Group21/Stack/Samples" unique_id=1664854833]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+value = 8.0
+
+[node name="Group22" type="PanelContainer" parent="Scroll/Content" unique_id=1054288915]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group22" unique_id=130637493]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group22/Stack" unique_id=1413802367]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "TextEdit"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group22/Stack" unique_id=2072457919]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample22_0" type="TextEdit" parent="Scroll/Content/Group22/Stack/Samples" unique_id=650947818]
+custom_minimum_size = Vector2(150, 65)
+layout_mode = 2
+text = "Sample text"
+
+[node name="Group23" type="PanelContainer" parent="Scroll/Content" unique_id=777167488]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group23" unique_id=467676658]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group23/Stack" unique_id=1969432985]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "TooltipLabel"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group23/Stack" unique_id=1319476208]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample23_0" type="Label" parent="Scroll/Content/Group23/Stack/Samples" unique_id=913900384]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"TooltipLabel"
+text = "TooltipLabel"
+
+[node name="Group24" type="PanelContainer" parent="Scroll/Content" unique_id=2111627757]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group24" unique_id=1819852222]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group24/Stack" unique_id=1811851641]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "TooltipPanel"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group24/Stack" unique_id=1459631419]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample24_0" type="PanelContainer" parent="Scroll/Content/Group24/Stack/Samples" unique_id=414836178]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+theme_type_variation = &"TooltipPanel"
+
+[node name="Group25" type="PanelContainer" parent="Scroll/Content" unique_id=776382990]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group25" unique_id=2146808355]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group25/Stack" unique_id=1134872732]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Tree"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group25/Stack" unique_id=418977994]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample25_0" type="Tree" parent="Scroll/Content/Group25/Stack/Samples" unique_id=1544074591]
+custom_minimum_size = Vector2(150, 65)
+layout_mode = 2
+
+[node name="Group26" type="PanelContainer" parent="Scroll/Content" unique_id=1516568490]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group26" unique_id=2121103627]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group26/Stack" unique_id=269063879]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "VScrollBar"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group26/Stack" unique_id=1781476739]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample26_0" type="VScrollBar" parent="Scroll/Content/Group26/Stack/Samples" unique_id=947460816]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group27" type="PanelContainer" parent="Scroll/Content" unique_id=914850252]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group27" unique_id=99753111]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group27/Stack" unique_id=1936692107]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "VSplitContainer"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group27/Stack" unique_id=579777114]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample27_0" type="VSplitContainer" parent="Scroll/Content/Group27/Stack/Samples" unique_id=311001846]
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+
+[node name="Group28" type="PanelContainer" parent="Scroll/Content" unique_id=81264622]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stack" type="VBoxContainer" parent="Scroll/Content/Group28" unique_id=407917817]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Scroll/Content/Group28/Stack" unique_id=1903115578]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Window"
+
+[node name="Samples" type="GridContainer" parent="Scroll/Content/Group28/Stack" unique_id=162043463]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Sample28_0" type="Window" parent="Scroll/Content/Group28/Stack/Samples" unique_id=662080367]
+oversampling_override = 1.0
+position = Vector2i(693, 28)
+visible = false
+
+[node name="States" type="PanelContainer" parent="Scroll/Content" unique_id=1082964383]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StateStack" type="VBoxContainer" parent="Scroll/Content/States" unique_id=1498677272]
+layout_mode = 2
+
+[node name="StateTitle" type="Label" parent="Scroll/Content/States/StateStack" unique_id=737299244]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Button states"
+
+[node name="StateRow" type="HBoxContainer" parent="Scroll/Content/States/StateStack" unique_id=1854668254]
+layout_mode = 2
+
+[node name="Action_normal" type="Button" parent="Scroll/Content/States/StateStack/StateRow" unique_id=1148782224]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+theme_type_variation = &"AppActionButton"
+text = "Action / normal"
+
+[node name="Action_pressed" type="Button" parent="Scroll/Content/States/StateStack/StateRow" unique_id=1580668487]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+theme_type_variation = &"AppActionButton"
+toggle_mode = true
+button_pressed = true
+text = "Action / pressed"
+
+[node name="Action_disabled" type="Button" parent="Scroll/Content/States/StateStack/StateRow" unique_id=2019066927]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+theme_type_variation = &"AppActionButton"
+disabled = true
+text = "Action / disabled"
+
+[node name="Fret_normal" type="Button" parent="Scroll/Content/States/StateStack/StateRow" unique_id=1142459293]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+theme_type_variation = &"Fret"
+text = "Fret / normal"
+
+[node name="Fret_pressed" type="Button" parent="Scroll/Content/States/StateStack/StateRow" unique_id=213107421]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+theme_type_variation = &"Fret"
+toggle_mode = true
+button_pressed = true
+text = "Fret / pressed"
+
+[node name="Fret_disabled" type="Button" parent="Scroll/Content/States/StateStack/StateRow" unique_id=591092485]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+theme_type_variation = &"Fret"
+disabled = true
+text = "Fret / disabled"
+
+[node name="IndicatorsSection" type="PanelContainer" parent="Scroll/Content" unique_id=1435371849]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="IndicatorsContent" type="VBoxContainer" parent="Scroll/Content/IndicatorsSection" unique_id=210309084]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Scroll/Content/IndicatorsSection/IndicatorsContent" unique_id=799374890]
+layout_mode = 2
+text = "Arrangement and repeated-beat indicators"
+
+[node name="IndicatorsPreview" type="Control" parent="Scroll/Content/IndicatorsSection/IndicatorsContent" unique_id=1253533946]
+custom_minimum_size = Vector2(480, 75)
+layout_mode = 2
+script = ExtResource("indicators_preview")
+shared_theme = ExtResource("1_theme")

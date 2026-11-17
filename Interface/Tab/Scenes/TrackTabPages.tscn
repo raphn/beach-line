@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[node name="TrackTabPages" type="VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Headers" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FixedControls" type="HBoxContainer" parent="Headers"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_scroll_mode = 0
+
+[node name="Sections" type="HBoxContainer" parent="Scroll"]
+layout_mode = 2

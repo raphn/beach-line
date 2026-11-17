@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://cba16x8oryp3w"]
+
+[ext_resource type="Script" uid="uid://difta5dioo7nk" path="res://Interface/Tab/Scripts/MeasureTabView.cs" id="1_view"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="app_theme"]
+[ext_resource type="PackedScene" path="res://Interface/Tab/Scenes/MeasureHeader.tscn" id="header"]
+
+[node name="MeasureTab" type="VBoxContainer" unique_id=1418722228]
+custom_minimum_size = Vector2(0, 0)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("app_theme")
+theme_type_variation = &"TabMeasureView"
+
+[node name="MeasureHeader" parent="." unique_id=2017817429 instance=ExtResource("header")]
+layout_mode = 2
+
+[node name="Content" type="Control" parent="." unique_id=1648217594]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="MeasureTabView" type="Control" parent="Content" unique_id=311834394]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("app_theme")
+theme_type_variation = &"TabMeasureView"
+script = ExtResource("1_view")
+
+[node name="PlaceholderLabel" type="Label" parent="Content" unique_id=287181823]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+vertical_alignment = 1
+clip_text = true

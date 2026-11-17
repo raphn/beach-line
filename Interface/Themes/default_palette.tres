@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ThemePalette" format=3 uid="uid://bi1w64yckpjaw"]
+
+[ext_resource type="Script" uid="uid://c3oinjhau48yo" path="res://Interface/ThemeEditor/theme_palette.gd" id="1_fishf"]
+
+[resource]
+script = ExtResource("1_fishf")
+background_color = Color(0.0534, 0.0556, 0.06, 1)
+panel_color = Color(0.15, 0.15, 0.15, 1)
+highlight_color = Color(0.22352941, 0.78039217, 0.79607844, 1)
+tab_background_color = Color(0.15, 0.15, 0.15, 1)
+tab_grid_color = Color(0.86, 0.86, 0.86, 1)
+tab_string_color = Color(0.6, 0.6, 0.6, 1)
+tab_text_color = Color(0.98, 0.98, 0.98, 1)
+beat_background_color = Color(0.14901961, 0.14901961, 0.14901961, 1)
+button_highlight_difference = 0.25
+active_groups = Array[StringName]([&"button_difference", &"surface", &"highlight", &"beat_background", &"tab_string", &"tab_grid", &"tab_text", &"tab_line_thickness"])

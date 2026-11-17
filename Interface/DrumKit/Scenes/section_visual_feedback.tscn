@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bbyvyo7gt2m0h"]
+
+[ext_resource type="PackedScene" uid="uid://nfn54ygvwgpt" path="res://Interface/DrumKit/Scenes/measure_header.tscn" id="1_3bju5"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="drum_theme"]
+
+[node name="SectionVisualFeedback" type="PanelContainer" unique_id=971003951]
+custom_minimum_size = Vector2(0, 48)
+offset_right = 178.0
+offset_bottom = 56.0
+size_flags_horizontal = 3
+theme = ExtResource("drum_theme")
+theme_type_variation = &"DrumHeaderPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=191329633]
+layout_mode = 2
+
+[node name="SectionInformation" type="RichTextLabel" parent="VBoxContainer" unique_id=150823396]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[i]Section ::[/i] [b]A[/b]"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MeasureHeaders" type="HBoxContainer" parent="VBoxContainer" unique_id=813783856]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="MeasureHeader" parent="VBoxContainer/MeasureHeaders" unique_id=1339142634 instance=ExtResource("1_3bju5")]
+layout_mode = 2

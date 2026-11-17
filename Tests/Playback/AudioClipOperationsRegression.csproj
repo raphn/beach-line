@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <IntermediateOutputPath>obj\AudioClipOperations\$(Configuration)\$(TargetFramework)\</IntermediateOutputPath>
+    <OutputPath>bin\AudioClipOperations\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AudioClipOperationsRegression.cs" />
+    <ProjectReference Include="../../BeachLine.csproj" />
+  </ItemGroup>
+</Project>

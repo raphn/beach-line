@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[node name="AudioOnlyRuler" type="PanelContainer"]
+size_flags_horizontal = 3
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Layout"]
+layout_mode = 2
+
+[node name="MeasureControls" type="HBoxContainer" parent="Layout"]
+layout_mode = 2
+
+[node name="AddMeasure" type="Button" parent="Layout/MeasureControls"]
+layout_mode = 2
+text = "+ Measure"
+
+[node name="RemoveLastMeasure" type="Button" parent="Layout/MeasureControls"]
+layout_mode = 2
+text = "− Last Measure"

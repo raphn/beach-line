@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[node name="TabStatusBar" type="HFlowContainer"]
+size_flags_horizontal = 3
+
+[node name="Status" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Drag empty space to select; Shift-drag adds to selection. Ctrl+C copies, hover and Ctrl+V pastes. Ctrl-click adds fret 0. Double-click to edit a fret; Ctrl+arrow keys edit or move notes."
+text = "TAB help · hover for shortcuts"
+clip_text = true

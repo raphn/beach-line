@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://m7p1t0v0p2w1"]
+
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://dlg6oovn46kql" path="res://Interface/GuitarFretboard/Scripts/FretboardChordController.cs" id="2_controller"]
+[ext_resource type="PackedScene" uid="uid://dgwj4r8a67qcx" path="res://Interface/Common/Scenes/chord_inserting_options.tscn" id="4_options"]
+
+[node name="GuitarFretBoardPopup" type="Window" unique_id=1860643522]
+disable_3d = true
+oversampling_override = 1.0
+title = "Fretboard"
+position = Vector2i(0, 36)
+size = Vector2i(720, 160)
+minimize_disabled = true
+maximize_disabled = true
+min_size = Vector2i(160, 90)
+theme = ExtResource("1_theme")
+script = ExtResource("2_controller")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=289655933]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"AppPanel"
+
+[node name="Layout" type="VBoxContainer" parent="Panel" unique_id=1938596641]
+layout_mode = 2
+
+[node name="FretScroll" type="ScrollContainer" parent="Panel/Layout" unique_id=1676890485]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Strings" type="VBoxContainer" parent="Panel/Layout/FretScroll" unique_id=2053380840]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChordInsertingOptions" parent="Panel/Layout" unique_id=87437900 instance=ExtResource("4_options")]
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="Panel/Layout/ChordInsertingOptions"]
+layout_mode = 2
+text = "Reset"
+
+[editable path="Panel/Layout/ChordInsertingOptions"]

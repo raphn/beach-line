@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://bcp351l0mrfrn"]
+
+[ext_resource type="Texture2D" uid="uid://m6vtkj4xcxk5" path="res://Interface/Common/Graphs/guitar_lorc.png" id="1_nlxjy"]
+[ext_resource type="Texture2D" uid="uid://cgifbbelpuxro" path="res://Interface/Common/Graphs/cog_lorc.png" id="2_g3ypv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_piece"]
+content_margin_left = 10.0
+content_margin_top = 3.0
+content_margin_right = 4.0
+content_margin_bottom = 3.0
+bg_color = Color(0.2, 0.2, 0.2, 1)
+border_width_left = 3
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.94, 0.94, 0.94, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="PercussionSubTrackHeader" type="PanelContainer" unique_id=146630514]
+theme_override_styles/panel = SubResource("StyleBoxFlat_piece")
+
+[node name="BoxContainer" type="BoxContainer" parent="." unique_id=163929624]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="DeleteButton" type="Button" parent="BoxContainer" unique_id=1215900736]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+tooltip_text = "Delete this percussion piece"
+theme_type_variation = &"AppDestructiveButton"
+theme_override_font_sizes/font_size = 10
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BoxContainer" unique_id=1849487656]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="PieceTexture" type="TextureRect" parent="BoxContainer/HBoxContainer" unique_id=2064080961]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_nlxjy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameContainer" type="PanelContainer" parent="BoxContainer/HBoxContainer" unique_id=1637912885]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"AppNamePanel"
+
+[node name="TrackNameLabel" type="Label" parent="BoxContainer/HBoxContainer/NameContainer" unique_id=1447367301]
+layout_mode = 2
+text = "Piece-01"
+
+[node name="TrackNameEdit" type="LineEdit" parent="BoxContainer/HBoxContainer/NameContainer" unique_id=1343404671]
+visible = false
+layout_mode = 2
+text = "Piece"
+placeholder_text = "Piece Name"
+
+[node name="Config" type="HBoxContainer" parent="BoxContainer/HBoxContainer" unique_id=301152208]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="TrackSettingsButton" type="Button" parent="BoxContainer/HBoxContainer/Config" unique_id=1264573274]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Percussion piece settings"
+theme_type_variation = &"AppActionButton"
+icon = ExtResource("2_g3ypv")
+icon_alignment = 1
+expand_icon = true
+
+[node name="MuteButton" type="Button" parent="BoxContainer/HBoxContainer/Config" unique_id=91230699]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "Mute this percussion piece"
+theme_type_variation = &"AppMuteButton"
+theme_override_font_sizes/font_size = 14
+text = "M"
+
+[node name="SoloButton" type="Button" parent="BoxContainer/HBoxContainer/Config" unique_id=1355134390]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "Solo this percussion piece"
+theme_type_variation = &"AppSoloButton"
+theme_override_font_sizes/font_size = 14
+text = "S"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="BoxContainer" unique_id=1976724633]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Volume" type="HSlider" parent="BoxContainer/HBoxContainer2" unique_id=1757745952]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Percussion piece volume"
+theme_type_variation = &"DrumVolumeSlider"
+min_value = -80.0
+max_value = 20.0
+
+[node name="Label" type="Label" parent="BoxContainer/HBoxContainer2" unique_id=646645104]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_type_variation = &"DrumVolumeLabel"
+text = "-80db"
+horizontal_alignment = 1
+vertical_alignment = 1
