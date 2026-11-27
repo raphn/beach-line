@@ -23,6 +23,7 @@ public partial class DrumScorePresenter
         public Guid? TabTrackId { get; set; }
         public MeasureTabView.EditorSnapshot? Tab { get; set; }
         public Dictionary<Guid, bool> Folded { get; set; } = new();
+        public int? TrackHeight { get; set; }
         public Dictionary<Guid, int> DisplayModes { get; set; } = new();
         public Dictionary<Guid, Guid> RepeatSources { get; set; } = new();
         public Dictionary<Guid, Dictionary<Guid, Guid>>? SectionRepeatSources { get; set; }
@@ -30,6 +31,8 @@ public partial class DrumScorePresenter
         public int Snap { get; set; } = 16;
         public Dictionary<Guid, int>? TrackSnaps { get; set; }
         public Dictionary<Guid, int>? TrackTabScroll { get; set; }
+        public Dictionary<Guid, int>? FullTabViewportHeights { get; set; }
+        public Dictionary<Guid, int>? FullTabPitchScroll { get; set; }
         public int? PlaybackRepeatMode { get; set; }
         public Guid? ArrangementId { get; set; }
         public bool ArrangementLoop { get; set; } = true;
@@ -84,12 +87,14 @@ public partial class DrumScorePresenter
         if (_selectedNonPercussionTrackId == trackId) return;
         if (_editorTabTrackId != trackId)
         {
+            if (_activeEditorView is not null && GodotObject.IsInstanceValid(_activeEditorView)) _activeEditorView.ShowFocusWhenUnfocused = false;
             _activeEditorView = null; _tabRestorePending = false; _editorTabSnapshot = null;
             _editorTabTrackId = null; _editorTabMeasureId = null;
         }
         _selectedNonPercussionTrackId = trackId;
         UpdateTrackSelectionAppearance();
         ActivateFloatingBoards(trackId);
+        RequestBoardHighlightsRefresh();
         MarkEditorStateDirty();
     }
 
@@ -106,12 +111,16 @@ public partial class DrumScorePresenter
             _restoreEditorFocus = _activeEditorView.HasFocus();
             CaptureActiveTab();
         }
+        if (_activeEditorView is not null && GodotObject.IsInstanceValid(_activeEditorView)) _activeEditorView.ShowFocusWhenUnfocused = false;
         _activeEditorView = null;
         _tabRestorePending = false;
+        RequestBoardHighlightsRefresh();
     }
 
     private void ActivateTabView(Guid trackId, Guid measureId, MeasureTabView view)
     {
+        if (_activeEditorView is not null && _activeEditorView != view && GodotObject.IsInstanceValid(_activeEditorView))
+            _activeEditorView.ShowFocusWhenUnfocused = false;
         SetActiveEditorTrack(trackId);
         _drumFocus = null;
         _editingMeasureId = measureId;
@@ -120,6 +129,8 @@ public partial class DrumScorePresenter
         _editorTabTrackId = trackId;
         _editorTabMeasureId = measureId;
         _activeEditorView = view;
+        view.ShowFocusWhenUnfocused = true;
+        RequestBoardHighlightsRefresh();
         CaptureActiveTab();
         MarkEditorStateDirty();
     }
@@ -130,10 +141,13 @@ public partial class DrumScorePresenter
         {
             if (_activeEditorView != view || !GodotObject.IsInstanceValid(view)) return;
             CaptureActiveTab();
+            RequestBoardHighlightsRefresh();
             MarkEditorStateDirty();
         };
         if (_pendingTabCursor is not null || _editorTabSnapshot is null || _editorTabTrackId != trackId || _editorTabMeasureId != measureId) return;
         _activeEditorView = view;
+        view.ShowFocusWhenUnfocused = true;
+        RequestBoardHighlightsRefresh();
         _tabRestorePending = true;
         var snapshot = _editorTabSnapshot;
         var focus = _restoreEditorFocus;
@@ -143,7 +157,8 @@ public partial class DrumScorePresenter
             if (_activeEditorView != view || !GodotObject.IsInstanceValid(view) || !view.IsInsideTree()) return;
             _tabRestorePending = false;
             view.RestoreEditorSnapshot(snapshot, focus && view.IsVisibleInTree());
-            if (focus && view.IsVisibleInTree() && GodotObject.IsInstanceValid(scroll)) scroll.EnsureControlVisible(view);
+            RequestBoardHighlightsRefresh();
+            if (focus && view.IsVisibleInTree() && GodotObject.IsInstanceValid(scroll)) EnsureTabEditorVisible(scroll, view);
         }).CallDeferred();
     }
 
@@ -157,14 +172,15 @@ public partial class DrumScorePresenter
             VisibleSectionIds = GetVisibleSections().Select(section => section.Id).ToList(),
             MeasureId = _editingMeasureId, TrackId = _selectedNonPercussionTrackId,
             TabTrackId = _editorTabTrackId, TabMeasureId = _editorTabMeasureId, Tab = _editorTabSnapshot, DrumFocus = _drumFocus,
-            Folded = new(_trackFoldedStates), DisplayModes = new(_trackDisplayModes),
+            Folded = new(_trackFoldedStates), TrackHeight = (int)_trackHeight, DisplayModes = new(_trackDisplayModes),
             RepeatSources = _score.Sections.Count == 0 ? new() : _sectionRepeatSourceIndices
                 .Where(pair => pair.Key.SectionId == GetSelectedSection().Id && pair.Value >= 0 && pair.Value < GetSelectedSection().Measures.Count)
                 .ToDictionary(pair => pair.Key.TrackId, pair => GetSelectedSection().Measures[pair.Value].Id),
             SectionRepeatSources = CaptureSectionRepeatSources(),
             Boards = CaptureFloatingBoardStates(), Snap = _tabSnapDenominator, TrackSnaps = new(_tabSnapDenominators), TrackTabScroll = new(_trackTabScroll), PlaybackRepeatMode = (int)_playbackLoopMode, PercussionFolded = null,
             ArrangementId = _selectedArrangementId, ArrangementLoop = _arrangementLoop, ArrangementShortcuts = _arrangementShortcuts,
-            ScrollHorizontal = scroll?.ScrollHorizontal ?? _lastScrollX, ScrollVertical = scroll?.ScrollVertical ?? _lastScrollY
+            ScrollHorizontal = scroll?.ScrollHorizontal ?? _lastScrollX, ScrollVertical = scroll?.ScrollVertical ?? _lastScrollY,
+            FullTabViewportHeights = new(_fullTabViewportHeights), FullTabPitchScroll = new(_fullTabPitchScroll)
         };
     }
 
@@ -203,10 +219,16 @@ public partial class DrumScorePresenter
 
     private void RestoreEditorWorkspace(string? path, bool loadSavedState = true)
     {
+        _trackHeight = TrackHeight.Standard;
+        _expandedInFoldedPreset.Clear();
+        _fullTabViewportHeights.Clear();
+        _fullTabPitchScroll.Clear();
         _playbackLoopMode = PlaybackLoopMode.Score;
         _selectedArrangementId = _score.Arrangements.FirstOrDefault()?.Id;
         _arrangementLoop = true; _arrangementShortcuts = false;
+        if (_activeEditorView is not null && GodotObject.IsInstanceValid(_activeEditorView)) _activeEditorView.ShowFocusWhenUnfocused = false;
         _activeEditorView = null; _tabRestorePending = false; _editorTabSnapshot = null; _editorTabTrackId = null; _editorTabMeasureId = null; _drumFocus = null; _restoreDrumFocus = false;
+        RequestBoardHighlightsRefresh();
         _selectedNonPercussionTrackId = null; _editingMeasureId = null; _selectedSectionIndex = 0;
         _visibleSectionIds.Clear();
         _trackFoldedStates.Clear(); _trackDisplayModes.Clear(); _selectedRepeatSourceIndices.Clear(); _sectionRepeatSourceIndices.Clear();
@@ -220,6 +242,8 @@ public partial class DrumScorePresenter
             if (!File.Exists(statePath)) { SeedTrackSnapDefaults(null); ActivateFloatingBoards(null); return; }
             var state = JsonSerializer.Deserialize<EditorWorkspaceState>(File.ReadAllText(statePath));
             if (state is null || state.Version != 1) { SeedTrackSnapDefaults(null); ActivateFloatingBoards(null); return; }
+            if (state.TrackHeight is >= (int)TrackHeight.Compact and <= (int)TrackHeight.FoldedTall)
+                _trackHeight = (TrackHeight)state.TrackHeight.Value;
             _playbackLoopMode = RestorePlaybackRepeatMode(state.PlaybackRepeatMode);
             _selectedArrangementId = _score.Arrangements.Any(a => a.Id == state.ArrangementId) ? state.ArrangementId : _score.Arrangements.FirstOrDefault()?.Id;
             _arrangementLoop = state.ArrangementLoop; _arrangementShortcuts = state.ArrangementShortcuts;
@@ -259,6 +283,11 @@ public partial class DrumScorePresenter
             SeedTrackSnapDefaults(state);
             foreach (var (scrollTrackId, position) in state.TrackTabScroll ?? new())
                 if (trackIds.Contains(scrollTrackId)) _trackTabScroll[scrollTrackId] = Math.Max(0, position);
+            var fullTabIds = _score.Tracks.Where(track => track.UsesFullTab).Select(track => track.Id).ToHashSet();
+            foreach (var (id, height) in state.FullTabViewportHeights ?? new())
+                if (fullTabIds.Contains(id) && height >= 0 && height < FullTabViewportHeights.Length) _fullTabViewportHeights[id] = height;
+            foreach (var (id, position) in state.FullTabPitchScroll ?? new())
+                if (fullTabIds.Contains(id)) _fullTabPitchScroll[id] = Math.Max(0, position);
             // Older workspace snapshots stored a single snap value. Keep that value
             // as the fallback for tracks that have no per-track entry.
             RestoreFloatingBoardStates(state.Boards ?? new());
@@ -309,6 +338,7 @@ public partial class DrumScorePresenter
         {
             if (!GodotObject.IsInstanceValid(cell) || !(cell == hovered || cell.IsAncestorOf(hovered))) continue;
             _drumFocus = new DrumFocusState { TrackId = track, MeasureId = measure, BeatId = beat, ControlPath = cell.GetPathTo(hovered).ToString() };
+            if (_activeEditorView is not null && GodotObject.IsInstanceValid(_activeEditorView)) _activeEditorView.ShowFocusWhenUnfocused = false;
             _activeEditorView = null; _editorTabSnapshot = null; _editorTabTrackId = null; _editorTabMeasureId = null;
             MarkEditorStateDirty();
             return;

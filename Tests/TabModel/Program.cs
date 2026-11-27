@@ -37,6 +37,7 @@ foreach (var (name, run) in tests)
 }
 
 LegacyTabTests.Run();
+FullTabTests.Run();
 TabRetuningTests.Run();
 TabSelectionEditTests.Run();
 TabTupletTests.Run();
@@ -46,6 +47,7 @@ ClipboardTests.Run();
 TabEditorSnapshotTests.Run();
 TabPaginationGeometryTests.Run();
 TrackSettingsDialogTests.Run();
+TrackPedalTests.Run();
 ScoreHistoryTests.Run();
 TabDurationResizeTests.Run();
 NotePitchSelectorTests.Run();

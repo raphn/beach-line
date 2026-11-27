@@ -97,7 +97,8 @@ public partial class DrumScorePresenter
 		int targetString, ScoreTime onset, out bool changesLinkedNotes)
 	{
 			var bars = BuildTabBars();
-			var targetBars = bars.Where(bar => ReferenceEquals(ResolveTrackOccurrence(bar.Section, target.Track, bar).SourceTrackMeasure, target.Source)).ToArray();
+			var targetBars = bars.Where(bar => ReferenceEquals(target.Source,
+				GetEffectiveTrackMeasure(bar.Section, target.Track, bar.Measure, ResolveTrackOccurrence(bar.Section, target.Track, bar)))).ToArray();
 			var occurrences = BuildTabOccurrences(target.Track, bars);
 			var occupied = new List<TabPasteOccupied>();
 			foreach (var occurrence in occurrences)

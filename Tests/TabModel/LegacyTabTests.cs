@@ -7,6 +7,8 @@ using OpenTab.Music.Persistence;
 // Retains the existing tab model, legacy archive, and keyboard decoder checks.
 internal static class LegacyTabTests
 {
+    private const string CustomBannerPath = "res://Interface/Common/Graphs/banners/hungquach679png-edm-7158021_1920.png";
+
     public static void Run()
     {
         var score = new ScoreDocument("Tab model", new TempoMark(120, new RhythmicValue(4)), new TimeSignature(4, 4));
@@ -44,12 +46,12 @@ internal static class LegacyTabTests
 
         var restored = ScoreFile.Deserialize(ScoreFile.Serialize(score));
         var restoredTrack = restored.Tracks.Single();
-        track.InstrumentImageId = "acoustic-guitar";
+        track.BannerImagePath = CustomBannerPath;
         track.DisplayColorRgba = 0x12ab34ff;
         restored = ScoreFile.Deserialize(ScoreFile.Serialize(score));
         restoredTrack = restored.Tracks.Single();
-        Check(restoredTrack.InstrumentImageId == "acoustic-guitar" && restoredTrack.DisplayColorRgba == 0x12ab34ff,
-            "Track image identifier or color did not round-trip.");
+        Check(restoredTrack.BannerImagePath == CustomBannerPath && restoredTrack.DisplayColorRgba == 0x12ab34ff,
+            "Track banner or color did not round-trip.");
         var restoredPart = restored.Sections[0].Measures[0].GetTrackMeasure(restoredTrack.Id)!;
         Check(restoredPart.UsesTabEvents && restoredPart.TabEvents.Count == 4, "Tab events did not round-trip.");
         Check(restoredPart.TabEvents[0].Intensity == 5 && restoredPart.TabEvents[1].Velocity == 81 && restoredPart.TabEvents[1].Intensity == 3,
@@ -71,7 +73,8 @@ internal static class LegacyTabTests
         var legacyV3 = (JsonObject)json.DeepClone();
         foreach (var item in legacyV3["Tracks"]!.AsArray())
         {
-            item!.AsObject().Remove("InstrumentImageId");
+            item!.AsObject().Remove("BannerImagePath");
+            item.AsObject()["InstrumentImageId"] = "violin";
             item.AsObject().Remove("DisplayColorRgba");
         }
         using var legacyV3Archive = new MemoryStream();
@@ -79,11 +82,11 @@ internal static class LegacyTabTests
         using (var output = zip.CreateEntry("project.json").Open())
             System.Text.Json.JsonSerializer.Serialize(output, legacyV3);
         var restoredLegacyV3 = ScoreFile.Deserialize(legacyV3Archive.ToArray());
-        Check(restoredLegacyV3.Tracks[0].InstrumentImageId is null && restoredLegacyV3.Tracks[0].DisplayColorRgba == 0xffffffff,
-            "A version 3 file without appearance fields did not receive safe defaults.");
+        Check(restoredLegacyV3.Tracks[0].BannerImagePath is null && restoredLegacyV3.Tracks[0].DisplayColorRgba == 0xffffffff,
+            "An old score's instrument artwork did not yield the default banner and color.");
 
         json["Version"] = 1;
-        foreach (var item in json["Tracks"]!.AsArray()) { item!.AsObject().Remove("TabTuning"); item.AsObject().Remove("MaxFret"); item.AsObject().Remove("InstrumentImageId"); item.AsObject().Remove("DisplayColorRgba"); }
+        foreach (var item in json["Tracks"]!.AsArray()) { item!.AsObject().Remove("TabTuning"); item.AsObject().Remove("MaxFret"); item.AsObject().Remove("BannerImagePath"); item.AsObject().Remove("DisplayColorRgba"); }
         foreach (var section in json["Sections"]!.AsArray())
         foreach (var bar in section!["Measures"]!.AsArray())
         foreach (var data in bar!["Parts"]!.AsArray()) { data!.AsObject().Remove("UsesTabEvents"); data.AsObject().Remove("TabEvents"); data.AsObject().Remove("RepeatCount"); }
@@ -92,8 +95,8 @@ internal static class LegacyTabTests
         using (var output = zip.CreateEntry("project.json").Open())
             System.Text.Json.JsonSerializer.Serialize(output, json);
         var restoredLegacy = ScoreFile.Deserialize(archive.ToArray());
-        Check(restoredLegacy.Tracks[0].InstrumentImageId is null && restoredLegacy.Tracks[0].DisplayColorRgba == 0xffffffff,
-            "Legacy tracks did not default to kind image and opaque white color.");
+        Check(restoredLegacy.Tracks[0].BannerImagePath is null && restoredLegacy.Tracks[0].DisplayColorRgba == 0xffffffff,
+            "Legacy tracks did not default to the built-in banner and opaque white color.");
         var legacyPart = restoredLegacy.Sections[0].Measures[0].GetTrackMeasure(restoredLegacy.Tracks[0].Id)!;
         Check(!legacyPart.UsesTabEvents && legacyPart.TabEvents.Count == 0 && legacyPart.Voices[0].Beats[0].Notes.Single().MidiPitch == 64,
             "Version 1 pitch-only notes were not preserved.");

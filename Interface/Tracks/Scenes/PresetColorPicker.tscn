@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bq8rlf7q1txfy"]
 
-[ext_resource type="Script" path="res://Interface/Tracks/preset_color_picker.gd" id="1"]
+[ext_resource type="Script" uid="uid://drbsps5ej4p7d" path="res://Interface/Tracks/Scripts/preset_color_picker.gd" id="1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_border"]
 bg_color = Color(0, 0, 0, 0)

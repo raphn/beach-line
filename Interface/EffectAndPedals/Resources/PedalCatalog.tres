@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PedalCatalog" format=3 uid="uid://cvo2sygaoeun8"]
+
+[ext_resource type="Script" uid="uid://b307hbogmnfr3" path="res://Interface/EffectAndPedals/Resources/PedalCatalog.cs" id="1_catalog"]
+[ext_resource type="Script" uid="uid://cr2d7nbn44cq3" path="res://Interface/EffectAndPedals/Resources/PedalInfo.cs" id="1_fnque"]
+[ext_resource type="Resource" uid="uid://bhfprg3ribwo2" path="res://Interface/EffectAndPedals/Resources/Pedals/Overdrive.tres" id="2_overdrive"]
+[ext_resource type="Resource" uid="uid://cc7hoj1g8fq5h" path="res://Interface/EffectAndPedals/Resources/Pedals/Chorus.tres" id="3_chorus"]
+[ext_resource type="Resource" uid="uid://d3kws8w8ymrhn" path="res://Interface/EffectAndPedals/Resources/Pedals/Delay.tres" id="4_delay"]
+
+[resource]
+script = ExtResource("1_catalog")
+Pedals = Array[ExtResource("1_fnque")]([ExtResource("2_overdrive"), ExtResource("3_chorus"), ExtResource("4_delay")])

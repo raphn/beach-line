@@ -15,8 +15,10 @@ public sealed class TabClipboard
 {
     private sealed record ClipNote(int StringDelta, int? OriginalStringNumber, ScoreTime OnsetDelta, int Fret, int Velocity, ScoreTime Duration, int TupletActual, string SoundVariation, StringArticulation IncomingArticulation, NoteExpression[] Expressions);
     private readonly ClipNote[] _notes;
+    private readonly bool _fullTab;
+    private readonly bool _exactPlacement;
 
-    private TabClipboard(ClipNote[] notes) => _notes = notes;
+    private TabClipboard(ClipNote[] notes, bool fullTab = false, bool exactPlacement = false) { _notes = notes; _fullTab = fullTab; _exactPlacement = exactPlacement; }
     public int NoteCount => _notes.Length;
 
     /// <summary>Creates a simultaneous, exact-duration chord clipboard from string/fret assignments.</summary>
@@ -36,10 +38,48 @@ public sealed class TabClipboard
             throw new ArgumentException("A chord can contain only one note per string.", nameof(notes));
         foreach (var (stringNumber, fret) in assignments)
             TabEventEditing.ValidateAssignment(track, stringNumber, fret);
+        return CreateChordPayload(track, assignments, duration, false);
+    }
+
+    /// <summary>Creates a simultaneous chord on the chromatic pitch grid.</summary>
+    public static TabClipboard CreateFullTabChord(ScoreTrack track, IReadOnlyCollection<int> pitches, ScoreTime duration)
+    {
+        ArgumentNullException.ThrowIfNull(track);
+        ArgumentNullException.ThrowIfNull(pitches);
+        if (!track.UsesFullTab)
+            throw new ArgumentException("Chords require a chromatic pitch grid track.", nameof(track));
+        ValidateTabTrack(track);
+        if (!duration.IsInitialized || duration <= ScoreTime.Zero)
+            throw new ArgumentOutOfRangeException(nameof(duration));
+        if (pitches.Count < 2 || pitches.Distinct().Count() != pitches.Count)
+            throw new ArgumentException("A chord requires at least two distinct pitches.", nameof(pitches));
+        if (pitches.Any(pitch => pitch < 0 || pitch > 127))
+            throw new ArgumentOutOfRangeException(nameof(pitches), "Pitches must be between 0 and 127.");
+        var assignments = pitches.Select(pitch => (StringNumber: 128 - pitch, Fret: 0)).ToArray();
+        foreach (var (stringNumber, fret) in assignments)
+            TabEventEditing.ValidateAssignment(track, stringNumber, fret);
+        return CreateChordPayload(track, assignments, duration, true);
+    }
+
+    /// <summary>Creates a single exact-duration note for direct board entry.</summary>
+    public static TabClipboard CreateSingleNote(ScoreTrack track, int stringNumber, int fret, ScoreTime duration)
+    {
+        ArgumentNullException.ThrowIfNull(track);
+        ValidateTabTrack(track);
+        if (!duration.IsInitialized || duration <= ScoreTime.Zero)
+            throw new ArgumentOutOfRangeException(nameof(duration));
+        TabEventEditing.ValidateAssignment(track, stringNumber, fret);
+        var velocity = TrackDefaults.VelocityFor(track.Kind);
+        return new TabClipboard(new[] { new ClipNote(0, track.UsesFullTab ? stringNumber : null, ScoreTime.Zero, fret, velocity, duration, 0, "", StringArticulation.None, Array.Empty<NoteExpression>()) }, track.UsesFullTab, exactPlacement: true);
+    }
+
+    private static TabClipboard CreateChordPayload(ScoreTrack track, (int StringNumber, int Fret)[] assignments,
+        ScoreTime duration, bool fullTab)
+    {
         var anchor = assignments.Min(n => n.StringNumber);
         var velocity = TrackDefaults.VelocityFor(track.Kind);
-        return new TabClipboard(assignments.Select(n => new ClipNote(n.StringNumber - anchor, null, ScoreTime.Zero,
-            n.Fret, velocity, duration, 0, "", StringArticulation.None, Array.Empty<NoteExpression>())).ToArray());
+        return new TabClipboard(assignments.Select(n => new ClipNote(n.StringNumber - anchor, fullTab ? n.StringNumber : null, ScoreTime.Zero,
+            n.Fret, velocity, duration, 0, "", StringArticulation.None, Array.Empty<NoteExpression>())).ToArray(), fullTab);
     }
 
     /// <summary>Copies selected events with relative timing and source lines. Legacy beat notes are unsupported.</summary>
@@ -89,7 +129,7 @@ public sealed class TabClipboard
                 occurrence.AbsoluteOnset - copyAnchorAbsoluteOnset, occurrence.Event.Fret, occurrence.Event.Velocity, occurrence.Event.Duration,
                 occurrence.Event.TupletActual, occurrence.Event.SoundVariation, occurrence.Event.IncomingArticulation, occurrence.Event.Expressions.Select(expression => expression.Clone()).ToArray());
         }
-        return new TabClipboard(copies);
+        return new TabClipboard(copies, sourceTrack.UsesFullTab);
     }
 
     /// <summary>Plans a paste. Copied groups retain source lines; a lone note follows the target line and advances past collisions.</summary>
@@ -100,6 +140,7 @@ public sealed class TabClipboard
         ArgumentNullException.ThrowIfNull(targetTrack);
         ArgumentNullException.ThrowIfNull(targetMeasure);
         ValidateTabTrack(targetTrack);
+        if (_fullTab != targetTrack.UsesFullTab) throw new InvalidOperationException("Cannot paste between a chromatic pitch grid and another tablature grid.");
         if (targetMeasure.TrackId != targetTrack.Id) throw new ArgumentException("The measure part belongs to another track.", nameof(targetMeasure));
         if (!targetMeasure.UsesTabEvents && targetMeasure.Voices.SelectMany(v => v.Beats).Any(b => b.Notes.Count != 0))
             throw new InvalidOperationException("Convert legacy notes in the destination part before pasting tablature events.");
@@ -125,7 +166,7 @@ public sealed class TabClipboard
         {
             var source = _notes[i];
             var stringNumber = source.OriginalStringNumber ?? anchorStringNumber + source.StringDelta;
-            if (stringNumber < 1 || stringNumber > targetTrack.TabTuningMidiPitches.Count)
+            if (stringNumber < 1 || stringNumber > targetTrack.TabLaneMidiPitches.Count)
             {
                 dropped.Add(i);
                 continue;
@@ -134,11 +175,11 @@ public sealed class TabClipboard
             catch (ArgumentOutOfRangeException) { dropped.Add(i); continue; }
             var onset = anchorOnset + source.OnsetDelta;
             if (onset < ScoreTime.Zero) { dropped.Add(i); continue; }
-            pending.Add(new PlannedNote(i, stringNumber, source.Fret, targetTrack.TabTuningMidiPitches[stringNumber - 1] + source.Fret,
+            pending.Add(new PlannedNote(i, stringNumber, source.Fret, targetTrack.TabLaneMidiPitches[stringNumber - 1] + source.Fret,
                 source.Velocity, onset, source.Duration, source.TupletActual, source.SoundVariation, source.IncomingArticulation, source.Expressions));
         }
 
-        if (_notes.Length == 1 && pending.Count == 1)
+        if (!_exactPlacement && _notes.Length == 1 && pending.Count == 1)
         {
             var n = pending[0];
             if (visibleBarDuration is { } initialLimit && n.Onset >= initialLimit)
@@ -175,7 +216,7 @@ public sealed class TabClipboard
 
     private static void ValidateTabTrack(ScoreTrack track)
     {
-        if (track.TabTuningMidiPitches.Count == 0) throw new InvalidOperationException("The track has no configured tablature tuning.");
+        if (track.TabLaneMidiPitches.Count == 0) throw new InvalidOperationException("The track has no configured tablature tuning.");
     }
 
     internal sealed record PlannedNote(int ClipIndex, int StringNumber, int Fret, int MidiPitch, int Velocity, ScoreTime Onset, ScoreTime Duration, int TupletActual, string SoundVariation, StringArticulation IncomingArticulation, NoteExpression[] Expressions);

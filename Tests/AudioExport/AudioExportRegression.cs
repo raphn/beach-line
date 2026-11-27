@@ -40,6 +40,33 @@ try
     if (!bytes.AsSpan(44).ToArray().Any(value => value != 0)) throw new Exception("Rendered WAV contained no nonzero samples.");
     Console.WriteLine("Audio export regression passed: selected arrangement rendered to non-silent PCM16 WAV.");
 
+    // A pedal must use the same processing path for live blocks and offline mixdown.
+    foreach (var effect in new[] { "overdrive", "chorus", "delay" })
+    {
+        track.Pedals.Add(new TrackPedal { TypeId = effect, Drive = .8f, Tone = .6f, Level = .5f });
+        using (var wetBank = File.OpenRead(soundFont))
+            await AudioExportService.ExportAsync(score, wetBank, selection, PlaybackVersionSelection.Empty,
+                output, AudioExportFormat.Wav, new AudioExportOptions { SampleRate = 48000, TailSeconds = 0, BufferFrames = 4096 });
+        var wetBytes = await File.ReadAllBytesAsync(output);
+        if (wetBytes.AsSpan(44).SequenceEqual(bytes.AsSpan(44))) throw new Exception($"{effect} did not change exported audio.");
+        using (var liveBank = File.OpenRead(soundFont))
+        {
+            var liveService = new SoundFontPlaybackService(liveBank, 48000);
+            var liveClock = new ScorePlaybackClock(score, 48000, selection: selection);
+            var liveLeft = new float[4096]; var liveRight = new float[4096];
+            liveClock.Render(liveService, liveLeft, liveRight);
+            for (var i = 0; i < liveLeft.Length; i++)
+            {
+                short Encode(float sample) => (short)Math.Round(Math.Clamp(sample, -1f, 1f) * (sample < 0 ? 32768 : 32767));
+                if (BitConverter.ToInt16(wetBytes, 44 + i * 4) != Encode(liveLeft[i]) ||
+                    BitConverter.ToInt16(wetBytes, 46 + i * 4) != Encode(liveRight[i]))
+                    throw new Exception($"Live and exported {effect} differ at frame {i}.");
+            }
+        }
+        track.Pedals.Clear();
+    }
+    Console.WriteLine("Pedal export regression passed: overdrive, chorus, and delay change WAV audio and match live rendering.");
+
     if (TryGetFfmpeg() is { } ffmpeg)
     {
         foreach (var (format, extension) in new[] { (AudioExportFormat.Flac, ".flac"), (AudioExportFormat.OggVorbis, ".ogg"), (AudioExportFormat.Mp3, ".mp3") })

@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://difta5dioo7nk" path="res://Interface/Tab/Scripts/MeasureTabView.cs" id="1_view"]
 [ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="app_theme"]
-[ext_resource type="PackedScene" path="res://Interface/Tab/Scenes/MeasureHeader.tscn" id="header"]
+[ext_resource type="PackedScene" uid="uid://nva0pmd4urwp" path="res://Interface/Tab/Scenes/MeasureHeader.tscn" id="header"]
 
 [node name="MeasureTab" type="VBoxContainer" unique_id=1418722228]
-custom_minimum_size = Vector2(0, 0)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("app_theme")
@@ -15,7 +14,6 @@ theme_type_variation = &"TabMeasureView"
 layout_mode = 2
 
 [node name="Content" type="Control" parent="." unique_id=1648217594]
-custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

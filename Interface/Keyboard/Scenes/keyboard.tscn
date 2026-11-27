@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://csliq1ruwcp00"]
 
 [ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="1_m0uqs"]
-[ext_resource type="PackedScene" uid="uid://bchq3c0p2epv4" path="res://Interface/Keyboard/Scenes/octave.tscn" id="1_m7gqa"]
+[ext_resource type="Script" path="res://Interface/Keyboard/Scripts/KeyboardChordController.cs" id="2_controller"]
 [ext_resource type="PackedScene" uid="uid://dgwj4r8a67qcx" path="res://Interface/Common/Scenes/chord_inserting_options.tscn" id="3_63oop"]
 
 [node name="KeyboadPopup" type="Window" unique_id=2128709542]
@@ -9,11 +9,12 @@ disable_3d = true
 oversampling_override = 1.0
 title = "Keyboard"
 position = Vector2i(0, 36)
-size = Vector2i(726, 118)
-unresizable = true
+size = Vector2i(726, 170)
+min_size = Vector2i(320, 150)
 minimize_disabled = true
 maximize_disabled = true
 theme = ExtResource("1_m0uqs")
+script = ExtResource("2_controller")
 
 [node name="Keyboard" type="PanelContainer" parent="." unique_id=232666187]
 anchors_preset = 15
@@ -23,35 +24,50 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"AppPanel"
 
-[node name="KeysAndChords" type="BoxContainer" parent="Keyboard" unique_id=1163316262]
+[node name="KeysAndChords" type="VBoxContainer" parent="Keyboard" unique_id=1163316262]
 layout_mode = 2
-vertical = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Keyboard/KeysAndChords" unique_id=728964862]
+[node name="Range" type="HBoxContainer" parent="Keyboard/KeysAndChords"]
+layout_mode = 2
+
+[node name="StartLabel" type="Label" parent="Keyboard/KeysAndChords/Range"]
+layout_mode = 2
+text = "Start octave"
+
+[node name="StartOctave" type="SpinBox" parent="Keyboard/KeysAndChords/Range"]
+layout_mode = 2
+min_value = -1.0
+max_value = 9.0
+value = 2.0
+
+[node name="CountLabel" type="Label" parent="Keyboard/KeysAndChords/Range"]
+layout_mode = 2
+text = "Octaves"
+
+[node name="OctaveCount" type="SpinBox" parent="Keyboard/KeysAndChords/Range"]
+layout_mode = 2
+min_value = 1.0
+max_value = 8.0
+value = 6.0
+
+[node name="SelectedCount" type="Label" parent="Keyboard/KeysAndChords/Range"]
+layout_mode = 2
+text = "Selected: 0"
+
+[node name="KeyScroll" type="ScrollContainer" parent="Keyboard/KeysAndChords"]
+layout_mode = 2
+size_flags_vertical = 3
+vertical_scroll_mode = 0
+
+[node name="Octaves" type="HBoxContainer" parent="Keyboard/KeysAndChords/KeyScroll"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Octave" parent="Keyboard/KeysAndChords/HBoxContainer" unique_id=1327015819 instance=ExtResource("1_m7gqa")]
-layout_mode = 2
-
-[node name="Octave2" parent="Keyboard/KeysAndChords/HBoxContainer" unique_id=311722367 instance=ExtResource("1_m7gqa")]
-layout_mode = 2
-
-[node name="Octave3" parent="Keyboard/KeysAndChords/HBoxContainer" unique_id=331775905 instance=ExtResource("1_m7gqa")]
-layout_mode = 2
-
-[node name="Octave4" parent="Keyboard/KeysAndChords/HBoxContainer" unique_id=1580566678 instance=ExtResource("1_m7gqa")]
-layout_mode = 2
-
-[node name="Octave5" parent="Keyboard/KeysAndChords/HBoxContainer" unique_id=220477525 instance=ExtResource("1_m7gqa")]
-layout_mode = 2
-
-[node name="Octave6" parent="Keyboard/KeysAndChords/HBoxContainer" unique_id=488381447 instance=ExtResource("1_m7gqa")]
-layout_mode = 2
-
-[node name="HSeparator" type="HSeparator" parent="Keyboard/KeysAndChords" unique_id=154526433]
-layout_mode = 2
-theme_override_constants/separation = 8
-
 [node name="ChordInsertingOptions" parent="Keyboard/KeysAndChords" unique_id=1549772661 instance=ExtResource("3_63oop")]
 layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="Keyboard/KeysAndChords/ChordInsertingOptions"]
+layout_mode = 2
+text = "Reset"
+
+[editable path="Keyboard/KeysAndChords/ChordInsertingOptions"]

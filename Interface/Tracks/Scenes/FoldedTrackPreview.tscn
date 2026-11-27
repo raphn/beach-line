@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bf4e2n7qwuua1" path="res://Interface/Tracks/Scripts/FoldedTrackPreview.cs" id="1_preview"]
+[ext_resource type="Shader" uid="uid://deb18ptekpe2b" path="res://Interface/Common/Graphs/other/glossy_rounded_panel.gdshader" id="2_panel"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_panel"]
+resource_local_to_scene = true
+shader = ExtResource("2_panel")
+
+[node name="FoldedTrackPreview" type="Node2D"]
+script = ExtResource("1_preview")
+
+[node name="GlossyPanel" type="ColorRect" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_panel")
+mouse_filter = 2
+color = Color(0.3, 0.35, 0.42, 1)

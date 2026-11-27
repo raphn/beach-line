@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://y8cv177n78so"]
+
+[ext_resource type="Script" uid="uid://bi3sho15grga5" path="res://Interface/EffectAndPedals/Scripts/EffectPedalTile.cs" id="1_tile"]
+
+[node name="EffectPedalContainer" type="PanelContainer" unique_id=393978809 node_paths=PackedStringArray("Artwork", "TitleLabel", "EnabledButton", "RemoveButton", "PresetButton", "Knobs")]
+clip_children = 2
+custom_minimum_size = Vector2(272, 0)
+offset_right = 332.0
+offset_bottom = 172.0
+theme_type_variation = &"PedalTile"
+script = ExtResource("1_tile")
+Artwork = NodePath("TextureRect")
+TitleLabel = NodePath("BoxContainer/Header/Label")
+EnabledButton = NodePath("BoxContainer/Header/Enabled")
+RemoveButton = NodePath("BoxContainer/Header/Remove")
+PresetButton = NodePath("BoxContainer/Preset")
+Knobs = NodePath("BoxContainer/Knobs")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1410308442]
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BoxContainer" type="BoxContainer" parent="." unique_id=76010348]
+layout_mode = 2
+theme_override_constants/separation = 5
+vertical = true
+
+[node name="Header" type="HBoxContainer" parent="BoxContainer" unique_id=310447795]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Enabled" type="CheckButton" parent="BoxContainer/Header" unique_id=1181986987]
+layout_mode = 2
+tooltip_text = "Enable or bypass this pedal."
+button_pressed = true
+
+[node name="Label" type="Label" parent="BoxContainer/Header" unique_id=2038078500]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PedalName"
+text = "Effect Label"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Remove" type="Button" parent="BoxContainer/Header" unique_id=856692125]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Remove this pedal and its automation."
+text = "×"
+flat = true
+
+[node name="Preset" type="OptionButton" parent="BoxContainer" unique_id=1172944098]
+visible = false
+layout_mode = 2
+tooltip_text = "Apply a preset to this effect. Existing automation is kept and may override these settings during playback."
+
+[node name="Knobs" type="BoxContainer" parent="BoxContainer" unique_id=1876020574]
+layout_mode = 2
+theme_override_constants/separation = 2
+vertical = true

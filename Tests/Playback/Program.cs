@@ -19,6 +19,9 @@ if (args.Contains("--generate-example"))
 
 var tests = new (string Name, Action Run)[]
 {
+    ("chorus and delay DSP, channel isolation and post-roll", ChorusDelayRegression.Run),
+    ("track pedal DSP, automation and arrangement source positions", PedalEffectsRegression.Run),
+    ("full tab pitches survive a save and play together", FullTabPitchPlayback),
     ("arrangement fallback versions alternate across real rendered loop passes and preserve refresh", TransitionLoopPlayback),
     ("ordinary playback follows the selected version and ignores arrangement rules", OrdinaryVersionSelection),
     ("transition rules resolve actual repeated sections and do not consume alternation", TransitionArrangementPlayback),
@@ -323,6 +326,23 @@ static void TabSustainCutoff()
     Check(events.Any(e => e.Kind == "NoteOn" && e.Value == 64 && e.Frame == 72000), "TAB onset did not use exact measure-relative time.");
     Check(events.Any(e => e.Kind == "NoteOff" && e.Value == 64 && e.Frame == 120000), "Sustain was not cut at the next same-string onset in the next measure.");
     Check(!events.Any(e => e.Kind == "NoteOn" && e.Value == 50), "Legacy beat notes played alongside authoritative TAB events.");
+}
+
+static void FullTabPitchPlayback()
+{
+    var score = new ScoreDocument("Full Tab", new TempoMark(120, new RhythmicValue(4)), new TimeSignature(4, 4));
+    var track = score.AddTrack(new ScoreTrack("Keys", TrackKind.Keyboard));
+    var part = score.AddMeasure(score.Sections[0]).GetTrackMeasure(track.Id)!;
+    TabEventEditing.Add(part, track, 68, 0, ScoreTime.Zero, new ScoreTime(1, 4));
+    TabEventEditing.Add(part, track, 64, 0, ScoreTime.Zero, new ScoreTime(1, 2));
+
+    var clock = new ScorePlaybackClock(ScoreFile.Deserialize(ScoreFile.Serialize(score)), 48000);
+    var events = PendingEvents(clock);
+    Check(events.Any(e => e.Kind == "NoteOff" && e.Value == 60 && e.Frame == 24000) &&
+        events.Any(e => e.Kind == "NoteOff" && e.Value == 64 && e.Frame == 48000),
+        "Full Tab pitches lost their independent durations.");
+    clock.Render(NewSynth(), new float[1], new float[1]);
+    Check(ActivePlaybackPitches(clock).SequenceEqual(new[] { 60, 64 }), "Both Full Tab pitches must play together.");
 }
 
 static void TabTupletPlayback()
@@ -2181,7 +2201,7 @@ static void TransitionLoopPlayback()
     var (score, track, section, measure, voice) = MakeScore();
     AddHit(voice, 0, 36);
     var alternate = PlaybackVersion(score, section, measure, track, 38);
-    score.SetTrackMeasureAlternation(section, measure, track, new[] { Guid.Empty, alternate.Id });
+    score.SetTrackMeasureAlternation(section, measure, track, new[] { Guid.Empty, alternate.Id, alternate.Id });
     var arrangement = new PlaybackLoopSelection(PlaybackLoopMode.ArrangementLoop, null, new[] { section.Id });
     var clock = new ScorePlaybackClock(score, 48000, selection: arrangement) { LoopEnabled = true };
     var synth = NewSynth();
@@ -2192,7 +2212,9 @@ static void TransitionLoopPlayback()
     Check(ActivePlaybackPitches(clock).SequenceEqual(new[] { 38 }), "Rendered second loop did not advance after refresh.");
     clock.RefreshScore(score);
     clock.Render(synth, new float[96000], new float[96000]);
-    Check(ActivePlaybackPitches(clock).SequenceEqual(new[] { 36 }), "Rendered third loop did not wrap fallback.");
+    Check(ActivePlaybackPitches(clock).SequenceEqual(new[] { 38 }), "Rendered third loop skipped the repeated version.");
+    clock.Render(synth, new float[96000], new float[96000]);
+    Check(ActivePlaybackPitches(clock).SequenceEqual(new[] { 36 }), "Rendered fourth loop did not wrap to Original.");
     var fresh = new ScorePlaybackClock(score, 48000, selection: arrangement) { LoopEnabled = true };
     fresh.Render(NewSynth(), new float[1], new float[1]);
     Check(ActivePlaybackPitches(fresh).SequenceEqual(new[] { 36 }), "Fresh playback did not reset sequence.");

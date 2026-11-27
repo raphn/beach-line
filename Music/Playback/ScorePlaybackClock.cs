@@ -38,7 +38,7 @@ public sealed partial class ScorePlaybackClock
     }
 
     private readonly record struct ScheduledEvent(long Frame, int Order, EventKind Kind, int Channel, int Value, int SecondaryValue, Guid NoteId = default, Guid TrackId = default, int ProgramOverride = -1, double PieceGainDb = 0, int PieceGainPitch = -1, int ContentChoice = -1, Guid ContentVersion = default, int StringNumber = 0, StringArticulation Articulation = StringArticulation.None, double MinimumExpression = 0, double MaximumExpression = 0);
-    private readonly record struct MeasureSpan(Guid Id, long Start, long End, ScoreTime StartPosition, ScoreTime EndPosition);
+    private readonly record struct MeasureSpan(Guid Id, long Start, long End, ScoreTime StartPosition, ScoreTime EndPosition, long SourceStart);
 
     private ScheduledEvent[] _events;
     private ScheduledEvent[] _baseEvents = Array.Empty<ScheduledEvent>();
@@ -50,6 +50,8 @@ public sealed partial class ScorePlaybackClock
     private Dictionary<Guid, double> _trackMasterGains;
     private Dictionary<(Guid TrackId, int Pitch), double> _pieceGains;
     private bool _volumeUpdatePending = true;
+    private Dictionary<Guid, TrackEffectsChain> _trackEffects;
+    private bool _effectsUpdatePending = true;
     private MeasureSpan[] _measures;
     private readonly HashSet<Guid> _activeNotes = new();
     // The MIDI synthesizer note-off API is pitch based. Keep per-event ownership so
@@ -111,6 +113,9 @@ public sealed partial class ScorePlaybackClock
             .ToDictionary(piece => (piece.Id, piece.MidiPitch), piece => piece.GainDb);
         var tempoMap = score.CreateTempoMap();
         _tempoMap = tempoMap;
+        _trackEffects = CompileTrackEffects(score, tempoMap, sampleRate);
+        HasTimeBasedEffects = score.Tracks.Any(track => track.Kind is not (TrackKind.Audio or TrackKind.Ruler) &&
+            track.Pedals.Any(pedal => pedal.Enabled && pedal.TypeId is "chorus" or "delay"));
         _loopDurationFrames = ToFrame(tempoMap.GetElapsedSeconds(GetScoreEndPosition(score)), sampleRate);
         _baseLoopDurationFrames = _loopDurationFrames;
         var measures = new List<MeasureSpan>();
@@ -120,8 +125,9 @@ public sealed partial class ScorePlaybackClock
             foreach (var measure in section.Measures)
             {
                 var end = measureStart + GetMeasureDuration(score, section, measure);
-                measures.Add(new MeasureSpan(measure.Id, ToFrame(tempoMap.GetElapsedSeconds(measureStart), sampleRate),
-                    ToFrame(tempoMap.GetElapsedSeconds(end), sampleRate), measureStart, end));
+                var sourceStart = ToFrame(tempoMap.GetElapsedSeconds(measureStart), sampleRate);
+                measures.Add(new MeasureSpan(measure.Id, sourceStart,
+                    ToFrame(tempoMap.GetElapsedSeconds(end), sampleRate), measureStart, end, sourceStart));
                 measureStart = end;
             }
         }
@@ -733,6 +739,9 @@ public sealed partial class ScorePlaybackClock
         _trackMasterGains = replacement._trackMasterGains;
         _pieceGains = replacement._pieceGains;
         _volumeUpdatePending = true;
+        _trackEffects = replacement._trackEffects;
+        HasTimeBasedEffects = replacement.HasTimeBasedEffects;
+        _effectsUpdatePending = true;
         _measures = replacement._measures;
         _sectionTimelineSpans = replacement._sectionTimelineSpans;
         _tempoMap = replacement._tempoMap;
@@ -850,6 +859,8 @@ public sealed partial class ScorePlaybackClock
         return target.Start + Math.Min(oldPosition - old.Start, target.End - target.Start);
     }
 
+    /// <summary>Whether the current score contains an enabled time-based track effect that can ring out.</summary>
+    public bool HasTimeBasedEffects { get; private set; }
     public bool HasPendingEvents => _nextEventIndex < _events.Length;
     /// <summary>Length of the clock's currently projected timeline, in output frames.</summary>
     public long TimelineDurationFrames => _loopDurationFrames;
@@ -996,6 +1007,12 @@ public sealed partial class ScorePlaybackClock
             _volumeUpdatePending = false;
         }
 
+        if (_effectsUpdatePending)
+        {
+            service.SetTrackEffects(_trackEffects);
+            _effectsUpdatePending = false;
+        }
+
         var offset = 0;
         while (!_stopped && (offset < left.Length || HasEventAtOrBefore(_renderedFrames)))
         {
@@ -1018,9 +1035,26 @@ public sealed partial class ScorePlaybackClock
                 frames = (int)Math.Min(frames, untilEvent);
             }
 
+            // A compacted arrangement may jump to another source measure. Split at
+            // each boundary so automation always follows the source score position.
+            var sourceFrame = 0L;
+            if (_trackEffects.Count > 0)
+            {
+                var inCountIn = IsCountInBehind(0);
+                var localFrame = inCountIn ? (_isInitialPass ? _initialPositionFrame : 0)
+                    : Math.Max(0, _renderedFrames - _eventFrameOffset - _countInFrames);
+                sourceFrame = localFrame;
+                foreach (var measure in _measures)
+                {
+                    if (localFrame < measure.Start || localFrame >= measure.End) continue;
+                    sourceFrame = measure.SourceStart + localFrame - measure.Start;
+                    if (!inCountIn) frames = (int)Math.Min(frames, measure.End - localFrame);
+                    break;
+                }
+            }
             var leftSegment = left.Slice(offset, frames);
             var rightSegment = right.Slice(offset, frames);
-            service.Render(leftSegment, rightSegment);
+            service.Render(leftSegment, rightSegment, sourceFrame);
             if (!IsCountInBehind(0))
                 _audioMixer?.Mix(Math.Max(0, _renderedFrames - _eventFrameOffset - _countInFrames), leftSegment, rightSegment);
             offset += frames;
@@ -1032,6 +1066,7 @@ public sealed partial class ScorePlaybackClock
     public void Stop(SoundFontPlaybackService service)
     {
         ArgumentNullException.ThrowIfNull(service);
+        service.HoldTrackEffectsAutomation();
         foreach (var channel in _usedChannels)
         {
             service.AllNotesOff(channel);

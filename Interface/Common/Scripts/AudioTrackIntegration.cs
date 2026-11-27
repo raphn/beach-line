@@ -364,7 +364,7 @@ public partial class DrumScorePresenter
         RenderSection();
     }
 
-    private void RenderAudioTrack(ScoreTrack track, ScoreSection section)
+    private FoldableContainer RenderAudioTrack(ScoreTrack track, ScoreSection section)
     {
         if (_recordingTrackId == track.Id) _recordingPreview = null;
         var ui = AudioUi(track.Id);
@@ -372,20 +372,21 @@ public partial class DrumScorePresenter
         row.Name = $"AudioTrack_{track.Id:N}";
         _tabTracks.AddChild(row);
 
-        row.Folded = _trackFoldedStates.GetValueOrDefault(track.Id, row.Folded);
+        // Audio clips use a separate mixer; the first pedal implementation is for MIDI tracks.
+        row.GetNode<Control>("VBoxContainer/TrackPedals").Hide();
+
         RegisterTrackRow(track.Id, row);
-        row.FoldingChanged += folded => { _trackFoldedStates[track.Id] = folded; MarkEditorStateDirty(); };
-        var icon = row.GetNode<TextureRect>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/TextureRect");
-        var delete = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/DeleteButton");
-        var nameLabel = row.GetNode<Label>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameLabel");
-        var volume = row.GetNode<HSlider>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Volume");
-        var volumeLabel = row.GetNode<Label>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Label");
-        var mute = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/MuteButton");
-        var solo = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/SoloButton");
-        var configs = row.GetNode<HBoxContainer>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs");
+        var icon = row.GetNode<TextureRect>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/TextureRect");
+        var delete = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/DeleteButton");
+        var nameLabel = row.GetNode<Label>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameLabel");
+        var volume = row.GetNode<HSlider>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Volume");
+        var volumeLabel = row.GetNode<Label>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Label");
+        var mute = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/MuteButton");
+        var solo = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/SoloButton");
+        var configs = row.GetNode<HBoxContainer>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs");
         icon.Texture = GD.Load<Texture2D>(TrackSettingsDialog.ResolveImagePath(track));
         nameLabel.Text = track.Name;
-        var nameEdit = row.GetNode<LineEdit>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameEdit");
+        var nameEdit = row.GetNode<LineEdit>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameEdit");
         nameEdit.Text = track.Name; nameEdit.Visible = false;
         volume.MinValue = -80; volume.MaxValue = 20; volume.Step = 1; volume.Value = track.VolumeDb;
         volumeLabel.Text = $"{track.VolumeDb:0.#} dB";
@@ -417,16 +418,16 @@ public partial class DrumScorePresenter
         }
         nameEdit.TextSubmitted += _ => CommitName();
         nameEdit.FocusExited += CommitName;
-        var settings = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/TrackSettingsButton");
-        settings.Hide();
-        row.GetNode<Control>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/TrackSectionInfo").Hide();
-        row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/ToggleKeyboardButton").Hide();
-        row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/ToggleFretboardButton").Hide();
+        var settings = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/TrackSettingsButton");
+        settings.Pressed += () => ShowTrackSettings(track);
+        row.GetNode<Control>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/TrackSectionInfo").Hide();
+        row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/ToggleKeyboardButton").Hide();
+        row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/ToggleFretboardButton").Hide();
         var picker = new ColorPickerButton { Color = new Color(track.DisplayColorRgba), CustomMinimumSize = new Vector2(34, 34), TooltipText = AudioTranslations.Translate("Track color"), EditAlpha = true, ThemeTypeVariation = "AppActionButton" };
         configs.AddChild(picker);
         picker.ColorChanged += color => ApplyTrackDisplayColor(track.Id, PackAudioColor(color));
         picker.PopupClosed += () => { if (_score.Tracks.Any(item => item.Id == track.Id)) NotifyScoreEdited(); };
-        var sectionTemplate = row.GetNode<Control>("TrackContainer/HBoxContainer/TabSectionContainer");
+        var sectionTemplate = row.GetNode<Control>("VBoxContainer/TrackContainer/HBoxContainer/TabSectionContainer");
         var page = sectionTemplate.GetNode<VBoxContainer>("VBoxContainer");
         var measures = page.GetNode<Control>("Measures");
         page.RemoveChild(measures); measures.QueueFree();
@@ -489,6 +490,7 @@ public partial class DrumScorePresenter
                 AddRecordingPreview(page);
         }
         _audioTrackUi.Keys.Where(id => !_score.Tracks.Any(item => item.Id == id)).ToList().ForEach(id => _audioTrackUi.Remove(id));
+        return row;
     }
 
     private static uint PackAudioColor(Color color) =>
@@ -508,15 +510,8 @@ public partial class DrumScorePresenter
         var timing = new AudioTimelineTiming(_score, section, arrangement);
         var shell = _audioTimelineShellScene.Instantiate<VBoxContainer>();
         shell.GetNode<Label>("ContextLabel").Text = AudioTranslations.FormatSource("{0} clips ({1})", context, clips.Length);
-        var scroll = shell.GetNode<ScrollContainer>("AudioTimelineScroll");
         var timeline = shell.GetNode<AudioSectionTimeline>("AudioTimelineScroll/AudioTimeline");
-        while (shell.GetChildCount() > 0)
-        {
-            var child = shell.GetChild(0);
-            shell.RemoveChild(child);
-            parent.AddChild(child);
-        }
-        shell.QueueFree();
+        parent.AddChild(shell);
         timeline.SetTimelineDuration(timing.GetDurationSeconds());
         timeline.SetGuidesVisible(ui.ShowGuides);
         timeline.SetScissorsEnabled(ui.ScissorsEnabled);

@@ -9,6 +9,8 @@ using OpenTab.Music.Playback;
 // Reusable non-percussion track controls and tablature measures bound to the shared score.
 public partial class DrumScorePresenter
 {
+	[Export] private TrackBannerManager _trackBanners = null!;
+	[Export] private PackedScene _trackSettingsDialogScene = null!;
 	private readonly PackedScene _tabStatusBarScene = GD.Load<PackedScene>("res://Interface/Tab/Scenes/TabStatusBar.tscn");
 	private VBoxContainer _tabTracks = null!;
 	private PackedScene _tabMeasureScene = null!;
@@ -63,6 +65,12 @@ public partial class DrumScorePresenter
 	private readonly Dictionary<Guid, bool> _trackFoldedStates = new();
 	private int _visibleTabMeasureCount;
 	private bool _tabWidthUpdateQueued;
+	// The first three IDs are already stored in existing workspace files.
+	private enum TrackHeight { Compact, Standard, Tall, FoldedCompact, FoldedStandard, FoldedTall }
+	private TrackHeight _trackHeight = TrackHeight.Standard;
+	private bool UsesFoldedTrackHeight => _trackHeight >= TrackHeight.FoldedCompact;
+	private OptionButton _trackHeightSelector = null!;
+	private ScrollContainer _trackWorkspaceScroll = null!;
 	private sealed record TabBar(ScoreSection Section, ScoreMeasure Measure, int Index, ScoreTime Start, ScoreTime Duration);
 	private sealed record TabOccurrence(TabEvent Note, TrackMeasure Source, ScoreTime Start, ScoreTime End, bool IsRepeat, int DestinationIndex);
 	private sealed record PendingTabCursor(Guid TrackId, ScoreSection Section, int MeasureIndex, int StringNumber, ScoreTime Onset);
@@ -71,11 +79,13 @@ public partial class DrumScorePresenter
 	{
 		BindAudioTrackEditor();
 		GetNode<Button>("%AddMidiTrackButton").Pressed += ShowNewTrackSettings;
-		var workspaceScroll = GetNode<ScrollContainer>("%ScrollContainer");
-		workspaceScroll.GetHScrollBar().ValueChanged += value => { _lastScrollX = (int)value; MarkEditorStateDirty(); };
-		workspaceScroll.GetVScrollBar().ValueChanged += value => { _lastScrollY = (int)value; MarkEditorStateDirty(); };
-		workspaceScroll.Resized += QueueResponsiveTabWidthUpdate;
+		_trackWorkspaceScroll = GetNode<ScrollContainer>("%ScrollContainer");
+		_trackWorkspaceScroll.GetHScrollBar().ValueChanged += value => { _lastScrollX = (int)value; MarkEditorStateDirty(); };
+		_trackWorkspaceScroll.GetVScrollBar().ValueChanged += value => { _lastScrollY = (int)value; MarkEditorStateDirty(); };
+		_trackWorkspaceScroll.Resized += QueueResponsiveTabWidthUpdate;
 		_tabTracks = GetNode<VBoxContainer>("%Tracks");
+		_trackHeightSelector = GetNode<OptionButton>("%TrackHeight");
+		_trackHeightSelector.ItemSelected += index => SetTrackHeight((TrackHeight)_trackHeightSelector.GetItemId((int)index));
 		_tabMeasureScene = GD.Load<PackedScene>("res://Interface/Tab/Scenes/MeasureTab.tscn");
 		_nonPercussionTrackScene = GD.Load<PackedScene>("res://Interface/Tab/Scenes/NonPercussionTrack.tscn");
 	}
@@ -84,6 +94,7 @@ public partial class DrumScorePresenter
 	{
 		_tabClipboardViews.Clear();
 		_trackRows.Clear();
+		_fullTabViewports.Clear();
 		ClearChildren(_tabTracks);
 		var tools = _tabStatusBarScene.Instantiate<HFlowContainer>();
 		_tabTracks.AddChild(tools);
@@ -93,37 +104,104 @@ public partial class DrumScorePresenter
 		var bars = BuildTabBars();
 		var visibleSections = GetVisibleSections().ToList();
 		_visibleTabMeasureCount = visibleSections.Sum(visible => visible.Measures.Count);
+		var bannerRows = new List<(ScoreTrack Track, Control Row)>();
 		foreach (var track in _score.Tracks)
+		{
 			if (track.Kind == TrackKind.Ruler) continue;
-			else if (track.Kind == TrackKind.Audio) RenderAudioTrack(track, section);
+			Control row;
+			if (track.Kind == TrackKind.Audio) row = RenderAudioTrack(track, section);
 			else if (track.Kind == TrackKind.Percussion && !track.HasConfiguredPercussionKit)
-				_tabTracks.AddChild(new Label { Text = $"Legacy percussion track '{track.Name}' is preserved but cannot be edited in the kit editor." });
-			else if (track.Kind == TrackKind.Percussion) RenderPercussionKitTrack(track, bars, visibleSections);
-			else RenderNonPercussionTrack(track, bars, visibleSections);
+			{
+				row = new Label { Text = $"Legacy percussion track '{track.Name}' is preserved but cannot be edited in the kit editor." };
+				_tabTracks.AddChild(row);
+			}
+			else if (track.Kind == TrackKind.Percussion) row = RenderPercussionKitTrack(track, bars, visibleSections);
+			else row = RenderNonPercussionTrack(track, bars, visibleSections);
+			bannerRows.Add((track, row));
+		}
+		_trackBanners.SyncRows(bannerRows);
 		RenderAudioOnlyRuler(section);
+		_trackHeightSelector.Select(_trackHeightSelector.GetItemIndex((int)_trackHeight));
+		ApplyTrackHeight();
 		QueueResponsiveTabWidthUpdate();
 	}
 
-	private void RenderNonPercussionTrack(ScoreTrack track, List<TabBar> bars, IReadOnlyList<ScoreSection> visibleSections)
+	private void ApplyTrackHeight()
+	{
+		var presentation = _trackHeight switch
+		{
+			TrackHeight.Compact or TrackHeight.FoldedCompact => AdaptiveTrackHeader.Presentation.Compact,
+			TrackHeight.Tall or TrackHeight.FoldedTall => AdaptiveTrackHeader.Presentation.Tall,
+			_ => AdaptiveTrackHeader.Presentation.Standard
+		};
+		var (laneScale, audioHeight) = presentation switch
+		{
+			AdaptiveTrackHeader.Presentation.Compact => (0.66f, 76f),
+			AdaptiveTrackHeader.Presentation.Tall => (1.5f, 172f),
+			_ => (1.12f, 132f)
+		};
+		foreach (var entry in _trackRows.Values)
+			AdaptiveTrackHeader.Apply(entry.Control, entry.IndependentHeight ? AdaptiveTrackHeader.Presentation.Compact : presentation);
+		foreach (var view in FindControls<MeasureTabView>(_tabTracks))
+			if (view.ViewData?.IsFullTab != true) view.SetLaneHeightScale(laneScale);
+		foreach (var timeline in FindControls<AudioSectionTimeline>(_tabTracks))
+			if (timeline.GetParent() is ScrollContainer scroll) SetMinimumHeight(scroll, audioHeight);
+	}
+
+	private void SetTrackHeight(TrackHeight height)
+	{
+		if (_trackHeight == height) return;
+		_trackHeight = height;
+		_trackHeightSelector.Select(_trackHeightSelector.GetItemIndex((int)height));
+		ApplyTrackFoldPreset();
+		ApplyTrackHeight();
+		QueueResponsiveTabWidthUpdate();
+		MarkEditorStateDirty();
+	}
+
+	private bool TryResizeTracksWithWheel(InputEvent inputEvent)
+	{
+		if (inputEvent is not InputEventMouseButton
+			{
+				Pressed: true, CtrlPressed: true, ShiftPressed: false, AltPressed: false, MetaPressed: false,
+				ButtonIndex: MouseButton.WheelUp or MouseButton.WheelDown
+			} wheel || _trackWorkspaceScroll is null || !_trackWorkspaceScroll.IsVisibleInTree() ||
+			!_trackWorkspaceScroll.GetGlobalRect().HasPoint(wheel.Position))
+			return false;
+
+		var hovered = GetViewport().GuiGetHoveredControl();
+		if (hovered is null || (hovered != _trackWorkspaceScroll && !_trackWorkspaceScroll.IsAncestorOf(hovered)))
+			return false;
+
+		int step = wheel.ButtonIndex == MouseButton.WheelUp ? 1 : -1;
+		if (TryStepFullTabHeight(hovered, step)) return true;
+		int index = Math.Clamp(_trackHeightSelector.Selected + step, 0, _trackHeightSelector.ItemCount - 1);
+		SetTrackHeight((TrackHeight)_trackHeightSelector.GetItemId(index));
+		return true;
+	}
+
+	private FoldableContainer RenderNonPercussionTrack(ScoreTrack track, List<TabBar> bars, IReadOnlyList<ScoreSection> visibleSections)
 	{
 		var row = _nonPercussionTrackScene.Instantiate<FoldableContainer>();
 		row.Name = $"Track_{track.Id:N}";
 		_tabTracks.AddChild(row);
+		row.GetNode<TrackPedals>("VBoxContainer/TrackPedals").Configure(track, () => { SetActiveEditorTrack(track.Id); NotifyScoreEdited(); });
 
-		row.Folded = _trackFoldedStates.GetValueOrDefault(track.Id, row.Folded);
 		RegisterTrackRow(track.Id, row);
-		row.FoldingChanged += folded => { _trackFoldedStates[track.Id] = folded; MarkEditorStateDirty(); };
-		BindFloatingBoardButtons(track.Id, row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/ToggleKeyboardButton"), row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/ToggleFretboardButton"));
-		var deleteTrack = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/DeleteButton");
-		var nameLabel = row.GetNode<Label>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameLabel");
-		var nameEdit = row.GetNode<LineEdit>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameEdit");
-		var icon = row.GetNode<TextureRect>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/TextureRect");
-		var settings = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/TrackSettingsButton");
-		var mute = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/MuteButton");
-		var solo = row.GetNode<Button>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/SoloButton");
-		var volume = row.GetNode<HSlider>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Volume");
-		var volumeLabel = row.GetNode<Label>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Label");
-		BindTrackSectionInfo(track, row.GetNode<Control>("TrackContainer/HBoxContainer/TrackControls/VBoxContainer/TrackSectionInfo"));
+		var boardControls = row.GetNode<Control>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs");
+		var fretboardButton = boardControls.GetNode<Button>("ToggleFretboardButton");
+		BindFloatingBoardButtons(track.Id, boardControls.GetNode<Button>("ToggleKeyboardButton"), fretboardButton);
+		if (track.UsesFullTab) fretboardButton.Hide();
+		var deleteTrack = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/DeleteButton");
+		var nameLabel = row.GetNode<Label>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameLabel");
+		var nameEdit = row.GetNode<LineEdit>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/NameContainer/TrackNameEdit");
+		var icon = row.GetNode<TextureRect>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/PanelContainer/TextureRect");
+		var settings = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/TrackSettingsButton");
+		var mute = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/MuteButton");
+		var solo = row.GetNode<Button>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/Configs/SoloButton");
+		var volume = row.GetNode<HSlider>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Volume");
+		var volumeLabel = row.GetNode<Label>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/VBoxContainer/VolumeContainer/Label");
+		BindTrackSectionInfo(track, row.GetNode<Control>("VBoxContainer/TrackContainer/HBoxContainer/TrackControls/VBoxContainer/TrackSectionInfo"));
 
 		nameLabel.Text = track.Name;
 
@@ -191,8 +269,8 @@ public partial class DrumScorePresenter
 		volume.ValueChanged += value => { SelectTrack(); track.VolumeDb = value; volumeLabel.Text = $"{value:0.#} dB"; NotifyScoreEdited(); };
 
 
-		var sectionHost = row.GetNode<HBoxContainer>("TrackContainer/HBoxContainer");
-		var sectionTemplate = row.GetNode<Control>("TrackContainer/HBoxContainer/TabSectionContainer");
+		var sectionHost = row.GetNode<HBoxContainer>("VBoxContainer/TrackContainer/HBoxContainer");
+		var sectionTemplate = row.GetNode<Control>("VBoxContainer/TrackContainer/HBoxContainer/TabSectionContainer");
 		sectionHost.RemoveChild(sectionTemplate);
 		var measureScroll = CreateTrackTabPages(track.Id, sectionHost, out var fixedHeaders, out var pageSections);
 		pageSections.AddChild(sectionTemplate);
@@ -233,6 +311,8 @@ public partial class DrumScorePresenter
 				fixedHeaders.AddChild(headerPanel);
 			}
 		}
+		if (track.UsesFullTab) BindFullTabViewport(track.Id, row, measureScroll);
+		return row;
 	}
 
 	private void QueueResponsiveTabWidthUpdate()
@@ -269,8 +349,8 @@ public partial class DrumScorePresenter
 		foreach (var row in _tabTracks.GetChildren().OfType<FoldableContainer>())
 		{
 			if (!row.IsVisibleInTree() || row.Folded) continue;
-			var host = row.GetNodeOrNull<HBoxContainer>("TrackContainer/HBoxContainer") ??
-				row.GetNodeOrNull<HBoxContainer>("TrackContainer/VBoxContainer/TabSectionContainer/SubTracks/KitLanes");
+			var host = row.GetNodeOrNull<HBoxContainer>("VBoxContainer/TrackContainer/HBoxContainer") ??
+				row.GetNodeOrNull<HBoxContainer>("BoxContainer/TrackContainer/VBoxContainer/TabSectionContainer/SubTracks/KitLanes");
 			if (host is null) continue;
 
 			var measureWidth = 0f;
@@ -297,8 +377,10 @@ public partial class DrumScorePresenter
 		sectionMarker.TooltipText = sectionMarker.Text;
 		var measureViews = sectionContainer.GetNode<HBoxContainer>("VBoxContainer/Measures");
 		sectionContainer.CustomMinimumSize = new Vector2(0, sectionContainer.CustomMinimumSize.Y);
-		var mode = _trackDisplayModes.GetValueOrDefault(track.Id, track.Kind is TrackKind.Guitar or TrackKind.Bass or TrackKind.Percussion ? 0 : 1);
+		var fullTab = track.UsesFullTab;
+		var mode = fullTab ? 0 : _trackDisplayModes.GetValueOrDefault(track.Id);
 		modeSelector.Select(mode);
+		modeSelector.Visible = !fullTab;
 		void SelectTrack() => SetActiveEditorTrack(track.Id);
 		addFirstMeasure.Visible = section.Measures.Count == 0;
 		addFirstMeasure.Pressed += () => { SetFocusedSection(section); InitializeMeasureSnapDefaults(_score.AddMeasure(section)); NotifyScoreEdited(); RenderSection(); };
@@ -357,7 +439,7 @@ public partial class DrumScorePresenter
 			}
 		}
 		var displayMode = mode;
-		var isTabTrack = track.Kind is TrackKind.Guitar or TrackKind.Bass or TrackKind.Percussion;
+		var isTabTrack = fullTab || track.Kind is TrackKind.Guitar or TrackKind.Bass or TrackKind.Percussion;
 		if (displayMode == 1)
 		{
 			AddTrackPlaceholder(measureViews, resolved, populatedCount, measureWidth, "Standard notation view is not available yet. Score notes remain unchanged.", index => SelectRepeatSource(track, section, index));
@@ -366,26 +448,27 @@ public partial class DrumScorePresenter
 		{
 			AddTrackPlaceholder(measureViews, resolved, populatedCount, measureWidth, $"Tablature is unavailable for {track.Kind} tracks. Track data remains unchanged.", index => SelectRepeatSource(track, section, index));
 		}
-		else if (track.TabTuningMidiPitches.Count == 0)
+		else if (track.TabLaneMidiPitches.Count == 0)
 		{
 			AddTrackPlaceholder(measureViews, resolved, populatedCount, measureWidth, "No tuning assigned. Existing pitch-only notes remain unchanged.", index => SelectRepeatSource(track, section, index));
 		}
 		else
 		{
 			var occurrences = BuildTabOccurrences(track, bars);
+			var effectiveEnds = GetTabOccurrenceEnds(occurrences);
 			var pendingCursorViewScheduled = false;
 			foreach (var item in resolved.Take(populatedCount))
 			{
 				var bar = item.Bar;
 				var source = GetEffectiveTrackMeasure(section, track, bar.Measure, item.Occurrence);
 				if (source is null) continue;
+				var legacyPitchNotes = fullTab && !source.UsesTabEvents ? TabEventEditing.GetLegacyPitchNotes(source) : null;
+				var readOnly = legacyPitchNotes is { Count: > 0 };
 				var visible = new List<MeasureTabView.TabNoteViewData>();
 				var mappings = new Dictionary<string, TabOccurrence>();
 				foreach (var occurrence in occurrences)
 				{
-					var next = occurrences.Where(o => o.Note.StringNumber == occurrence.Note.StringNumber && o.Start > occurrence.Start)
-						.Select(o => o.Start).DefaultIfEmpty(occurrence.End).Min();
-					var effectiveEnd = next < occurrence.End ? next : occurrence.End;
+					var effectiveEnd = effectiveEnds[occurrence];
 					var barEnd = bar.Start + bar.Duration;
 					if (occurrence.Start >= barEnd || effectiveEnd <= bar.Start) continue;
 					var start = occurrence.Start < bar.Start ? bar.Start : occurrence.Start;
@@ -401,22 +484,36 @@ public partial class DrumScorePresenter
 						IncomingArticulation: occurrence.Note.IncomingArticulation));
 				}
 				var column = measureViews.GetNode<Control>($"Measure{bar.Index + 1}");
+				if (readOnly)
+				{
+					foreach (var note in legacyPitchNotes!)
+					{
+						if (note.Onset >= bar.Duration) continue;
+						var end = note.EndPosition < bar.Duration ? note.EndPosition : bar.Duration;
+						visible.Add(new MeasureTabView.TabNoteViewData(note.Id.ToString("N"), note.StringNumber, 0,
+							TabTime(note.Onset), TabTime(end - note.Onset), VelocityLevel: note.Intensity));
+					}
+					BindLegacyFullTabEditing(column, track, source, bars);
+				}
 				var view = column.GetNode<MeasureTabView>("Content/MeasureTabView");
 				view.SnapDenominator = GetMeasureSnapDenominator(track.Id, source);
 				view.CustomMinimumSize = new Vector2(measureWidth, view.CustomMinimumSize.Y);
 				RegisterCursorTarget(bar.Measure.Id, view);
 				_cursorTabViews.Add((bar.Measure.Id, view));
 				var signature = _score.ResolveTimeSignature(section, bar.Measure);
-				view.Bind(new MeasureTabView.TabMeasureViewData(track.TabTuningMidiPitches, track.MaxFret,
+				view.Bind(new MeasureTabView.TabMeasureViewData(track.TabLaneMidiPitches, fullTab ? 0 : track.MaxFret,
 					TabTime(bar.Duration), visible, signature.Numerator, signature.Denominator, IsRepeat: item.Occurrence.IsRepeat,
 					RepeatSourceMeasureNumber: (item.Occurrence.SourceMeasureIndex ?? bar.Index) + 1, IsPercussion: track.Kind == TrackKind.Percussion,
-					TrackColorRgba: track.DisplayColorRgba));
+					TrackColorRgba: track.DisplayColorRgba, IsFullTab: fullTab, IsReadOnly: readOnly));
 				if (!item.Occurrence.IsRepeat && item.Occurrence.SourceMeasureIndex is { } sourceIndex)
 					RegisterPlaybackFollowTarget(track.Id, section.Measures[sourceIndex].Id, view, measureScroll);
 				var content = column.GetNode<Control>("Content");
 				content.CustomMinimumSize = new Vector2(0, view.CustomMinimumSize.Y);
-				RegisterTabClipboardView(view, track, bar, source, mappings);
+				BindEditorView(track.Id, bar.Measure.Id, view, measureScroll);
+				view.MeasureSelected += () => { SetFocusedSection(section); ActivateTabView(track.Id, bar.Measure.Id, view); SelectRepeatSource(track, section, item.Occurrence.SourceMeasureIndex); };
 				view.PlacementClickHandler = position => HandleChordPlacementClick(view, track, position);
+				if (readOnly) continue;
+				RegisterTabClipboardView(view, track, bar, source, mappings);
 				view.VelocityGestureStarted += (selection, _) => BeginVelocityDrag(track, mappings, selection, view.GetViewport().GetMousePosition());
 				view.VelocityGestureUpdated += (_, _, _, delta) => UpdateVelocityDrag(delta, view.GetViewport().GetMousePosition());
 				view.VelocityGestureEnded += (_, _) => FinishVelocityDrag(cancel: false);
@@ -428,8 +525,6 @@ public partial class DrumScorePresenter
 					var targets = selected.Select(note => mappings[note.Id]).ToArray();
 					ShowNoteVelocitySettings(track, targets, selected.Count, position);
 				};
-				BindEditorView(track.Id, bar.Measure.Id, view, measureScroll);
-				view.MeasureSelected += () => { SetFocusedSection(section); ActivateTabView(track.Id, bar.Measure.Id, view); SelectRepeatSource(track, section, item.Occurrence.SourceMeasureIndex); };
 				view.EditIntentHandler = intent =>
 				{
 					SetActiveEditorTrack(track.Id);
@@ -459,7 +554,7 @@ public partial class DrumScorePresenter
 					Callable.From(() =>
 					{
 						if (!GodotObject.IsInstanceValid(view) || !GodotObject.IsInstanceValid(measureScroll)) return;
-						measureScroll.EnsureControlVisible(view);
+						EnsureTabEditorVisible(measureScroll, view, pending.StringNumber);
 						ActivateTabView(track.Id, bar.Measure.Id, view);
 						view.BeginCursor(pending.StringNumber, TabTime(pending.Onset));
 					}).CallDeferred();
@@ -483,7 +578,7 @@ public partial class DrumScorePresenter
 			{
 				Text = TranslationServer.Translate("Append source"),
 			TooltipText = string.Format(TranslationServer.Translate("Append an empty independent measure. {0}+click to copy the previous measure with independent events."), "Ctrl"),
-				CustomMinimumSize = new Vector2(measureWidth, Math.Max(180, measureWidth * 0.30f)),
+				CustomMinimumSize = new Vector2(measureWidth, 0),
 				SizeFlagsHorizontal = Control.SizeFlags.Fill,
 				SizeFlagsVertical = Control.SizeFlags.ExpandFill,
 				ThemeTypeVariation = "AppActionButton"
@@ -645,8 +740,9 @@ public partial class DrumScorePresenter
 		manager.GetNode<Button>("AlternationActions/AddChoice").Pressed += () =>
 		{
 			var id = Guid.Parse(alternationChoice.GetItemMetadata(alternationChoice.Selected).AsString());
-			if (!orderedIds.Contains(id)) orderedIds.Add(id);
+			orderedIds.Add(id);
 			RefreshAlternation();
+			alternationList.Select(orderedIds.Count - 1);
 		};
 		manager.GetNode<Button>("AlternationActions/RemoveChoice").Pressed += () => { var index = alternationList.GetSelectedItems().FirstOrDefault(-1); if (index >= 0) { orderedIds.RemoveAt(index); RefreshAlternation(); } };
 		manager.GetNode<Button>("AlternationActions/MoveUp").Pressed += () => { var index = alternationList.GetSelectedItems().FirstOrDefault(-1); if (index > 0) { (orderedIds[index - 1], orderedIds[index]) = (orderedIds[index], orderedIds[index - 1]); RefreshAlternation(); alternationList.Select(index - 1); } };
@@ -813,6 +909,9 @@ public partial class DrumScorePresenter
 		}
 		if (_pendingTabCursor?.TrackId == track.Id) _pendingTabCursor = null;
 		_trackFoldedStates.Remove(track.Id);
+		_fullTabViewportHeights.Remove(track.Id);
+		_fullTabPitchScroll.Remove(track.Id);
+		_expandedInFoldedPreset.Remove(track.Id);
 		foreach (var key in _sectionRepeatSourceIndices.Keys.Where(key => key.TrackId == track.Id).ToArray()) _sectionRepeatSourceIndices.Remove(key);
 		_trackDisplayModes.Remove(track.Id);
 		_selectedRepeatSourceIndices.Remove(track.Id);
@@ -824,7 +923,7 @@ public partial class DrumScorePresenter
 
 	private void ShowTrackSettings(ScoreTrack track)
 	{
-		var dialog = GD.Load<PackedScene>("res://Interface/Tracks/TrackSettingsDialog.tscn").Instantiate<TrackSettingsDialog>();
+		var dialog = _trackSettingsDialogScene.Instantiate<TrackSettingsDialog>();
 		AddChild(dialog);
 		dialog.Configure(track);
 		dialog.EvaluateRetuning = tuning =>
@@ -842,7 +941,7 @@ public partial class DrumScorePresenter
 			if (!_score.Tracks.Contains(track)) { dialog.QueueFree(); return; }
 			var program = dialog.SelectedProgram;
 			var color = dialog.SelectedColorRgba;
-			var image = dialog.SelectedImageId;
+			var banner = dialog.SelectedBannerImagePath;
 			var name = dialog.SelectedName;
 			var tuningChanged = track.Kind is TrackKind.Guitar or TrackKind.Bass && dialog.TuningChanged;
 			if (tuningChanged)
@@ -866,15 +965,16 @@ public partial class DrumScorePresenter
 				}
 				if (_pendingTabCursor?.TrackId == track.Id) _pendingTabCursor = null;
 			}
-			var imageChanged = image != TrackSettingsDialog.ResolveImageId(track);
-			if (tuningChanged || name != track.Name || program != track.DefaultMidiProgram || color != track.DisplayColorRgba || imageChanged)
+			var bannerChanged = banner != TrackBannerArt.ResolvePath(track);
+			var trackChanged = tuningChanged || name != track.Name || program != track.DefaultMidiProgram || color != track.DisplayColorRgba;
+			if (trackChanged || bannerChanged)
 			{
 				track.Name = name;
 				track.DefaultMidiProgram = program;
 				track.DisplayColorRgba = color;
-				if (imageChanged) track.InstrumentImageId = image;
-				NotifyScoreEdited();
-				RenderSection();
+				if (bannerChanged) track.BannerImagePath = banner;
+				NotifyScoreEdited(refreshPlayback: trackChanged);
+				if (trackChanged) RenderSection();
 			}
 			dialog.QueueFree();
 		};
@@ -885,7 +985,7 @@ public partial class DrumScorePresenter
 
 	private void ShowNewTrackSettings()
 	{
-		var dialog = GD.Load<PackedScene>("res://Interface/Tracks/TrackSettingsDialog.tscn").Instantiate<TrackSettingsDialog>();
+		var dialog = _trackSettingsDialogScene.Instantiate<TrackSettingsDialog>();
 		AddChild(dialog);
 		dialog.ConfigureNew();
 		dialog.GetOkButton().ThemeTypeVariation = "AppActionButton";
@@ -895,7 +995,7 @@ public partial class DrumScorePresenter
 			var track = new ScoreTrack(dialog.SelectedName, dialog.SelectedKind, dialog.SelectedProgram)
 			{
 				DisplayColorRgba = dialog.SelectedColorRgba,
-				InstrumentImageId = dialog.SelectedImageId,
+				BannerImagePath = dialog.SelectedBannerImagePath,
 				TabSnapDenominator = _tabSnapDenominator
 			};
 			if (track.Kind is TrackKind.Guitar or TrackKind.Bass) track.ConfigureTab(dialog.SelectedTuning);
@@ -906,7 +1006,7 @@ public partial class DrumScorePresenter
 				if (measure.GetTrackMeasure(track.Id) is { } newPart) newPart.SnapDenominator = GetTabSnapDenominator(track.Id);
 			if (GetSelectedSection().Measures.Count == 0) InitializeMeasureSnapDefaults(_score.AddMeasure(GetSelectedSection()));
 			SetActiveEditorTrack(track.Id);
-			_trackDisplayModes[track.Id] = track.Kind is TrackKind.Guitar or TrackKind.Bass or TrackKind.Percussion ? 0 : 1;
+			_trackDisplayModes[track.Id] = 0;
 			NotifyScoreEdited();
 			RenderSection();
 			dialog.QueueFree();
@@ -954,7 +1054,7 @@ public partial class DrumScorePresenter
 				else if (intent.Action == "fret")
 				{
 					TabEventEditing.ValidateAssignment(track, note.StringNumber, intent.Fret);
-					note.Fret = intent.Fret; note.MidiPitch = track.TabTuningMidiPitches[note.StringNumber - 1] + intent.Fret;
+					note.Fret = intent.Fret; note.MidiPitch = track.TabLaneMidiPitches[note.StringNumber - 1] + intent.Fret;
 				}
 				else return false;
 			}
@@ -972,8 +1072,8 @@ public partial class DrumScorePresenter
 
 	private PendingTabCursor? GetTabNavigationTarget(ScoreTrack track, TabBar bar, MeasureTabView.TabEditIntent intent)
 	{
-		if (track.TabTuningMidiPitches.Count == 0 || bar.Duration <= ScoreTime.Zero) return null;
-		var stringNumber = Math.Clamp(intent.StringNumber + intent.NavigateVertical, 1, track.TabTuningMidiPitches.Count);
+		if (track.TabLaneMidiPitches.Count == 0 || bar.Duration <= ScoreTime.Zero) return null;
+		var stringNumber = Math.Clamp(intent.StringNumber + intent.NavigateVertical, 1, track.TabLaneMidiPitches.Count);
 		var onset = new ScoreTime(intent.Onset.Numerator, intent.Onset.Denominator);
 		var resolved = ResolveTrackOccurrence(bar.Section, track, bar);
 		var editingPart = GetEffectiveTrackMeasure(bar.Section, track, bar.Measure, resolved);
@@ -1028,6 +1128,22 @@ public partial class DrumScorePresenter
 				occurrences.Add(new TabOccurrence(note, source, bar.Start + note.Onset, bar.Start + note.EndPosition, resolved.IsRepeat, bar.Index));
 		}
 		return occurrences;
+	}
+
+	private static Dictionary<TabOccurrence, ScoreTime> GetTabOccurrenceEnds(List<TabOccurrence> occurrences)
+	{
+		var ends = new Dictionary<TabOccurrence, ScoreTime>(occurrences.Count);
+		foreach (var lane in occurrences.GroupBy(note => note.Note.StringNumber))
+		{
+			ScoreTime? nextOnset = null;
+			foreach (var onset in lane.GroupBy(note => note.Start).OrderByDescending(group => group.Key))
+			{
+				foreach (var note in onset)
+					ends[note] = nextOnset is { } next && next < note.End ? next : note.End;
+				nextOnset = onset.Key;
+			}
+		}
+		return ends;
 	}
 
 	private static MeasureTabView.ExactTime TabTime(ScoreTime value) => new(value.Numerator, value.Denominator);

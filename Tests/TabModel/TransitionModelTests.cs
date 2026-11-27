@@ -19,7 +19,8 @@ internal static class TransitionModelTests
 
         score.SetTrackMeasureTransitionRule(sectionA, destination, guitar, sectionB.Id, guitarVersion.Id);
         score.SetTrackMeasureTransitionRule(sectionA, destination, drums, sectionB.Id, drumVersion.Id);
-        score.SetTrackMeasureAlternation(sectionA, destination, guitar, new[] { Guid.Empty, guitarVersion.Id });
+        var guitarSequence = new[] { Guid.Empty, guitarVersion.Id, guitarVersion.Id };
+        score.SetTrackMeasureAlternation(sectionA, destination, guitar, guitarSequence);
         score.SetTrackMeasureAlternation(sectionA, destination, drums, new[] { drumVersion.Id, Guid.Empty });
         Assert(destination.TransitionRules.Count == 2 && destination.Alternations.Count == 2,
             "Rules and sequences for different tracks must coexist on the same slot.");
@@ -31,15 +32,16 @@ internal static class TransitionModelTests
         Assert(restoredSlot.TrackMeasureVersions.Count == 2, "Named versions did not round-trip.");
         Assert(restoredSlot.TransitionRules.Count == 2 && restoredSlot.Alternations.Count == 2,
             "Per-track transition rules or alternations did not round-trip.");
-        Assert(restoredSlot.Alternations.Single(item => item.TrackId == guitar.Id).VersionIds.SequenceEqual(new[] { Guid.Empty, guitarVersion.Id }),
-            "The original-content sentinel or order was not preserved.");
+        Assert(restoredSlot.Alternations.Single(item => item.TrackId == guitar.Id).VersionIds.SequenceEqual(guitarSequence),
+            "The original-content sentinel or repeated sequence entries were not preserved.");
 
         var copied = restored.DuplicateMeasure(restored.Sections[0], 0, before: false);
         Assert(copied.TrackMeasureVersions.Count == 2 && copied.TrackMeasureVersions.All(item => item.Id != guitarVersion.Id && item.Id != drumVersion.Id),
             "Duplicating a slot must assign fresh version identities.");
         var copiedGuitarVersion = copied.TrackMeasureVersions.Single(item => item.TrackId == guitar.Id);
-        Assert(copied.Alternations.Single(item => item.TrackId == guitar.Id).VersionIds[1] == copiedGuitarVersion.Id,
-            "Duplicating a slot must remap alternation references.");
+        Assert(copied.Alternations.Single(item => item.TrackId == guitar.Id).VersionIds
+                .SequenceEqual(new[] { Guid.Empty, copiedGuitarVersion.Id, copiedGuitarVersion.Id }),
+            "Duplicating a slot must remap every alternation entry, including repeated versions.");
         Assert(copied.TransitionRules.Single(rule => rule.TrackId == guitar.Id).VersionId == copiedGuitarVersion.Id,
             "Duplicating a slot must remap rule references.");
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://fq6fxxud23oo"]
 
-[ext_resource type="PackedScene" uid="uid://bq8rlf7q1txfy" path="res://Interface/Tracks/PresetColorPicker.tscn" id="1_i22qm"]
-[ext_resource type="Script" uid="uid://bexgj3upx5wx4" path="res://Interface/Tracks/preset_colors_selector.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://bq8rlf7q1txfy" path="res://Interface/Tracks/Scenes/PresetColorPicker.tscn" id="1_i22qm"]
+[ext_resource type="Script" uid="uid://bexgj3upx5wx4" path="res://Interface/Tracks/Scripts/preset_colors_selector.gd" id="2"]
 
 [node name="PresetColorsPopupWindow" type="Window" unique_id=359690716]
 oversampling_override = 1.0

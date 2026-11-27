@@ -13,6 +13,7 @@ public partial class FretboardChordController : Window
 	private readonly List<(int StringNumber, int Fret)> _selectedNotes = new();
 	private readonly IReadOnlyList<(int StringNumber, int Fret)> _selectedNotesView;
 	private readonly Dictionary<(int StringNumber, int Fret), Button> _fretButtons = new();
+	private readonly HashSet<(int StringNumber, int Fret)> _tabHighlights = new();
 	private readonly Dictionary<int, (int StringNumber, int Fret)> _selectionByString = new();
 	private readonly PackedScene _stringScene = GD.Load<PackedScene>("res://Interface/GuitarFretboard/Scenes/string.tscn");
 	private readonly PackedScene _extraFretButtonScene = GD.Load<PackedScene>("res://Interface/GuitarFretboard/Scenes/extra_fret_button.tscn");
@@ -24,6 +25,8 @@ public partial class FretboardChordController : Window
 	private Button _createToggle = null!;
 	private Button _insertToggle = null!;
 	private Button _resetButton = null!;
+	private Button _writeToggle = null!;
+	private Button _autoMoveToggle = null!;
 	private ScoreTrack? _track;
 	private int[] _configuredTuning = Array.Empty<int>();
 	private int _configuredMaxFret;
@@ -34,8 +37,19 @@ public partial class FretboardChordController : Window
 	public FretboardChordController() => _selectedNotesView = _selectedNotes.AsReadOnly();
 
 	public event Action? PlacementStateChanged;
+	public event Action<int, int>? DirectNoteRequested;
+	public bool IsWriteEnabled => IsNodeReady() && _writeToggle.ButtonPressed && _track is not null;
+	public bool AutoMoveEnabled => IsNodeReady() && _autoMoveToggle.ButtonPressed;
 	public bool IsArmed => _isArmed;
 	public IReadOnlyList<(int StringNumber, int Fret)> SelectedNotes => _selectedNotesView;
+
+	/// <summary>Sets presentation-only TAB highlights without changing fret selection or pressed state.</summary>
+	public void SetTabHighlights(IEnumerable<(int StringNumber, int Fret)> notes)
+	{
+		_tabHighlights.Clear();
+		if (notes is not null) _tabHighlights.UnionWith(notes);
+		ApplyTabHighlights();
+	}
 
 	public override void _Ready()
 	{
@@ -47,6 +61,9 @@ public partial class FretboardChordController : Window
 		_createToggle = GetNode<Button>("Panel/Layout/ChordInsertingOptions/CreateModeToggle");
 		_insertToggle = GetNode<Button>("Panel/Layout/ChordInsertingOptions/InsertChordToggle");
 		_resetButton = GetNode<Button>("Panel/Layout/ChordInsertingOptions/ResetButton");
+		_writeToggle = GetNode<Button>("Panel/Layout/ChordInsertingOptions/WriteToggle");
+		_autoMoveToggle = GetNode<Button>("Panel/Layout/ChordInsertingOptions/AutoMoveToggle");
+		_writeToggle.Toggled += OnWriteToggled;
 		_createToggle.Toggled += OnCreateToggled;
 		_insertToggle.Toggled += OnInsertToggled;
 		_resetButton.Pressed += ResetComposition;
@@ -166,6 +183,14 @@ public partial class FretboardChordController : Window
 		PlacementStateChanged?.Invoke();
 	}
 
+	/// <summary>Clears the inserted notes and returns to Create mode.</summary>
+	public void CompletePlacement()
+	{
+		ClearNotesAndDisarm();
+		UpdateOptions();
+		PlacementStateChanged?.Invoke();
+	}
+
 	/// <summary>Clears Create mode, placement mode, and all selected fret positions.</summary>
 	public void ResetComposition()
 	{
@@ -184,6 +209,7 @@ public partial class FretboardChordController : Window
 		if (IsNodeReady())
 		{
 			_createToggle.ButtonPressed = false;
+			_writeToggle.SetPressedNoSignal(false);
 			_insertToggle.ButtonPressed = false;
 			foreach (var button in _fretButtons.Values) button.ButtonPressed = false;
 		}
@@ -221,15 +247,16 @@ public partial class FretboardChordController : Window
 					continue;
 				}
 				button.Text = MidiName(pitch);
-				button.TooltipText = string.Format(TranslationServer.Translate("String {0}, fret {1}: {2}"), stringNumber, fret, MidiName(pitch));
+				button.TooltipText = FretTooltip(stringNumber, fret, pitch, _tabHighlights.Contains((stringNumber, fret)));
 				button.ThemeTypeVariation = fret == 0 ? "HandFret" : (MarkedFrets.Contains(fret) ? "MarkFret" : "Fret");
 				button.ButtonPressed = _selectionByString.TryGetValue(stringNumber, out var selected) && selected.Fret == fret;
-				button.Disabled = !_createToggle.ButtonPressed || _isArmed;
+				button.Disabled = (!_createToggle.ButtonPressed && !_writeToggle.ButtonPressed) || _isArmed;
 				button.CustomMinimumSize = new Vector2(38, 24);
 				button.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
 				var key = (stringNumber, fret);
 				button.Toggled += pressed => OnFretToggled(key, pressed);
 				_fretButtons[key] = button;
+				ApplyTabHighlight(button, key);
 			}
 			var existingFrets = _fretButtons.Keys.Where(key => key.StringNumber == stringNumber).Select(key => key.Fret).ToHashSet();
 			for (var fret = 0; fret <= _configuredMaxFret; fret++)
@@ -239,23 +266,79 @@ public partial class FretboardChordController : Window
 				var button = (Button)_extraFretButtonScene.Instantiate();
 				button.Name = $"Fret{fret}";
 				button.Text = MidiName(pitch);
-				button.TooltipText = string.Format(TranslationServer.Translate("String {0}, fret {1}: {2}"), stringNumber, fret, MidiName(pitch));
+				button.TooltipText = FretTooltip(stringNumber, fret, pitch, _tabHighlights.Contains((stringNumber, fret)));
 				button.ThemeTypeVariation = fret == 0 ? "HandFret" : (MarkedFrets.Contains(fret) ? "MarkFret" : "Fret");
 				button.ButtonPressed = _selectionByString.TryGetValue(stringNumber, out var selected) && selected.Fret == fret;
-				button.Disabled = !_createToggle.ButtonPressed || _isArmed;
+				button.Disabled = (!_createToggle.ButtonPressed && !_writeToggle.ButtonPressed) || _isArmed;
 				var key = (stringNumber, fret);
 				button.Toggled += pressed => OnFretToggled(key, pressed);
 				row.AddChild(button);
 				_fretButtons[key] = button;
+				ApplyTabHighlight(button, key);
 			}
 		}
 		QueueWindowFit();
+	}
+
+	private void ApplyTabHighlights()
+	{
+		if (!IsNodeReady()) return;
+		foreach (var pair in _fretButtons)
+		{
+			ApplyTabHighlight(pair.Value, pair.Key);
+			var fret = pair.Key.Fret;
+			var pitch = _configuredTuning[pair.Key.StringNumber - 1] + fret;
+			pair.Value.TooltipText = FretTooltip(pair.Key.StringNumber, fret, pitch, _tabHighlights.Contains(pair.Key));
+		}
+	}
+
+	private string FretTooltip(int stringNumber, int fret, int pitch, bool highlighted = false)
+	{
+		var tooltip = string.Format(TranslationServer.Translate("String {0}, fret {1}: {2}"), stringNumber, fret, MidiName(pitch));
+		return highlighted ? $"{tooltip}\n{TranslationServer.Translate("TAB highlight: presentation only")}" : tooltip;
+	}
+
+	private void ApplyTabHighlight(Button button, (int StringNumber, int Fret) key)
+	{
+		var highlighted = _tabHighlights.Contains(key);
+		if (highlighted)
+		{
+			button.AddThemeColorOverride("font_outline_color", new Color(0.337255f, 0.894118f, 0.921569f, 1f));
+			button.AddThemeConstantOverride("outline_size", 2);
+		}
+		else
+		{
+			button.RemoveThemeColorOverride("font_outline_color");
+			button.RemoveThemeConstantOverride("outline_size");
+		}
+		foreach (var state in new[] { "normal", "hover", "pressed", "hover_pressed", "disabled", "focus" })
+		{
+			if (!highlighted)
+			{
+				button.RemoveThemeStyleboxOverride(state);
+				continue;
+			}
+			if (button.GetThemeStylebox(state) is not StyleBoxFlat source) continue;
+			var style = (StyleBoxFlat)source.Duplicate();
+			style.BorderWidthLeft = 3;
+			style.BorderWidthTop = 3;
+			style.BorderWidthRight = 3;
+			style.BorderWidthBottom = 3;
+			style.BorderColor = new Color(0.337255f, 0.894118f, 0.921569f, 1f);
+			button.AddThemeStyleboxOverride(state, style);
+		}
 	}
 
 	private void OnFretToggled((int StringNumber, int Fret) key, bool pressed)
 	{
 		if (_suppressToggleEvents) return;
 		var button = _fretButtons[key];
+		if (IsWriteEnabled)
+		{
+			button.SetPressedNoSignal(_selectionByString.TryGetValue(key.StringNumber, out var selected) && selected == key);
+			DirectNoteRequested?.Invoke(key.StringNumber, key.Fret);
+			return;
+		}
 		if (!_createToggle.ButtonPressed || _isArmed)
 		{
 			button.SetPressedNoSignal(false);
@@ -289,7 +372,19 @@ public partial class FretboardChordController : Window
 	private void OnCreateToggled(bool pressed)
 	{
 		if (_suppressToggleEvents) return;
-		if (!pressed) ClearNotesAndDisarm();
+		if (pressed) _writeToggle.SetPressedNoSignal(false);
+		else ClearNotesAndDisarm();
+		UpdateOptions();
+		PlacementStateChanged?.Invoke();
+	}
+
+	private void OnWriteToggled(bool pressed)
+	{
+		if (pressed)
+		{
+			CancelPlacement();
+			_createToggle.SetPressedNoSignal(false);
+		}
 		UpdateOptions();
 		PlacementStateChanged?.Invoke();
 	}
@@ -312,8 +407,9 @@ public partial class FretboardChordController : Window
 	private void UpdateOptions()
 	{
 		if (!IsNodeReady()) return;
+		_writeToggle.Disabled = _track is null;
 		_insertToggle.Disabled = !_createToggle.ButtonPressed || _selectedNotes.Count < 2;
-		foreach (var button in _fretButtons.Values) button.Disabled = !_createToggle.ButtonPressed || _isArmed;
+		foreach (var button in _fretButtons.Values) button.Disabled = (!_createToggle.ButtonPressed && !_writeToggle.ButtonPressed) || _isArmed;
 	}
 
 	private void ClearNotesAndDisarm()

@@ -390,7 +390,7 @@ public partial class AudioSectionTimeline : Control
         }
         var clipEnd = _clips.Count == 0 ? 0 : _clips.Max(item => item.Start + item.Duration);
         var contentWidth = (_timelineDurationSeconds > 0 ? _timelineDurationSeconds : clipEnd) * _pixelsPerSecond;
-        ClipContentsMinimumSize = new Vector2((float)Math.Max(_timelineDurationSeconds > 0 ? 1 : 240, contentWidth), Math.Max(64, Size.Y));
+        ClipContentsMinimumSize = new Vector2((float)Math.Max(_timelineDurationSeconds > 0 ? 1 : 240, contentWidth), CustomMinimumSize.Y);
         ResizeChildren();
         MoveChild(_overlay, GetChildCount() - 1);
         Refresh();

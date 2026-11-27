@@ -26,12 +26,14 @@ public partial class MeasureTabView : Control
 	/// <param name="MeasureDuration">Exact length in whole-note units (a 4/4 bar is 1/1).</param>
 	public sealed record TabMeasureViewData(IReadOnlyList<int> OpenStringMidiPitches, int FretLimit, ExactTime MeasureDuration,
 		IReadOnlyList<TabNoteViewData> Notes, int BeatNumerator = 4, int BeatDenominator = 4, IReadOnlyList<string>? StringLabels = null,
-		bool IsRepeat = false, int RepeatSourceMeasureNumber = 0, bool IsPercussion = false, uint TrackColorRgba = 0xffffffff);
+		bool IsRepeat = false, int RepeatSourceMeasureNumber = 0, bool IsPercussion = false, uint TrackColorRgba = 0xffffffff,
+		bool IsFullTab = false, bool IsReadOnly = false);
 	public sealed record TabEditIntent(string Action, string EventId, int StringNumber, int Fret, ExactTime Onset, ExactTime Duration,
 		int NavigateHorizontal = 0, int NavigateVertical = 0, IReadOnlyList<TabNoteViewData>? Notes = null, int TupletActual = 0);
 	/// <summary>Serializable resumable editor state for this measure view. Transient pointer gestures are excluded.</summary>
 	public sealed record EditorSnapshot(string[] SelectedEventIds, string SelectedEventId, string SelectionAnchorId,
-		int ActiveStringNumber, ExactTime ActiveOnset, string EditingNoteId, string FretDigits);
+		int ActiveStringNumber, ExactTime ActiveOnset, string EditingNoteId, string FretDigits,
+		int FocusStringNumber = 0, ExactTime FocusOnset = default);
 
 	[Signal] public delegate void EditRequestedEventHandler(string action, string eventId, int stringNumber, int fret,
 		long onsetNumerator, long onsetDenominator, long durationNumerator, long durationDenominator);
@@ -75,13 +77,14 @@ public partial class MeasureTabView : Control
 	/// <summary>Tuplet ratio used for new entries: zero for straight, or 3, 5, or 6.</summary>
 	public float MeasureWidth { get => Size.X; set { CustomMinimumSize = new Vector2(value, CustomMinimumSize.Y); QueueRedraw(); } }
 	public float RowHeight { get; set; } = 34f;
-	/// <summary>Row height from the shared theme/defaults before any parent layout override.</summary>
+	/// <summary>Theme row height at the selected density, before parent layout alignment.</summary>
 	public float ThemeRowHeight => GetThemeRowHeight();
 	public float NoteHeight { get; private set; } = 23f;
 	/// <summary>Vertical start of the note lanes inside the measure view.</summary>
 	public float RowStart => Top;
 	/// <summary>Optional shared row height supplied by a parent layout, such as percussion kit headers.</summary>
 	public float? EffectiveRowHeightOverride { get; private set; }
+	private float _laneHeightScale = 1f;
 	/// <summary>Raised after theme or bound-data changes recalculate this view's minimum geometry.</summary>
 	public event Action? LayoutGeometryChanged;
 
@@ -90,6 +93,7 @@ public partial class MeasureTabView : Control
 	private const float Top = 22f;
 	private const float DefaultRowHeight = 34f;
 	private const float DefaultPercussionRowHeight = 42f;
+	private const float DefaultFullTabRowHeight = 18f;
 	private const float DefaultNoteHeight = 23f;
 	private const float MinimumRowHeight = 8f;
 	private const float MaximumRowHeight = 200f;
@@ -103,7 +107,13 @@ public partial class MeasureTabView : Control
 	private TabNoteViewData? _preview;
 	private IReadOnlyList<TabNoteViewData> _movePreviews = Array.Empty<TabNoteViewData>();
 	private int _targetString;
-	private int _pendingString = -1;
+	private bool _showFocusWhenUnfocused;
+	public bool ShowFocusWhenUnfocused { get => _showFocusWhenUnfocused; set { if (_showFocusWhenUnfocused == value) return; _showFocusWhenUnfocused = value; QueueRedraw(); } }
+	private int _focusString;
+	private ExactTime _focusOnset = new(0, 1);
+	private int _selectionStartString;
+	private double _selectionStartOnset;
+private int _pendingString = -1;
 	private double _pendingOnset;
 	private string _fretDigits = "";
 	private TabNoteViewData? _fretEditNote;
@@ -140,7 +150,7 @@ public partial class MeasureTabView : Control
 	{
 		if (what == NotificationThemeChanged) { _velocityStyles.Clear(); RefreshThemeGeometry(); }
 		if (what == NotificationTranslationChanged) RefreshTooltip();
-		if (what == NotificationThemeChanged || what == NotificationResized) QueueRedraw();
+		if (what == NotificationThemeChanged || what == NotificationResized || what == NotificationFocusEnter || what == NotificationFocusExit) QueueRedraw();
 	}
 
 	public override void _ExitTree()
@@ -177,11 +187,19 @@ public partial class MeasureTabView : Control
 
 	private float GetThemeRowHeight()
 	{
+		if (ViewData?.IsFullTab == true) return DefaultFullTabRowHeight;
 		float rowHeight = ViewData?.IsPercussion == true ? DefaultPercussionRowHeight : DefaultRowHeight;
 		if (HasThemeConstant("row_height", "TabMeasureView")) rowHeight = GetThemeConstant("row_height", "TabMeasureView");
 		if (ViewData?.IsPercussion == true && HasThemeConstant("percussion_row_height", "TabMeasureView"))
 			rowHeight = GetThemeConstant("percussion_row_height", "TabMeasureView");
-		return Math.Clamp(float.IsFinite(rowHeight) ? rowHeight : DefaultRowHeight, MinimumRowHeight, MaximumRowHeight);
+		return Math.Clamp(rowHeight * _laneHeightScale, MinimumRowHeight, MaximumRowHeight);
+	}
+
+	public void SetLaneHeightScale(float scale)
+	{
+		if (_laneHeightScale == scale) return;
+		_laneHeightScale = scale;
+		RefreshThemeGeometry();
 	}
 
 	/// <summary>Apply or clear a parent-computed row height without changing the shared theme baseline.</summary>
@@ -242,7 +260,7 @@ public partial class MeasureTabView : Control
 		SetTrackDisplayColor(data.TrackColorRgba);
 		ViewData = data;
 		RefreshTooltip();
-		if (data.IsPercussion) { _pendingString = -1; _fretEditNote = null; _fretDigits = ""; }
+		if (data.IsPercussion || data.IsFullTab || data.IsReadOnly) { _pendingString = -1; _fretEditNote = null; _fretDigits = ""; }
 		RefreshThemeGeometry();
 		_selectedEventIds.RemoveWhere(id => !data.Notes.Any(note => note.Id == id));
 		if (!data.Notes.Any(note => note.Id == _selectionAnchorId)) _selectionAnchorId = "";
@@ -254,9 +272,13 @@ public partial class MeasureTabView : Control
 	{
 		var copy = AppPreferences.FormatBinding("copy_notes");
 		var paste = AppPreferences.FormatBinding("paste_notes");
-		TooltipText = ViewData?.IsPercussion == true
+		TooltipText = ViewData?.IsReadOnly == true ? Tr("Click a measure to set the playback start.")
+			: ViewData?.IsFullTab == true ? Tr("Double-click empty space or Ctrl-click to add a note. Drag notes to move or resize; Alt-drag to change velocity. Ctrl+Up/Down moves selected notes between pitches.")
+			: ViewData?.IsPercussion == true
 			? string.Format(Tr("Click a measure to set the playback start.\nDouble-click empty space or Ctrl-click to add a hit.\nDrag hits to move or resize; Alt-drag up or down to change velocity.\nDrag empty space to select. Shift-drag adds to selection.\n{0} copies; hover a destination and press {1}."), copy, paste)
 			: string.Format(Tr("Click a measure to set the playback start (green); orange shows playback.\nAlt-drag a note up or down to change velocity.\nDrag empty space to select notes; Shift-drag adds to selection.\nCtrl+Left/Right changes selected frets; Ctrl+Up/Down moves selected notes between strings.\n{0} copies; hover a destination and press {1}.\nCtrl-click adds an open-string note.\nDouble-click to edit a fret; Enter or an arrow confirms. Escape cancels."), copy, paste);
+		if (ViewData?.IsReadOnly != true)
+			TooltipText += "\n" + Tr("Arrow keys move the cursor; Shift+arrow keys extend selection. Ctrl+A selects notes in this measure. Enter edits the focused cell.");
 	}
 
 	/// <summary>Update this existing view's note tint without rebinding its measure data.</summary>
@@ -280,24 +302,27 @@ public partial class MeasureTabView : Control
 		QueueRedraw();
 	}
 
-	/// <summary>Start fret entry at a snapped string and onset, usually after keyboard navigation.</summary>
-	public void BeginCursor(int stringNumber, ExactTime onset)
+	/// <summary>Place the independent keyboard cursor, including on empty cells.</summary>
+	public void BeginCursor(int stringNumber, ExactTime onset) => FocusCell(stringNumber, onset);
+
+	public bool TryGetFocusedCell(out int stringNumber, out ExactTime onset)
 	{
-		if (ViewData is null || ViewData.IsPercussion || ViewData.OpenStringMidiPitches.Count == 0) return;
-		int targetString = Math.Clamp(stringNumber, 1, ViewData.OpenStringMidiPitches.Count);
-		double targetOnset = Snap(onset.Value);
-		var existing = ViewData.Notes.FirstOrDefault(n => !n.IsContinuation && n.StringNumber == targetString && Math.Abs(n.Onset.Value - targetOnset) < 1e-9);
-		if (existing is not null) BeginFretEdit(existing);
-		else
-		{
-			_pendingString = targetString - 1;
-			_pendingOnset = targetOnset;
-			_fretEditNote = null;
-			_fretDigits = "";
-			_collision = false;
-			QueueRedraw();
-		}
-		GrabFocus();
+		stringNumber = _focusString;
+		onset = _focusOnset;
+		return ViewData is not null && stringNumber > 0 && stringNumber <= ViewData.OpenStringMidiPitches.Count && onset.Denominator > 0 && onset.Value >= 0 && onset.Value < ViewData.MeasureDuration.Value;
+	}
+
+	public void FocusCell(int stringNumber, ExactTime onset, bool focus = true)
+	{
+		if (ViewData is null || ViewData.OpenStringMidiPitches.Count == 0 || onset.Denominator <= 0 || ViewData.MeasureDuration.Value <= 0) return;
+		_focusString = Math.Clamp(stringNumber, 1, ViewData.OpenStringMidiPitches.Count);
+		double last = Math.Max(0, Math.Ceiling(ViewData.MeasureDuration.Value * Math.Max(1, SnapDenominator) - 1e-10) - 1) / Math.Max(1, SnapDenominator);
+		_focusOnset = onset.Value >= 0 && onset.Value < ViewData.MeasureDuration.Value
+			? onset.Reduced() : FromDouble(Math.Clamp(onset.Value, 0, last));
+		_selectionStartString = _focusString;
+		_selectionStartOnset = _focusOnset.Value;
+		if (focus && IsInsideTree()) { GrabFocus(); MeasureSelected?.Invoke(); }
+		QueueRedraw();
 		RaiseEditorStateChanged();
 	}
 
@@ -308,7 +333,7 @@ public partial class MeasureTabView : Control
 		_fretEditNote?.Onset ?? (_pendingString >= 0
 			? new ExactTime((long)Math.Round(_pendingOnset * Math.Max(1, SnapDenominator)), Math.Max(1, SnapDenominator)).Reduced()
 			: new ExactTime(0, 1)),
-		_fretEditNote?.Id ?? string.Empty, _fretDigits);
+		_fretEditNote?.Id ?? string.Empty, _fretDigits, _focusString, _focusOnset);
 
 	/// <summary>Restore only selection and fret entry that remain valid in the currently bound view.</summary>
 	/// <returns>True when a valid view was available; stale IDs and invalid cursor values are ignored.</returns>
@@ -333,7 +358,7 @@ public partial class MeasureTabView : Control
 		var activePositionValid = snapshot.ActiveStringNumber >= 1 &&
 			snapshot.ActiveStringNumber <= ViewData.OpenStringMidiPitches.Count && onset.Denominator > 0 &&
 			onset.Value >= 0 && onset.Value < ViewData.MeasureDuration.Value;
-		if (!ViewData.IsPercussion && digitsValid && activePositionValid)
+		if (!ViewData.IsPercussion && !ViewData.IsFullTab && !ViewData.IsReadOnly && digitsValid && activePositionValid)
 		{
 			var editingNote = string.IsNullOrEmpty(snapshot.EditingNoteId) ? null :
 				ViewData.Notes.FirstOrDefault(note => note.Id == snapshot.EditingNoteId && !note.IsContinuation);
@@ -356,6 +381,8 @@ public partial class MeasureTabView : Control
 		}
 		_collision = false;
 		_collisionMessage = string.Empty;
+		_focusString = 0;
+		if (snapshot.FocusStringNumber > 0 && snapshot.FocusOnset.Denominator > 0) FocusCell(snapshot.FocusStringNumber, snapshot.FocusOnset, false);
 		QueueRedraw();
 		if (focus && IsInsideTree()) GrabFocus();
 		return true;
@@ -410,6 +437,18 @@ public partial class MeasureTabView : Control
 			DrawRect(new Rect2(2, 2, Math.Max(0, Size.X - 4), Math.Max(0, Size.Y - 4)), TabColor("repeat_overlay_tint", new Color(0.137352f, 0.101968f, 0.2328f, 1f)));
 			DrawRect(new Rect2(2, 2, Math.Max(0, Size.X - 4), Math.Max(0, Size.Y - 4)), TabColor("repeat_overlay_outline", new Color(0.70f, 0.55f, 1f, 1f)), false, 3);
 		}
+		if (data?.IsFullTab == true)
+		{
+			for (int row = 0; row < count; row++)
+			{
+				int pitch = data.OpenStringMidiPitches[row];
+				bool blackKey = pitch % 12 is 1 or 3 or 6 or 8 or 10;
+				var shade = blackKey ? new Color(0, 0, 0, 0.16f) : new Color(1, 1, 1, 0.035f);
+				DrawRect(new Rect2(0, Top + row * RowHeight, Size.X, RowHeight), shade);
+				if (pitch % 12 == 0)
+					DrawLine(new Vector2(0, Top + row * RowHeight), new Vector2(Size.X, Top + row * RowHeight), TabColor("string_text"), 1f);
+			}
+		}
 		DrawRect(new Rect2(Left, Top - 15, timelineWidth, 1), TabColor("timeline"));
 		float duration = (float)(data?.MeasureDuration.Value ?? 1);
 		if (duration <= 0) duration = 1;
@@ -445,11 +484,11 @@ public partial class MeasureTabView : Control
 			float y = Top + row * RowHeight + RowHeight / 2;
 			DrawLine(new Vector2(Left, y), new Vector2(Size.X - Right, y), TabColor("string_line"), (row == 0 || row == count - 1 ? 1.5f : 1f) * lineThickness);
 			int midi = data?.OpenStringMidiPitches.ElementAtOrDefault(row) ?? 0;
-			string label = data?.StringLabels?.ElementAtOrDefault(row) ?? $"{row + 1} · {MidiName(midi)}";
+			string label = data?.IsFullTab == true ? MidiName(midi) : data?.StringLabels?.ElementAtOrDefault(row) ?? $"{row + 1} · {MidiName(midi)}";
 			DrawString(font, new Vector2(2, y + 4), label, HorizontalAlignment.Left, Left - 4, 11, TabColor("string_text"));
 		}
 		if (data is null) return;
-		DrawArticulationLinks(data.Notes, timelineWidth, duration);
+		if (!data.IsFullTab) DrawArticulationLinks(data.Notes, timelineWidth, duration);
 		foreach (var note in data.Notes) DrawNote(note, timelineWidth, duration, count, _selectedEventIds.Contains(note.Id), false);
 		if (_hasHover && _hoverNote is not null)
 		{
@@ -467,6 +506,12 @@ public partial class MeasureTabView : Control
 			DrawRect(new Rect2(cellX, cellY + 1, Math.Max(2f, cellRight - cellX), RowHeight - 2), cellFill, true);
 			DrawLine(new Vector2(cellRight, cellY + 1), new Vector2(cellRight, cellY + RowHeight - 1), HoverColor(), 2f);
 			DrawCircle(new Vector2(cellRight, cellY + RowHeight / 2), 4f, HoverColor());
+		}
+		if ((HasFocus() || ShowFocusWhenUnfocused) && TryGetFocusedCell(out int focusRow, out var focusOnset))
+		{
+			float x = Left + timelineWidth * (float)(focusOnset.Value / duration);
+			float w = Math.Max(2, Math.Min(Left + timelineWidth - x, timelineWidth / Math.Max(1, SnapDenominator) / duration));
+			DrawRect(new Rect2(x, Top + (focusRow - 1) * RowHeight + 1, w, RowHeight - 2), TabColor("caret"), false, 2f);
 		}
 		if (data.IsRepeat)
 			DrawString(font, new Vector2(Math.Max(Left, Size.X - 172), 15), $"↻ REPEAT · M{data.RepeatSourceMeasureNumber}", HorizontalAlignment.Left, 164, 12, TabColor("repeat_overlay_label_color", new Color(0.88f, 0.84f, 1f, 1f)));
@@ -513,7 +558,7 @@ public partial class MeasureTabView : Control
 	/// <summary>Returns the current pointer's snapped cell for paste or other presenter actions.</summary>
 	public bool TryGetHoverCellContext(out int stringNumber, out ExactTime onset)
 	{
-		if (_hasHover && TryGetHoverCell(_hoverPosition, out int row, out double value))
+		if (ViewData?.IsReadOnly != true && _hasHover && TryGetHoverCell(_hoverPosition, out int row, out double value))
 		{
 			stringNumber = row + 1;
 			onset = FromDouble(value);
@@ -551,12 +596,18 @@ public partial class MeasureTabView : Control
 		DrawStyleBox(style, rect);
 		float brightness = 0.299f * background.R + 0.587f * background.G + 0.114f * background.B;
 		string tupletMark = note.TupletActual switch { 3 => "³", 5 => "⁵", 6 => "⁶", _ => "" };
-		if (ViewData?.IsPercussion == true)
+		if (ViewData?.IsPercussion == true || ViewData?.IsFullTab == true)
 		{
 			if (tupletMark.Length > 0) DrawString(GetThemeDefaultFont() ?? ThemeDB.FallbackFont, new Vector2(x + 2, y + 14), tupletMark, HorizontalAlignment.Left, Math.Max(12, rect.Size.X - 4), 11, brightness > 0.5f ? Colors.Black : Colors.White);
 		}
-		else DrawString(GetThemeDefaultFont() ?? ThemeDB.FallbackFont, new Vector2(x + 4, y + 16), note.Fret + tupletMark, HorizontalAlignment.Left, Math.Max(20, rect.Size.X - 8), 13, brightness > 0.5f ? Colors.Black : Colors.White);
-		if (ViewData?.IsPercussion != true && !note.IsContinuation && note.IncomingArticulation != StringArticulation.None)
+		else
+		{
+			var fontSize = Math.Clamp((int)NoteHeight, 10, 13);
+			var baseline = Math.Min(16, NoteHeight - 1);
+			DrawString(GetThemeDefaultFont() ?? ThemeDB.FallbackFont, new Vector2(x + 4, y + baseline),
+				note.Fret + tupletMark, HorizontalAlignment.Left, Math.Max(20, rect.Size.X - 8), fontSize, brightness > 0.5f ? Colors.Black : Colors.White);
+		}
+		if (ViewData?.IsPercussion != true && ViewData?.IsFullTab != true && !note.IsContinuation && note.IncomingArticulation != StringArticulation.None)
 		{
 			var mark = note.IncomingArticulation == StringArticulation.HammerOn ? "H" : "P";
 			var markColor = note.IncomingArticulation == StringArticulation.HammerOn ? new Color(0.35f, 0.96f, 0.65f) : new Color(0.55f, 0.78f, 1f);
@@ -659,9 +710,10 @@ public partial class MeasureTabView : Control
 	{
 		if (e is InputEventKey key && key.Pressed && !key.Echo)
 		{
+			if (ViewData?.IsReadOnly == true) return;
 			if (key.CtrlPressed && TryGetNavigation(key.Keycode, out int fretStep, out int stringStep))
 			{
-				if (!(ViewData?.IsPercussion == true && fretStep != 0) && _pendingString < 0 && _fretEditNote is null && SelectedNotes.Count > 0)
+				if (!((ViewData?.IsPercussion == true || ViewData?.IsFullTab == true) && fretStep != 0) && _pendingString < 0 && _fretEditNote is null && SelectedNotes.Count > 0)
 				{
 					var notes = SelectedNotes.ToArray();
 					var anchor = notes.FirstOrDefault(n => n.Id == SelectedEventId) ?? notes[0];
@@ -670,12 +722,63 @@ public partial class MeasureTabView : Control
 				}
 				AcceptEvent(); return;
 			}
+			if (key.CtrlPressed && key.Keycode == Key.A && _pendingString < 0 && _fretEditNote is null && ViewData is not null)
+			{
+				var notes = ViewData.Notes.Where(n => !n.IsContinuation).ToArray();
+				SetSelection(notes.Select(n => n.Id), notes.FirstOrDefault()?.Id ?? "");
+				AcceptEvent(); return;
+			}
+			if (_pendingString < 0 && _fretEditNote is null && !key.CtrlPressed && !key.AltPressed && ViewData is not null)
+			{
+				if (!TryGetFocusedCell(out var row, out var onset))
+				{
+					var selected = ViewData.Notes.FirstOrDefault(n => n.Id == SelectedEventId && !n.IsContinuation);
+					FocusCell(selected?.StringNumber ?? 1, selected?.Onset ?? new ExactTime(0, 1), false);
+					TryGetFocusedCell(out row, out onset);
+				}
+				if (row > 0 && TryGetNavigation(key.Keycode, out int dx, out int dy))
+				{
+					var nextRow = Math.Clamp(row + dy, 1, ViewData.OpenStringMidiPitches.Count);
+					var nextTime = onset.Value + (double)dx / Math.Max(1, SnapDenominator);
+					if (nextTime < 0 || nextTime >= ViewData.MeasureDuration.Value)
+					{
+						DispatchIntent(new TabEditIntent("navigate", "", row, 0, onset, new ExactTime(1, Math.Max(1, SnapDenominator)), dx, dy));
+					}
+					else
+					{
+						if (!key.ShiftPressed) { _selectionStartString = nextRow; _selectionStartOnset = nextTime; }
+						_focusString = nextRow; _focusOnset = FromDouble(nextTime);
+						var notes = ViewData.Notes.Where(n => !n.IsContinuation && (key.ShiftPressed
+							? n.StringNumber >= Math.Min(_selectionStartString, nextRow) && n.StringNumber <= Math.Max(_selectionStartString, nextRow) && n.Onset.Value >= Math.Min(_selectionStartOnset, nextTime) - 1e-9 && n.Onset.Value <= Math.Max(_selectionStartOnset, nextTime) + 1e-9
+							: n.StringNumber == nextRow && Math.Abs(n.Onset.Value - nextTime) < 1e-9)).ToArray();
+						SetSelection(notes.Select(n => n.Id), notes.FirstOrDefault()?.Id ?? "");
+						QueueRedraw(); RaiseEditorStateChanged();
+					}
+					AcceptEvent(); return;
+				}
+				if (row > 0 && (key.Keycode == Key.Enter || key.Keycode == Key.KpEnter))
+				{
+					var note = ViewData.Notes.FirstOrDefault(n => !n.IsContinuation && n.StringNumber == row && Math.Abs(n.Onset.Value - onset.Value) < 1e-9);
+					if ((note is not null && _selectedEventIds.Contains(note.Id) && _selectedEventIds.Count > 1) || ViewData.IsPercussion || ViewData.IsFullTab)
+					{
+						if (note is not null)
+						{
+							if (!_selectedEventIds.Contains(note.Id)) SetSelection(new[] { note.Id }, note.Id, note.Id);
+							NoteContextRequested?.Invoke(note, GetGlobalRect().Position + new Vector2(Left + (Size.X - Left - Right) * (float)(onset.Value / ViewData.MeasureDuration.Value), Top + (row - 0.5f) * RowHeight));
+						}
+						else EmitIntent("insert", new TabNoteViewData("", row, 0, onset, new ExactTime(1, Math.Max(1, SnapDenominator))));
+					}
+					else if (note is not null) BeginFretEdit(note);
+					else { _pendingString = row - 1; _pendingOnset = onset.Value; _fretDigits = ""; QueueRedraw(); RaiseEditorStateChanged(); }
+					AcceptEvent(); return;
+				}
+			}
 			if (key.Keycode == Key.Delete)
 			{
 				if (_pendingString < 0 && _fretEditNote is null && SelectedNotes.Count > 0) { EmitSignal(SignalName.EditRequested, "delete", SelectedEventId, 0, 0, 0L, 1L, 0L, 1L); DispatchIntent(new TabEditIntent("delete", SelectedEventId, 0, 0, new ExactTime(0, 1), new ExactTime(0, 1), Notes: SelectedNotes.ToArray())); }
 				AcceptEvent(); return;
 			}
-			if (key.Keycode == Key.F2 && ViewData is not null && !ViewData.IsPercussion) { var selected = ViewData.Notes.FirstOrDefault(n => n.Id == SelectedEventId); if (selected is not null) { BeginFretEdit(selected); AcceptEvent(); return; } }
+			if (key.Keycode == Key.F2 && ViewData is not null && !ViewData.IsPercussion && !ViewData.IsFullTab) { var selected = ViewData.Notes.FirstOrDefault(n => n.Id == SelectedEventId); if (selected is not null) { BeginFretEdit(selected); AcceptEvent(); return; } }
 			if (key.Keycode == Key.Escape) { bool changed = _pendingString >= 0 || _fretEditNote is not null || _fretDigits.Length > 0 || _selectedEventIds.Count > 0; CancelVelocityGesture(); _preview = null; _movePreviews = Array.Empty<TabNoteViewData>(); _dragging = false; _boxSelecting = false; _movedBeyondThreshold = false; _fretDigits = ""; _pendingString = -1; _fretEditNote = null; _collision = false; QueueRedraw(); if (changed) RaiseEditorStateChanged(); AcceptEvent(); return; }
 			if (_pendingString >= 0 || _fretEditNote is not null)
 			{
@@ -693,6 +796,19 @@ public partial class MeasureTabView : Control
 				}
 			}
 		}
+		if (ViewData?.IsReadOnly == true)
+		{
+			if (e is InputEventMouseButton click && click.ButtonIndex == MouseButton.Left && click.Pressed)
+			{
+				if (PlacementClickHandler?.Invoke(click.Position) != true)
+				{
+					MeasureSelected?.Invoke();
+					GrabFocus();
+				}
+				AcceptEvent();
+			}
+			return;
+		}
 		if (e is InputEventMouseButton rightMouse && rightMouse.ButtonIndex == MouseButton.Right && rightMouse.Pressed)
 		{
 			var note = HitNote(rightMouse.Position, out _);
@@ -709,6 +825,9 @@ public partial class MeasureTabView : Control
 			if (mouse.Pressed)
 			{
 				if (PlacementClickHandler?.Invoke(mouse.Position) == true) { AcceptEvent(); return; }
+				var pointedNote = HitNote(mouse.Position, out _);
+				if (pointedNote is not null) FocusCell(pointedNote.StringNumber, pointedNote.Onset, false);
+				else if (TryGetHoverCell(mouse.Position, out int pointedRow, out double pointedOnset)) FocusCell(pointedRow + 1, FromDouble(pointedOnset), false);
 				if (mouse.CtrlPressed)
 				{
 					// Preserve unfinished fret input and prevent normal drag/double-click behavior.
@@ -742,7 +861,7 @@ public partial class MeasureTabView : Control
 				if (mouse.DoubleClick)
 				{
 					_boxSelecting = false;
-					if (ViewData?.IsPercussion == true) { if (_dragNote is null) TryInsertOpenStringNote(mouse.Position); }
+					if (ViewData?.IsPercussion == true || ViewData?.IsFullTab == true) { if (_dragNote is null) TryInsertOpenStringNote(mouse.Position); }
 					else if (_dragNote is not null) BeginFretEdit(_dragNote);
 					else BeginNote(mouse.Position);
 					_dragging = false; _preview = null; _dragNote = null;
@@ -816,7 +935,7 @@ public partial class MeasureTabView : Control
 
 	private void TryInsertOpenStringNote(Vector2 position)
 	{
-		if (ViewData is null || !TryGetHoverCell(position, out int row, out double onset)) return;
+		if (ViewData is null || ViewData.IsReadOnly || !TryGetHoverCell(position, out int row, out double onset)) return;
 		var duration = new ExactTime(1, Math.Max(1, SnapDenominator)).Reduced();
 		var created = new TabNoteViewData("", row + 1, 0, FromDouble(onset), duration);
 		if (WouldCollide(created, ""))

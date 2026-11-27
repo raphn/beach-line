@@ -38,6 +38,7 @@ public partial class SoundFontAudioNode : Node
     private bool _recordingTransport;
     private long _staleQueuedFrames;
     private bool _scoreFinishedGenerating;
+    private long _scoreTailFramesRemaining;
     private long _audioBufferCapacityFrames;
     private PlaybackPosition? _completedScorePosition;
     private PlaybackPosition? _startPosition;
@@ -90,7 +91,7 @@ public partial class SoundFontAudioNode : Node
         get => _previewLoop;
         set { _previewLoop = value; if (_previewActive) _previewStopAfterCycle = !value; }
     }
-    public bool IsScorePlaying => _scoreFinishedGenerating || (_scorePlaybackClock?.IsPlaying ?? false);
+    public bool IsScorePlaying => _scoreFinishedGenerating || _scoreTailFramesRemaining > 0 || (_scorePlaybackClock?.IsPlaying ?? false);
     public bool MetronomeEnabled
     {
         get => _metronomeEnabled;
@@ -131,7 +132,7 @@ public partial class SoundFontAudioNode : Node
     {
         get
         {
-            if (_scorePlaybackClock is null) return _completedScorePosition;
+            if (_scoreTailFramesRemaining > 0 || (_scoreFinishedGenerating && _completedScorePosition.HasValue) || _scorePlaybackClock is null) return _completedScorePosition;
             // A live score refresh can remap the clock while already generated audio
             // still reflects the previous map. Until the queue drains, use the clock
             // position to avoid showing an invalid jump across that discontinuity.
@@ -260,6 +261,9 @@ public partial class SoundFontAudioNode : Node
         _audioPlayback = null;
         _scorePlaybackClock = null;
         _scorePaused = false;
+        _scoreFinishedGenerating = false;
+        _scoreTailFramesRemaining = 0;
+        _completedScorePosition = null;
         _scoreAudioPreparationPending = false;
         _lastAudioUnderrunFrames = 0;
         _playbackService = newPlaybackService;
@@ -290,6 +294,7 @@ public partial class SoundFontAudioNode : Node
         _scorePlaybackClock = newClock;
         _staleQueuedFrames = 0;
         _scoreFinishedGenerating = false;
+        _scoreTailFramesRemaining = 0;
         _completedScorePosition = null;
         var measures = score.Sections.SelectMany(section => section.Measures).ToArray();
         var scopedMode = _loopSelection?.Mode is PlaybackLoopMode.Measure or PlaybackLoopMode.Sections or PlaybackLoopMode.ArrangementOnce or PlaybackLoopMode.ArrangementLoop;
@@ -328,6 +333,7 @@ public partial class SoundFontAudioNode : Node
         _audioPlayback = null;
         _scorePlaybackClock = null;
         _scoreFinishedGenerating = false;
+        _scoreTailFramesRemaining = 0;
         _staleQueuedFrames = 0;
         _completedScorePosition = null;
         PlayScore(score, startMeasureId);
@@ -404,6 +410,7 @@ public partial class SoundFontAudioNode : Node
         _scorePaused = false;
         _staleQueuedFrames = 0;
         _scoreFinishedGenerating = false;
+        _scoreTailFramesRemaining = 0;
         _completedScorePosition = _startPosition;
         if (_audioPlayer is not null)
         {
@@ -629,7 +636,7 @@ public partial class SoundFontAudioNode : Node
         {
             if (_scorePaused || _audioPlayback is null) return;
             if (_audioBufferCapacityFrames - _audioPlayback.GetFramesAvailable() > 0) return;
-            _completedScorePosition = _scorePlaybackClock?.Position;
+            _completedScorePosition ??= _scorePlaybackClock?.Position;
             _scorePlaybackClock = null;
             _scoreFinishedGenerating = false;
             return;
@@ -644,14 +651,22 @@ public partial class SoundFontAudioNode : Node
         while (framesAvailable > 0)
         {
             var frameCount = Math.Min(framesAvailable, RenderBlockFrames);
+            if (_scoreTailFramesRemaining > 0) frameCount = (int)Math.Min(frameCount, _scoreTailFramesRemaining);
             var left = _leftBuffer.AsSpan(0, frameCount);
             var right = _rightBuffer.AsSpan(0, frameCount);
-            if (_scorePlaybackClock is null)
+            if (_scoreTailFramesRemaining > 0)
+            {
+                _playbackService.Render(left, right);
+                _scoreTailFramesRemaining -= frameCount;
+                if (_scoreTailFramesRemaining == 0) _scoreFinishedGenerating = true;
+            }
+            else if (_scorePlaybackClock is null)
             {
                 _playbackService.Render(left, right);
             }
             else
             {
+                left.Clear(); right.Clear();
                 _scorePlaybackClock.Render(_playbackService, left, right);
                 var underruns = _scorePlaybackClock.AudioUnderrunFrames;
                 if (underruns > _lastAudioUnderrunFrames)
@@ -661,7 +676,13 @@ public partial class SoundFontAudioNode : Node
                 }
                 if (!_scorePlaybackClock.IsPlaying)
                 {
-                    _scoreFinishedGenerating = true;
+                    if (_scorePlaybackClock.HasTimeBasedEffects)
+                    {
+                        _completedScorePosition = _scorePlaybackClock.Position;
+                        _scorePlaybackClock.Stop(_playbackService);
+                        _scoreTailFramesRemaining = 2L * _sampleRate;
+                    }
+                    else _scoreFinishedGenerating = true;
                 }
             }
 

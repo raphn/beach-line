@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bk81p67mh08av"]
+
+[ext_resource type="Theme" uid="uid://6g3mk48ymrqf" path="res://Interface/EffectAndPedals/Themes/pedals_theme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://dt2m14cvmpvl5" path="res://Interface/EffectAndPedals/Scripts/TrackPedals.cs" id="4_script"]
+[ext_resource type="PackedScene" path="res://Interface/EffectAndPedals/Scenes/effect_pedal_container.tscn" id="5_pedal"]
+[ext_resource type="PackedScene" path="res://Interface/EffectAndPedals/Scenes/effect_pedal_knob.tscn" id="6_knob"]
+[ext_resource type="PackedScene" path="res://Interface/EffectAndPedals/Scenes/pedal_automation_dialog.tscn" id="7_automation"]
+[ext_resource type="Resource" path="res://Interface/EffectAndPedals/Resources/PedalCatalog.tres" id="8_catalog"]
+
+[node name="TrackPedals" type="FoldableContainer" unique_id=1849774942 node_paths=PackedStringArray("_pedals", "_addPedalButton")]
+tooltip_text = "Show or hide this track's pedals and effects."
+theme = ExtResource("3_theme")
+theme_type_variation = &"PedalFoldable"
+folded = true
+title = "PEDALS & EFFECTS"
+script = ExtResource("4_script")
+_pedalScene = ExtResource("5_pedal")
+_knobScene = ExtResource("6_knob")
+_automationScene = ExtResource("7_automation")
+_catalog = ExtResource("8_catalog")
+_pedals = NodePath("Shelf/ScrollContainer/Pedals")
+_addPedalButton = NodePath("Shelf/AddPedalButton")
+
+[node name="Shelf" type="HBoxContainer" parent="." unique_id=746142878]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Shelf" unique_id=1712644829]
+layout_mode = 2
+size_flags_horizontal = 3
+follow_focus = true
+vertical_scroll_mode = 0
+
+[node name="Pedals" type="HBoxContainer" parent="Shelf/ScrollContainer" unique_id=691743744]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="AddPedalButton" type="MenuButton" parent="Shelf" unique_id=998462983]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Choose an effect pedal to add to this track."
+theme_type_variation = &"PedalAdd"
+flat = false
+text = "+"

@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://bt7fxjfjhxmhq"]
+
+[node name="PedalAutomationDialog" type="ConfirmationDialog" unique_id=1525578986]
+oversampling_override = 1.0
+title = "Pedal automation"
+size = Vector2i(620, 981)
+min_size = Vector2i(480, 320)
+ok_button_text = "Apply"
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=394557069]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=1255695675]
+layout_mode = 2
+
+[node name="Help" type="Label" parent="Margin/Layout" unique_id=507190394]
+layout_mode = 2
+text = "Positions are quarter notes from the start of the source score (0 is the start). Repeats follow the source position. Adding or removing measures or sections does not move keyframes. Values are percentages."
+autowrap_mode = 2
+
+[node name="Columns" type="HBoxContainer" parent="Margin/Layout" unique_id=1682557013]
+layout_mode = 2
+
+[node name="Position" type="Label" parent="Margin/Layout/Columns" unique_id=1718280309]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Quarter note"
+
+[node name="Value" type="Label" parent="Margin/Layout/Columns" unique_id=937461037]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Value %"
+
+[node name="Mode" type="Label" parent="Margin/Layout/Columns" unique_id=148457549]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "To next point"
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/Layout" unique_id=796305746]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="Margin/Layout/Scroll" unique_id=2101332685]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Status" type="Label" parent="Margin/Layout" unique_id=988784291]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="AddPoint" type="Button" parent="Margin/Layout" unique_id=64423248]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Add an automation point after the last point."
+text = "Add keyframe"

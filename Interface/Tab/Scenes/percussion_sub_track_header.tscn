@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://bcp351l0mrfrn"]
 
-[ext_resource type="Texture2D" uid="uid://m6vtkj4xcxk5" path="res://Interface/Common/Graphs/guitar_lorc.png" id="1_nlxjy"]
+[ext_resource type="Texture2D" path="res://Interface/DrumKit/Graphs/drum-pieces.svg" id="1_nlxjy"]
 [ext_resource type="Texture2D" uid="uid://cgifbbelpuxro" path="res://Interface/Common/Graphs/cog_lorc.png" id="2_g3ypv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_piece"]
+atlas = ExtResource("1_nlxjy")
+region = Rect2(384, 0, 64, 64)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_piece"]
 content_margin_left = 10.0
@@ -44,7 +48,7 @@ theme_override_constants/separation = 1
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 size_flags_vertical = 3
-texture = ExtResource("1_nlxjy")
+texture = SubResource("AtlasTexture_piece")
 expand_mode = 1
 stretch_mode = 5
 

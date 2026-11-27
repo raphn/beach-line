@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://opbjh8xx0c3p"]
+
+[ext_resource type="Script" uid="uid://d2qd5rwybhmri" path="res://Interface/EffectAndPedals/Scripts/EffectPedalKnob.cs" id="1_knob"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrivr"]
+content_margin_left = 12.0
+bg_color = Color(0, 0, 0, 0.5882353)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="EffectPedalKnob" type="PanelContainer" unique_id=65718028 node_paths=PackedStringArray("NameLabel", "Slider", "ValueLabel", "AutomationButton")]
+offset_right = 4.0
+offset_bottom = 4.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xrivr")
+script = ExtResource("1_knob")
+NameLabel = NodePath("EffectPedalKnob/Label")
+Slider = NodePath("EffectPedalKnob/ValueSlider")
+ValueLabel = NodePath("EffectPedalKnob/Value")
+AutomationButton = NodePath("EffectPedalKnob/Automation")
+
+[node name="EffectPedalKnob" type="BoxContainer" parent="." unique_id=2111491531]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="EffectPedalKnob" unique_id=1380940658]
+custom_minimum_size = Vector2(68, 0)
+layout_mode = 2
+text = "Vol."
+
+[node name="ValueSlider" type="HSlider" parent="EffectPedalKnob" unique_id=398455880]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="Value" type="Label" parent="EffectPedalKnob" unique_id=915020282]
+custom_minimum_size = Vector2(66, 0)
+layout_mode = 2
+text = "50%"
+horizontal_alignment = 2
+
+[node name="Automation" type="Button" parent="EffectPedalKnob" unique_id=257382621]
+custom_minimum_size = Vector2(36, 26)
+layout_mode = 2
+tooltip_text = "Edit automation keyframes. When present, keyframes override the slider during playback."
+text = "A"
+flat = true

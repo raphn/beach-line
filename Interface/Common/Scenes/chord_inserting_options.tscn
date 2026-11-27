@@ -104,3 +104,16 @@ text = "Create Mode"
 layout_mode = 2
 toggle_mode = true
 text = "Insert Chord"
+
+[node name="WriteToggle" type="Button" parent="."]
+layout_mode = 2
+tooltip_text = "Write the clicked note at the highlighted TAB position. Selecting Write turns off chord creation."
+toggle_mode = true
+text = "Write"
+
+[node name="AutoMoveToggle" type="Button" parent="."]
+layout_mode = 2
+tooltip_text = "After writing a note, advance by one notated beat, including across measures."
+toggle_mode = true
+button_pressed = true
+text = "Auto-Move"

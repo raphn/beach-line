@@ -14,6 +14,7 @@ internal static class ClipboardTests
         MissingStringsAndOverflow();
         ExpressionsKeepLinkedIdentityAndDeepCopyOnPaste();
         ChordCreationAndHistory();
+        DirectSingleNotePlacement();
     }
 
     private static (ScoreTrack Track, TrackMeasure A, TrackMeasure B) Parts(int strings = 3)
@@ -23,6 +24,35 @@ internal static class ClipboardTests
         return (track, new TrackMeasure(track.Id), new TrackMeasure(track.Id));
     }
 
+    private static void DirectSingleNotePlacement()
+    {
+        var (track, source, target) = Parts();
+        var onset = new ScoreTime(3, 8);
+        var duration = new ScoreTime(1, 4);
+        var occupied = TabEventEditing.Add(target, track, 2, 3, onset, duration);
+        var direct = TabClipboard.CreateSingleNote(track, 2, 7, duration);
+        var plan = direct.PlanPaste(track, target, 2, onset, new ScoreTime(1, 16), new ScoreTime(1, 1));
+        var entry = plan.Entries.Single();
+        Check(entry.StringNumber == 2 && entry.Fret == 7 && entry.Onset == onset && entry.Duration == duration,
+            "direct note did not preserve the requested string, fret, onset and duration");
+        Check(plan.RequiresConfirmation && plan.ConflictingEventIds.Contains(occupied.Id),
+            "direct note collision did not require confirmation at the selected onset");
+        Reject(() => plan.Apply());
+        Check(target.TabEvents.Count == 1 && target.TabEvents.Single() == occupied,
+            "unconfirmed direct note changed the destination");
+        var placed = plan.Apply(true).Single();
+        Check(placed.StringNumber == 2 && placed.Fret == 7 && placed.Onset == onset && placed.Duration == duration &&
+            !target.TabEvents.Contains(occupied), "confirmed direct note did not replace the occupied onset");
+
+        var copied = TabEventEditing.Add(source, track, 2, 4, ScoreTime.Zero, duration);
+        var ordinary = TabClipboard.Copy(track, source, new[] { copied }, 2, ScoreTime.Zero)
+            .PlanPaste(track, target, 2, onset, new ScoreTime(1, 16), new ScoreTime(1, 1));
+        Check(!ordinary.RequiresConfirmation && ordinary.Entries.Single().Onset == onset + duration,
+            "ordinary single-note paste no longer advances past a collision");
+        Reject(() => TabClipboard.CreateSingleNote(track, 4, 0, duration));
+        Reject(() => TabClipboard.CreateSingleNote(track, 2, 7, ScoreTime.Zero));
+        Console.WriteLine("PASS direct single-note exact placement and ordinary paste collision search");
+    }
     private static void ExpressionsKeepLinkedIdentityAndDeepCopyOnPaste()
     {
         var (track, source, _) = Parts();

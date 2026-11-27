@@ -36,6 +36,7 @@ public partial class DrumScorePresenter
             if (!GodotObject.IsInstanceValid(controls.Lead) || !GodotObject.IsInstanceValid(controls.Section)) continue;
             var isLead = section.LeadTrackId == trackId;
             controls.Section.Text = $"[i]Section[/i] [b]{section.Name} · {section.Title}[/b]";
+            controls.Section.TooltipText = $"{section.Name} · {section.Title}";
             controls.Lead.Text = TranslationServer.Translate(isLead ? "Lead" : "Set lead");
             controls.Lead.SetPressedNoSignal(isLead);
             controls.Lead.Disabled = isLead;

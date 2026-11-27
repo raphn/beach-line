@@ -1,0 +1,91 @@
+[gd_resource type="Theme" format=3 uid="uid://6g3mk48ymrqf"]
+
+[sub_resource type="StyleBoxFlat" id="AddHover"]
+bg_color = Color(0.19, 0.244, 0.268, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.35, 0.54, 0.57, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="Tile"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.144, 0.159, 0.187, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 3
+border_color = Color(0.27, 0.299, 0.344, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.069, 0.077, 0.091, 1)
+border_width_left = 1
+border_width_top = 3
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.027, 0.032, 0.044, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.178, 0.194, 0.224, 1)
+border_width_bottom = 1
+border_color = Color(0.34, 0.44, 0.5, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="Header"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.125, 0.137, 0.158, 1)
+border_width_bottom = 1
+border_color = Color(0.22, 0.243, 0.278, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[resource]
+PedalAdd/base_type = &"MenuButton"
+PedalAdd/colors/font_color = Color(0.7, 0.83, 0.86, 1)
+PedalAdd/colors/font_hover_color = Color(0.88, 0.95, 0.97, 1)
+PedalAdd/colors/font_hover_pressed_color = Color(0.88, 0.95, 0.97, 1)
+PedalAdd/colors/font_pressed_color = Color(0.88, 0.95, 0.97, 1)
+PedalAdd/font_sizes/font_size = 28
+PedalAdd/styles/hover = SubResource("AddHover")
+PedalAdd/styles/hover_pressed = SubResource("AddHover")
+PedalAdd/styles/normal = SubResource("Tile")
+PedalAdd/styles/pressed = SubResource("AddHover")
+PedalFoldable/base_type = &"FoldableContainer"
+PedalFoldable/colors/font_color = Color(0.76, 0.8, 0.86, 1)
+PedalFoldable/colors/font_hover_color = Color(0.92, 0.95, 0.98, 1)
+PedalFoldable/font_sizes/font_size = 13
+PedalFoldable/styles/panel = SubResource("Panel")
+PedalFoldable/styles/title_collapsed_hover_panel = SubResource("Hover")
+PedalFoldable/styles/title_collapsed_panel = SubResource("Header")
+PedalFoldable/styles/title_hover_panel = SubResource("Hover")
+PedalFoldable/styles/title_panel = SubResource("Header")
+PedalName/base_type = &"Label"
+PedalName/colors/font_color = Color(0.86, 0.9, 0.96, 1)
+PedalName/font_sizes/font_size = 15
+PedalTile/base_type = &"PanelContainer"
+PedalTile/styles/panel = SubResource("Tile")

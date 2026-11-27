@@ -40,7 +40,7 @@ public partial class DrumScorePresenter
         _expressionPendingOccurrences = occurrences.ToArray();
         _velocityTupletActual = tuplets.Length == 1 ? tuplets[0] : null;
         _noteVelocityPopup.Initialize(initialLevel, selectionCount, _velocityTupletActual);
-        _noteVelocityPopup.SetArticulationAvailable(track.Kind != TrackKind.Percussion && track.TabTuningMidiPitches.Count > 0);
+        _noteVelocityPopup.SetArticulationAvailable((track.Kind is TrackKind.Guitar or TrackKind.Bass) && track.TabTuningMidiPitches.Count > 0);
         _noteVelocityPopup.SetArticulationPreviewAvailable(CanPreviewIncomingArticulation(track, targets));
         var choices = targets.Select(target => VariationOptions(track, target.Note)).ToArray();
         var common = choices[0].Where(option => choices.Skip(1).All(list =>

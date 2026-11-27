@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="448" height="64" viewBox="0 0 448 64">
+  <!-- Original, compact fallback icons: kick, snare, hi-hat, low tom, high tom, cymbal, other. -->
+  <g stroke="#e2ebf0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(0)"><path fill="#386888" d="M14 15h20c8 0 14 8 14 17s-6 17-14 17H14z"/><ellipse fill="#e4e1d7" cx="16" cy="32" rx="11" ry="18"/><path fill="none" d="M9 49l-4 7m32-7 5 7"/></g>
+    <g transform="translate(64)"><path fill="#697b89" d="M11 25v13c0 6 42 6 42 0V25"/><ellipse fill="#e6e2d6" cx="32" cy="25" rx="21" ry="6"/><path fill="none" d="M16 40l-4 13m36-13 4 13M21 22l21 5"/></g>
+    <g transform="translate(128)"><path fill="none" d="M32 17v36m-9 3 9-4 9 4"/><ellipse fill="#c79a57" cx="32" cy="23" rx="22" ry="5"/><ellipse fill="#dec078" cx="32" cy="18" rx="20" ry="4"/></g>
+    <g transform="translate(192)"><path fill="#386888" d="M12 22v20c0 8 40 8 40 0V22"/><ellipse fill="#e6e2d6" cx="32" cy="22" rx="20" ry="7"/><path fill="none" d="M16 46l-4 10m36-10 4 10"/></g>
+    <g transform="translate(256)"><path fill="#4f87a7" d="M16 23v15c0 7 32 7 32 0V23"/><ellipse fill="#e6e2d6" cx="32" cy="23" rx="16" ry="6"/><path fill="none" d="M19 42l-3 11m29-11 3 11"/></g>
+    <g transform="translate(320)"><path fill="none" d="M32 17v37m-9 2 9-3 9 3"/><path fill="#d6aa60" d="M7 24c4-5 16-7 25-7s21 2 25 7c-11 6-39 6-50 0z"/><path fill="#f2d397" d="M29 17h6l-1-3h-4z"/></g>
+    <g transform="translate(384)"><circle fill="#597c8b" cx="32" cy="32" r="22"/><path fill="none" d="M20 40l24-18m-20-2 19 24"/><circle fill="#e6e2d6" cx="20" cy="40" r="2"/><circle fill="#e6e2d6" cx="43" cy="44" r="2"/></g>
+  </g>
+</svg>

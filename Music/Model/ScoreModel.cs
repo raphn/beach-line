@@ -761,7 +761,6 @@ public sealed class ScoreDocument
         ValidateSlotTrack(section, measure, track);
         ArgumentNullException.ThrowIfNull(orderedVersionIds);
         var ids = orderedVersionIds.ToArray();
-        if (ids.Distinct().Count() != ids.Length) throw new ArgumentException("Alternation entries must be unique.", nameof(orderedVersionIds));
         foreach (var id in ids) ValidateSlotVersion(measure, track.Id, id);
         var alternation = measure.Alternations.FirstOrDefault(item => item.TrackId == track.Id);
         if (alternation is null) measure.Alternations.Add(alternation = new TrackMeasureAlternation(track.Id));
@@ -1045,6 +1044,7 @@ public sealed class ScoreDocument
 
 public sealed class ScoreTrack
 {
+    private static readonly IReadOnlyList<int> FullTabPitches = Array.AsReadOnly(Enumerable.Range(0, 128).Reverse().ToArray());
     private readonly List<int> _tabTuningMidiPitches = new();
     private readonly IReadOnlyList<int> _tabTuningView;
     private readonly List<PercussionPiece> _percussionPieces = new();
@@ -1074,15 +1074,20 @@ public sealed class ScoreTrack
         }
     }
     private int? _tabSnapDenominator = 16;
-    /// <summary>Stable UI-level identifier for an instrument image; null uses the track kind default.</summary>
-    public string? InstrumentImageId { get; set; }
+    /// <summary>Optional artwork selected for the track banner.</summary>
+    public string? BannerImagePath { get; set; }
     /// <summary>Track display color as 0xRRGGBBAA, defaulting to opaque white.</summary>
     public uint DisplayColorRgba { get; set; } = 0xffffffff;
     public double VolumeDb { get; set; } = 0.0;
     public bool IsMuted { get; set; }
     public bool IsSoloed { get; set; }
+    /// <summary>Ordered effects applied to this track before it is mixed.</summary>
+    public List<TrackPedal> Pedals { get; } = new();
     /// <summary>Open-string MIDI pitches in displayed order (string 1 first). Empty means unconfigured.</summary>
     public IReadOnlyList<int> TabTuningMidiPitches => _tabTuningView;
+    public bool UsesFullTab => Kind is TrackKind.Keyboard or TrackKind.Other;
+    /// <summary>Displayed editing lanes, independent of the stored instrument tuning.</summary>
+    public IReadOnlyList<int> TabLaneMidiPitches => UsesFullTab ? FullTabPitches : _tabTuningView;
     /// <summary>Ordered percussion lanes. Each lane's MIDI pitch is also its open-string pitch.</summary>
     public IReadOnlyList<PercussionPiece> PercussionPieces => _percussionPiecesView;
     public bool HasConfiguredPercussionKit => Kind == TrackKind.Percussion && _hasPercussionKitConfiguration;

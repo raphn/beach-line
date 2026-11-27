@@ -31,10 +31,8 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		("violin", "Violin", "violin.png"),
 		("xylophone", "Xylophone", "xylophone.png"),
 		("percussion-kit", "Percussion kit", "percussion-kit.svg"),
-		// Retain this legacy ID for scores saved before the instrument picker was expanded.
-		("placeholder", "Other", "../../../../_project/icon.png")
+		("placeholder", "Other", "")
 	];
-	private static readonly string[] ImageIds = InstrumentImages.Select(image => image.Id).ToArray();
 	private static readonly string[] Categories =
 	[
 		"Piano", "Chromatic percussion", "Organ", "Guitar", "Bass", "Strings", "Ensemble and choir", "Brass",
@@ -45,26 +43,19 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		.ToDictionary(item => item.Id, item => item.index, StringComparer.Ordinal);
 	private static string ImagePath(int index) => InstrumentImages[index].Id == "placeholder"
 		? "res://_project/icon.png"
-		: ResolveInstrumentImagePath(InstrumentImages[index].Path);
-	private static string ResolveInstrumentImagePath(string filename)
-	{
-		var relativePath = Path.Combine("Interface", "Common", "Graphs", "instruments", filename);
-		for (var directory = new DirectoryInfo(System.Environment.CurrentDirectory); directory is not null; directory = directory.Parent)
-		{
-			if (File.Exists(Path.Combine(directory.FullName, relativePath)))
-				return $"res://Interface/Common/Graphs/instruments/{filename}";
-			if (File.Exists(Path.Combine(directory.FullName, "App", relativePath)))
-				return $"res://Interface/Common/Graphs/instruments/{filename}";
-		}
+		: $"res://Interface/Common/Graphs/instruments/{InstrumentImages[index].Path}";
 
-		return "res://Interface/Common/Graphs/guitar_lorc.png";
-	}
-	public static IReadOnlyList<string> SelectableImageIds => ImageIds;
-
-	private OptionButton _programs = null!;
-	private OptionButton _categories = null!;
-	private ItemList _instruments = null!;
-	private ItemList _images = null!;
+	private BoxContainer _instrumentInfoHeader = null!;
+	private TextureRect _instrumentHeaderIcon = null!;
+	private Label _instrumentHeaderLabel = null!;
+	private BoxContainer _instrumentPicker = null!;
+	private TabContainer _instrumentBranch = null!;
+	private Button _defaultInstrumentButton = null!;
+	private int _selectedProgram = 25;
+	[Export] private ItemList _bannerImages = null!;
+	[Export] private AcceptDialog _bannerPopup = null!;
+	[Export] private Button _chooseBannerButton = null!;
+	[Export] private TextureRect _bannerPreview = null!;
 	private LineEdit _name = null!;
 	private VBoxContainer _tuningSection = null!;
 	private Button _initializeTuning = null!;
@@ -81,7 +72,7 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 	private Button _okButton = null!;
 	private Color _selectedColor = Colors.White;
 	private uint _configuredAlpha = 0xff;
-	private string _selectedImageId = "acoustic-guitar";
+	private string _selectedBannerImagePath = "";
 	private TrackKind _selectedKind = TrackKind.Guitar;
 	private int[] _selectedTuning = [64, 59, 55, 50, 45, 40];
 	private int[] _originalTuning = Array.Empty<int>();
@@ -96,7 +87,7 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 
 	public string SelectedName => _name is null ? "" : _name.Text.Trim();
 	public TrackKind SelectedKind => _selectedKind;
-	public int SelectedProgram => _programs is null || _programs.Selected < 0 ? 0 : _programs.GetItemId(_programs.Selected);
+	public int SelectedProgram => _selectedProgram;
 	public int[] SelectedTuning => (int[])_selectedTuning.Clone();
 	public bool TuningChanged => _tuningReordered || !_selectedTuning.SequenceEqual(_originalTuning);
 	public TabRetuningMode SelectedRetuningMode => _retuningMode is not null && _retuningMode.Selected == 1 ? TabRetuningMode.KeepPitch : TabRetuningMode.KeepFingering;
@@ -106,15 +97,16 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		set { _evaluateRetuning = value; if (IsInsideTree()) RefreshRetuningOptions(); }
 	}
 	public uint SelectedColorRgba => PackColor(_selectedColor, _configuredAlpha);
-	public string SelectedImageId => _selectedImageId;
+	public string SelectedBannerImagePath => _selectedBannerImagePath;
 
 	public override void _Ready()
 	{
 		_kindInfo = GetNode<Label>("%TrackInfo");
-		_programs = GetNode<OptionButton>("%Program");
-		_categories = GetNode<OptionButton>("%Category");
-		_instruments = GetNode<ItemList>("%InstrumentChoices");
-		_images = GetNode<ItemList>("%InstrumentImages");
+		_instrumentInfoHeader = GetNode<BoxContainer>("%InstrumentInfoHeader");
+		_instrumentHeaderIcon = GetNode<TextureRect>("%InstrumentHeaderIcon");
+		_instrumentHeaderLabel = GetNode<Label>("%InstrumentHeaderLabel");
+		_instrumentPicker = GetNode<BoxContainer>("%Instruments");
+		_instrumentBranch = GetNode<TabContainer>("%InstrumentBranch");
 		_name = GetNode<LineEdit>("%TrackName");
 		_tuningSection = GetNode<VBoxContainer>("%TuningSection");
 		_initializeTuning = GetNode<Button>("%InitializeTuning");
@@ -129,21 +121,10 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		_colorSwatch = _colorButton.GetNode<ColorRect>("ColorSwatch");
 		_okButton = GetOkButton();
 
-		var names = GeneralMidiInstruments.Names;
-		for (var i = 0; i < names.Count; i++) _programs.AddItem($"{i + 1:000}  {names[i]}", i);
-		foreach (var category in Categories) _categories.AddItem(category);
-		for (var i = 0; i < InstrumentImages.Length; i++)
-		{
-			var image = InstrumentImages[i];
-			var texture = GD.Load<Texture2D>(ImagePath(i));
-			var item = _images.AddItem(image.Label, texture, true);
-			_images.SetItemTooltip(item, image.Label);
-		}
+		ConfigureInstrumentButtons();
 
-		_categories.ItemSelected += OnCategorySelected;
-		_instruments.ItemSelected += OnInstrumentSelected;
-		_programs.ItemSelected += OnProgramSelected;
-		_images.ItemSelected += OnImageSelected;
+		_bannerImages.ItemSelected += OnBannerSelected;
+		_chooseBannerButton.Pressed += OpenBannerPicker;
 		_name.TextChanged += OnNameChanged;
 		_initializeTuning.Pressed += InitializeTuning;
 		_addHighString.Pressed += () => AddString(high: true);
@@ -152,7 +133,6 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		_retuningMode.AddItem("Keep fingering (change pitch)", 0);
 		_retuningMode.AddItem("Keep pitch (adjust fingering)", 1);
 		_colorButton.Pressed += ShowColorSelector;
-		PopulateInstrumentList(0);
 		ConfigureNew();
 	}
 
@@ -166,25 +146,24 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		_colorCustomized = false;
 		Title = "Add Track";
 		_selectedKind = TrackKind.Guitar;
+		_selectedProgram = 25;
+		_instrumentInfoHeader.Visible = false;
+		_instrumentPicker.Visible = true;
+		_instrumentBranch.CurrentTab = 0;
+		_synchronizing = true;
+		_defaultInstrumentButton.ButtonPressed = true;
 		_selectedTuning = [64, 59, 55, 50, 45, 40];
 		_originalTuning = Array.Empty<int>();
 		_configuredAlpha = 0xff;
 		_selectedColor = DefaultColorForProgram(24);
-		_selectedImageId = "acoustic-guitar";
-		_synchronizing = true;
-		_programs.Select(25); // Acoustic Guitar (steel)
-		_categories.Select(3);
+		_selectedBannerImagePath = TrackBannerArt.DefaultPath(_selectedKind);
 		_name.Text = DefaultName(25);
 		SetTuning(_selectedTuning);
 		_colorSwatch.Color = _selectedColor;
-		_images.Select(ImageIndexById[_selectedImageId]);
+		RefreshBannerPreview();
 		_synchronizing = false;
-		PopulateInstrumentList(24);
-		_instruments.Select(1);
-		_categories.Disabled = false;
-		_instruments.MouseFilter = Control.MouseFilterEnum.Stop;
-		_programs.Disabled = false;
 		_tuningSection.Visible = true;
+		_stringRows.Visible = true;
 		_addHighString.Visible = true; _addLowString.Visible = true;
 		_initializeTuning.Visible = false;
 		_retuningPanel.Visible = false;
@@ -193,7 +172,7 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		UpdateValidation();
 	}
 
-	/// <summary>Loads an existing track; only name, sound, color, and image can be changed.</summary>
+	/// <summary>Loads an existing track; loads the track name, color, banner, and any editable tuning.</summary>
 	public void Configure(ScoreTrack track)
 	{
 		ArgumentNullException.ThrowIfNull(track);
@@ -203,35 +182,21 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		_nameCustomized = true;
 		Title = $"{track.Name} Settings";
 		_selectedKind = track.Kind;
+		_selectedProgram = track.DefaultMidiProgram;
+		_instrumentPicker.Visible = false;
+		_instrumentInfoHeader.Visible = true;
 		_selectedTuning = track.TabTuningMidiPitches.ToArray();
 		_originalTuning = (int[])_selectedTuning.Clone();
 		_selectedColor = Unpack(track.DisplayColorRgba);
 		_configuredAlpha = track.DisplayColorRgba & 0xff;
-		_selectedImageId = ResolveImageId(track);
+		_selectedBannerImagePath = TrackBannerArt.ResolvePath(track);
 		_synchronizing = true;
 		_name.Text = track.Name;
-		_programs.Select(Math.Clamp(track.DefaultMidiProgram, 0, _programs.ItemCount - 1));
 		_colorSwatch.Color = Opaque(_selectedColor);
 		SetTuning(_selectedTuning);
-		_images.Select(ImageIndexById[_selectedImageId]);
 		_synchronizing = false;
-		var category = track.Kind == TrackKind.Percussion ? Categories.Length - 1 : CategoryForProgram(Math.Clamp(track.DefaultMidiProgram, 0, 127));
-		_categories.Select(category);
-		if (track.Kind == TrackKind.Percussion)
-		{
-			_instruments.Clear();
-			_instruments.AddItem("Percussion kit");
-			_instruments.Select(0);
-		}
-		else
-		{
-			var program = Math.Clamp(track.DefaultMidiProgram, 0, 127);
-			PopulateInstrumentList(program / 8 * 8);
-			_instruments.Select(program % 8);
-		}
-		_categories.Disabled = true;
-		_instruments.MouseFilter = Control.MouseFilterEnum.Ignore;
-		_programs.Disabled = track.Kind == TrackKind.Percussion;
+		RefreshBannerPreview();
+		UpdateInstrumentHeader();
 		var canTune = track.Kind is TrackKind.Guitar or TrackKind.Bass;
 		_tuningSection.Visible = canTune;
 		_addHighString.Visible = canTune; _addLowString.Visible = canTune;
@@ -245,94 +210,111 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		UpdateValidation();
 	}
 
-	public static string ResolveImageId(ScoreTrack track)
+	public static string ResolveImageId(ScoreTrack track) => ResolveImageId(track.Kind, track.DefaultMidiProgram);
+
+	private static string ResolveImageId(TrackKind kind, int program) => kind switch
 	{
-		if (track.InstrumentImageId is not null && ImageIndexById.ContainsKey(track.InstrumentImageId)) return track.InstrumentImageId;
-		return track.Kind switch
+		TrackKind.Audio or TrackKind.Ruler => "placeholder",
+		TrackKind.Percussion => "percussion-kit",
+		_ => DefaultImageIdForProgram(program)
+	};
+
+	public static string ResolveImagePath(ScoreTrack track) => ResolveImagePath(track.Kind, track.DefaultMidiProgram);
+
+	private static string ResolveImagePath(TrackKind kind, int program) => kind == TrackKind.Audio
+		? "res://Interface/Common/Graphs/audio/import-wav-to-section.svg"
+		: ImagePath(ImageIndexById[ResolveImageId(kind, program)]);
+
+	private void ConfigureInstrumentButtons()
+	{
+		var group = new ButtonGroup();
+		var band = GetNode<GridContainer>("%BandInstruments");
+		var orchestra = GetNode<GridContainer>("%OrchestraInstruments");
+		RegisterInstrument(band, "SetGuitarButton", 25, "acoustic-guitar", group);
+		RegisterInstrument(band, "SetElectricGuitarButton", 27, "guitar", group);
+		RegisterInstrument(band, "SetElectricBassButton", 33, "e-bass", group);
+		RegisterInstrument(band, "SetKeyboardButton", 0, "piano", group);
+		RegisterInstrument(band, "SetDrumkitButton", 0, "percussion-kit", group, percussion: true);
+		RegisterInstrument(orchestra, "SetViolinButton", 40, "violin", group);
+		RegisterInstrument(orchestra, "SetCelloButton", 42, "cello", group);
+		RegisterInstrument(orchestra, "SetHarpButton", 46, "harp", group);
+		RegisterInstrument(orchestra, "SetTrumpetButton", 56, "trumpet", group);
+		RegisterInstrument(orchestra, "SetTromboneButton", 57, "trombone", group);
+		RegisterInstrument(orchestra, "SetFrenchHornButton", 60, "french-horn", group);
+		RegisterInstrument(orchestra, "SetSaxophoneButton", 65, "saxophone", group);
+		RegisterInstrument(orchestra, "SetClarinetButton", 71, "clarinet", group);
+		RegisterInstrument(orchestra, "SetFluteButton", 73, "flute", group);
+		RegisterInstrument(orchestra, "SetXylophoneButton", 13, "xylophone", group);
+		_defaultInstrumentButton = band.GetNode<Button>("SetGuitarButton");
+	}
+
+	private void RegisterInstrument(GridContainer container, string buttonName, int program, string imageId, ButtonGroup group, bool percussion = false)
+	{
+		var button = container.GetNode<Button>(buttonName);
+		button.ButtonGroup = group;
+		button.Icon = GD.Load<Texture2D>(ImagePath(ImageIndexById[imageId]));
+		button.Toggled += pressed =>
 		{
-			TrackKind.Guitar => "acoustic-guitar",
-			TrackKind.Bass => "guitar",
-			TrackKind.Keyboard => "piano",
-			TrackKind.Percussion => "percussion-kit",
-			_ => "placeholder"
+			if (!pressed || _synchronizing || _isEditing) return;
+			if (percussion) SelectPercussionKit();
+			else { _selectedProgram = program; ApplyProgramDefaults(program); }
 		};
 	}
 
-	public static string ResolveImagePath(ScoreTrack track) => ImagePath(ImageIndexById[ResolveImageId(track)]);
-
-	private void OnCategorySelected(long index)
+	private void UpdateInstrumentHeader()
 	{
-		if (_synchronizing || _isEditing || (ulong)index >= (ulong)Categories.Length) return;
-		if (index == Categories.Length - 1)
+		if (_instrumentHeaderLabel is null) return;
+		_instrumentHeaderLabel.Text = _selectedKind == TrackKind.Percussion ? Tr("Percussion kit")
+			: _selectedKind == TrackKind.Audio ? Tr("Audio")
+			: GeneralMidiInstruments.GetName(Math.Clamp(_selectedProgram, 0, 127));
+		_instrumentHeaderIcon.Texture = GD.Load<Texture2D>(ResolveImagePath(_selectedKind, _selectedProgram));
+	}
+
+	private void OpenBannerPicker()
+	{
+		if (_bannerImages.ItemCount == 0)
 		{
-			_instruments.Clear();
-			_instruments.AddItem("Percussion kit");
-			_instruments.Select(0);
-			SelectPercussionKit();
-			return;
+			foreach (var path in TrackBannerArt.Paths)
+			{
+				var texture = GD.Load<Texture2D>(path);
+				using var image = texture.GetImage();
+				if (image.IsCompressed()) image.Decompress();
+				var scale = Math.Min(120f / image.GetWidth(), 68f / image.GetHeight());
+				image.Resize(Math.Max(1, (int)(image.GetWidth() * scale)),
+					Math.Max(1, (int)(image.GetHeight() * scale)), Image.Interpolation.Lanczos);
+				var item = _bannerImages.AddItem("", ImageTexture.CreateFromImage(image));
+				_bannerImages.SetItemTooltip(item, Path.GetFileNameWithoutExtension(path));
+			}
 		}
-		var program = (int)index * 8;
-		PopulateInstrumentList(program);
-		_instruments.Select(0);
-		SelectProgram(program);
+
+		var index = TrackBannerArt.Paths.ToList().IndexOf(_selectedBannerImagePath);
+		if (index >= 0 && index < _bannerImages.ItemCount) _bannerImages.Select(index);
+		_bannerPopup.PopupCentered();
+		_bannerImages.EnsureCurrentIsVisible();
 	}
 
-	private void OnInstrumentSelected(long index)
+	private void RefreshBannerPreview()
 	{
-		if (_synchronizing || _isEditing || index < 0) return;
-		if (_categories.Selected == Categories.Length - 1)
-		{
-			SelectPercussionKit();
-			return;
-		}
-		var baseProgram = _categories.Selected * 8;
-		if (baseProgram < 0 || baseProgram > 120) return;
-		SelectProgram(baseProgram + (int)index);
-	}
-
-	private void OnProgramSelected(long _)
-	{
-		if (_synchronizing) return;
-		var program = SelectedProgram;
-		var category = CategoryForProgram(program);
-		_synchronizing = true;
-		_categories.Select(category);
-		PopulateInstrumentList(program / 8 * 8);
-		_instruments.Select(program % 8);
-		_synchronizing = false;
-		if (!_isEditing) ApplyProgramDefaults(program);
-	}
-
-	private void SelectProgram(int program)
-	{
-		_synchronizing = true;
-		_programs.Select(program);
-		_synchronizing = false;
-		ApplyProgramDefaults(program);
+		_bannerPreview.Texture = GD.Load<Texture2D>(_selectedBannerImagePath);
 	}
 
 	private void ApplyProgramDefaults(int program)
 	{
 		if (!_colorCustomized) ApplyDefaultColor(CategoryForProgram(program));
 		_selectedKind = KindForProgram(program);
-		_programs.Disabled = false;
 		if (_selectedKind == TrackKind.Guitar)
 		{
 			_selectedTuning = [64, 59, 55, 50, 45, 40];
-			_selectedImageId = DefaultImageIdForProgram(program);
 		}
 		else if (_selectedKind == TrackKind.Bass)
 		{
 			_selectedTuning = [43, 38, 33, 28];
-			_selectedImageId = DefaultImageIdForProgram(program);
 		}
 		else
 		{
 			_selectedTuning = Array.Empty<int>();
-			_selectedImageId = DefaultImageIdForProgram(program);
 		}
 		if (!_nameCustomized) ApplyNameText(DefaultName(program));
-		SetImageSelection(_selectedImageId);
 		var canTune = _selectedKind is TrackKind.Guitar or TrackKind.Bass;
 		_tuningSection.Visible = canTune;
 		_addHighString.Visible = canTune; _addLowString.Visible = canTune;
@@ -349,16 +331,11 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 	private void SelectPercussionKit()
 	{
 		if (!_colorCustomized) ApplyDefaultColor(Categories.Length - 1);
-		_synchronizing = true;
-		_programs.Select(0);
-		_synchronizing = false;
+		_selectedProgram = 0;
 		_selectedKind = TrackKind.Percussion;
 		_tuningSection.Visible = false;
-		_programs.Disabled = true;
 		_selectedTuning = Array.Empty<int>();
-		_selectedImageId = "percussion-kit";
 		if (!_nameCustomized) ApplyNameText("Percussion kit");
-		SetImageSelection(_selectedImageId);
 		_addHighString.Visible = false; _addLowString.Visible = false;
 		_stringRows.Visible = false;
 		_initializeTuning.Visible = false;
@@ -366,13 +343,6 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 		_tuningHelp.Visible = false;
 		UpdateKindDisplay();
 		UpdateValidation();
-	}
-
-	private void PopulateInstrumentList(int baseProgram)
-	{
-		_instruments.Clear();
-		for (var i = baseProgram; i < Math.Min(baseProgram + 8, GeneralMidiInstruments.Names.Count); i++)
-			_instruments.AddItem(GeneralMidiInstruments.Names[i]);
 	}
 
 	private void ApplyNameText(string value)
@@ -397,16 +367,11 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 
 	private void OnRetuningModeSelected(long _) => UpdateRetuningFeedback();
 
-	private void OnImageSelected(long index)
+	private void OnBannerSelected(long index)
 	{
-		if ((ulong)index < (ulong)ImageIds.Length) _selectedImageId = ImageIds[index];
-	}
-
-	private void SetImageSelection(string imageId)
-	{
-		if (!ImageIndexById.TryGetValue(imageId, out var index)) index = ImageIndexById["placeholder"];
-		_selectedImageId = ImageIds[index];
-		_images.Select(index);
+		if ((ulong)index >= (ulong)TrackBannerArt.Paths.Count) return;
+		_selectedBannerImagePath = TrackBannerArt.Paths[(int)index];
+		RefreshBannerPreview();
 	}
 
 	private void SetTuning(int[] pitches)
@@ -529,9 +494,10 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 
 	private void UpdateKindDisplay()
 	{
-		_kindInfo.Text = _selectedKind is TrackKind.Guitar or TrackKind.Bass
+		var selectedInfo = _selectedKind is TrackKind.Guitar or TrackKind.Bass
 			? $"{_selectedKind} track · tuning {FormatTuning(SelectedTuning)}"
 			: $"{_selectedKind} track";
+		_kindInfo.Text = Tr("Choose an instrument, then confirm to create the track. Its type cannot be changed later.") + "\n" + selectedInfo;
 	}
 
 	private void UpdateValidation()
@@ -553,7 +519,7 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 	{
 		if (_colorSelector is null)
 		{
-			var selectorScene = GD.Load<PackedScene>("res://Interface/Tracks/PresetColorsSelector.tscn");
+			var selectorScene = GD.Load<PackedScene>("res://Interface/Tracks/Scenes/PresetColorsSelector.tscn");
 			_colorSelector = selectorScene.Instantiate<Window>();
 			AddChild(_colorSelector);
 			_colorSelector.Connect("color_selected", Callable.From<Color>(OnPresetColorSelected));
@@ -605,7 +571,7 @@ public partial class TrackSettingsDialog : ConfirmationDialog
 
 	private void EnsureReady()
 	{
-		if (_programs is null) throw new InvalidOperationException("TrackSettingsDialog must be in the scene tree before it can be configured.");
+		if (_instrumentPicker is null) throw new InvalidOperationException("TrackSettingsDialog must be in the scene tree before it can be configured.");
 	}
 
 	private static TrackKind KindForProgram(int program) => program switch

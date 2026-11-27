@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using OpenTab.Music;
 
 namespace OpenTab.Music.Persistence;
@@ -18,9 +19,10 @@ public static class ScoreFile
     {
         ValidateExpressionLinks(score);
         AudioModelValidation.ValidateAudio(score);
+        ValidatePedals(score.Tracks);
         var document = new Document
         {
-            Version = 14,
+            Version = 17,
             Id = score.Id, Title = score.Title, Tempo = TempoData.From(score.DefaultTempo),
             Meter = MeterData.From(score.DefaultTimeSignature), Key = KeyData.From(score.DefaultKeySignature),
             PercussionMasterGainDb = score.PercussionMasterGainDb,
@@ -39,7 +41,8 @@ public static class ScoreFile
             Tracks = score.Tracks.Select(t => new TrackData { Id = t.Id, Name = t.Name, Kind = t.Kind,
                 Program = t.DefaultMidiProgram, Volume = t.VolumeDb, Mute = t.IsMuted, Solo = t.IsSoloed,
                 TabTuning = t.TabTuningMidiPitches.ToList(), MaxFret = t.MaxFret,
-                InstrumentImageId = t.InstrumentImageId, DisplayColorRgba = t.DisplayColorRgba, TabSnapDenominator = t.TabSnapDenominator,
+                BannerImagePath = t.BannerImagePath, DisplayColorRgba = t.DisplayColorRgba, TabSnapDenominator = t.TabSnapDenominator,
+                Pedals = t.Pedals.Select(PedalData.From).ToList(),
                 PercussionPieces = t.HasConfiguredPercussionKit ? t.PercussionPieces.Select(piece => new PercussionPieceData { Id = piece.Id, Name = piece.Name,
                     MidiPitch = piece.MidiPitch, IsMuted = piece.IsMuted, GainDb = piece.GainDb }).ToList() : null }).ToList(),
             Sections = score.Sections.Select(s => new SectionData { Id = s.Id, Name = s.Name, Title = s.Title,
@@ -73,7 +76,7 @@ public static class ScoreFile
         if (entry.Length > 64 * 1024 * 1024) throw new InvalidDataException("The score document is too large.");
         using var json = entry.Open();
         var data = JsonSerializer.Deserialize<Document>(json, JsonOptions) ?? throw new InvalidDataException("The score is empty.");
-        if (data.Version is not (1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14) || data.Sections.Count == 0) throw new InvalidDataException("Unsupported score version or missing section.");
+        if (data.Version is not (1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14 or 15 or 16 or 17) || data.Sections.Count == 0) throw new InvalidDataException("Unsupported score version or missing section.");
         var score = new ScoreDocument(data.Title, data.Tempo.ToValue(), data.Meter.ToValue(), data.Key.ToValue())
         {
             Id = data.Id,
@@ -85,8 +88,14 @@ public static class ScoreFile
         foreach (var t in data.Tracks)
         {
             var track = new ScoreTrack(t.Name, t.Kind, t.Program) { Id = t.Id, VolumeDb = t.Volume, IsMuted = t.Mute, IsSoloed = t.Solo,
-                InstrumentImageId = t.InstrumentImageId, DisplayColorRgba = t.DisplayColorRgba,
+                BannerImagePath = t.BannerImagePath, DisplayColorRgba = t.DisplayColorRgba,
                 TabSnapDenominator = data.Version >= 14 ? t.TabSnapDenominator : null };
+            if (data.Version >= 15)
+                foreach (var pedal in t.Pedals ?? new())
+                {
+                    if (pedal is null) throw new InvalidDataException("A track pedal is missing.");
+                    track.Pedals.Add(pedal.ToValue());
+                }
             if (data.Version >= 2) track.RestoreTabConfiguration(t.TabTuning ?? new List<int>(), t.MaxFret);
             if (track.Kind == TrackKind.Percussion && data.Version >= 4 && t.PercussionPieces is not null)
             {
@@ -106,6 +115,7 @@ public static class ScoreFile
             }
             score.RestoreTrack(track);
         }
+        ValidatePedals(score.Tracks);
         if (data.Version >= 9)
             foreach (var asset in data.AudioAssets ?? new()) score.AudioAssets.Add(asset.ToValue());
         var tracks = score.Tracks.ToDictionary(t => t.Id);
@@ -146,8 +156,8 @@ public static class ScoreFile
                         {
                             var onset = new ScoreTime(n.OnsetNumerator, n.OnsetDenominator);
                             var duration = new ScoreTime(n.DurationNumerator, n.DurationDenominator);
-                            TabEventEditing.ValidateAssignment(track, n.StringNumber, n.Fret);
-                            if (track.TabTuningMidiPitches[n.StringNumber - 1] + n.Fret != n.Pitch)
+                            NormalizeTabAssignment(track, n, data.Version);
+                            if (track.TabLaneMidiPitches[n.StringNumber - 1] + n.Fret != n.Pitch)
                                 throw new InvalidDataException("A tablature event's string, fret, and pitch do not match its track tuning.");
                             var tabEvent = new TabEvent(n.StringNumber, n.Fret, n.Pitch, n.Velocity, onset, duration) { Id = n.Id, AllowsBarOverflow = n.AllowsBarOverflow, TupletActual = data.Version >= 6 ? n.TupletActual : 0, SoundVariation = data.Version >= 8 ? n.SoundVariation ?? "" : "", IncomingArticulation = data.Version >= 12 ? n.IncomingArticulation : StringArticulation.None };
                             if (data.Version >= 7)
@@ -165,7 +175,7 @@ public static class ScoreFile
                             }
                             target.TabEvents.Add(tabEvent);
                         }
-                        if (target.TabEvents.GroupBy(n => (n.StringNumber, n.Onset)).Any(group => group.Count() > 1))
+                        if (!track.UsesFullTab && target.TabEvents.GroupBy(n => (n.StringNumber, n.Onset)).Any(group => group.Count() > 1))
                             throw new InvalidDataException("A string cannot have two tablature attacks at the same onset.");
                     }
                     measure.TrackMeasures.Add(target);
@@ -231,6 +241,21 @@ public static class ScoreFile
         return score;
     }
 
+    private static void ValidatePedals(IEnumerable<ScoreTrack> tracks)
+    {
+        var identities = new HashSet<Guid>();
+        try
+        {
+            foreach (var track in tracks)
+                foreach (var pedal in track.Pedals)
+                {
+                    if (pedal is null || !identities.Add(pedal.Id)) throw new ArgumentException("Pedal identities must be unique.");
+                    pedal.Validate();
+                }
+        }
+        catch (ArgumentException ex) { throw new InvalidDataException("A track pedal or its automation is invalid.", ex); }
+    }
+
     private static void ValidateExpressionLinks(ScoreDocument score)
     {
         var allExpressions = score.Sections.SelectMany(section => section.Measures)
@@ -272,8 +297,8 @@ public static class ScoreFile
         {
             var onset = new ScoreTime(n.OnsetNumerator, n.OnsetDenominator);
             var duration = new ScoreTime(n.DurationNumerator, n.DurationDenominator);
-            TabEventEditing.ValidateAssignment(track, n.StringNumber, n.Fret);
-            if (track.TabTuningMidiPitches[n.StringNumber - 1] + n.Fret != n.Pitch)
+            NormalizeTabAssignment(track, n, version);
+            if (track.TabLaneMidiPitches[n.StringNumber - 1] + n.Fret != n.Pitch)
                 throw new InvalidDataException("A tablature event's string, fret, and pitch do not match its track tuning.");
             var tabEvent = new TabEvent(n.StringNumber, n.Fret, n.Pitch, n.Velocity, onset, duration)
             { Id = n.Id, AllowsBarOverflow = n.AllowsBarOverflow, TupletActual = version >= 6 ? n.TupletActual : 0, SoundVariation = version >= 8 ? n.SoundVariation ?? "" : "", IncomingArticulation = version >= 12 ? n.IncomingArticulation : StringArticulation.None };
@@ -288,7 +313,9 @@ public static class ScoreFile
                 }
             target.TabEvents.Add(tabEvent);
         }
-        if (target.TabEvents.GroupBy(n => (n.StringNumber, n.Onset)).Any(group => group.Count() > 1))
+        // An older fixed-pitch track can have the same pitch authored on different lanes.
+        // Keep those attacks when the lanes are mapped to the same chromatic row.
+        if (!track.UsesFullTab && target.TabEvents.GroupBy(n => (n.StringNumber, n.Onset)).Any(group => group.Count() > 1))
             throw new InvalidDataException("A string cannot have two tablature events at the same onset.");
         return target;
     }
@@ -306,7 +333,42 @@ public static class ScoreFile
     public sealed class Document { public int Version { get; set; } = 11; public Guid Id { get; set; } public string Title { get; set; } = ""; public TempoData Tempo { get; set; } = new(); public MeterData Meter { get; set; } = new(); public KeyData Key { get; set; } = new(); public double PercussionMasterGainDb { get; set; } public bool MetronomeEnabled { get; set; } public bool CountInEnabled { get; set; } public bool CountInEveryLoop { get; set; } public List<TrackData> Tracks { get; set; } = new(); public List<AudioAssetData>? AudioAssets { get; set; } public List<SectionData> Sections { get; set; } = new(); public List<ArrangementData>? Arrangements { get; set; } }
     public sealed class ArrangementData { public Guid Id { get; set; } public string Name { get; set; } = ""; public List<ArrangementSectionData>? Sections { get; set; } public List<AudioClipData>? AudioClips { get; set; } }
     public sealed class ArrangementSectionData { public Guid SectionId { get; set; } public int Repetitions { get; set; } = 1; }
-    public sealed class TrackData { public Guid Id { get; set; } public string Name { get; set; } = ""; public TrackKind Kind { get; set; } public int Program { get; set; } public double Volume { get; set; } public bool Mute { get; set; } public bool Solo { get; set; } public List<int>? TabTuning { get; set; } public int MaxFret { get; set; } = 24; public string? InstrumentImageId { get; set; } public uint DisplayColorRgba { get; set; } = 0xffffffff; public int? TabSnapDenominator { get; set; } public List<PercussionPieceData>? PercussionPieces { get; set; } }
+    public sealed class TrackData { public Guid Id { get; set; } public string Name { get; set; } = ""; public TrackKind Kind { get; set; } public int Program { get; set; } public double Volume { get; set; } public bool Mute { get; set; } public bool Solo { get; set; } public List<int>? TabTuning { get; set; } public int MaxFret { get; set; } = 24; public string? BannerImagePath { get; set; } public uint DisplayColorRgba { get; set; } = 0xffffffff; public int? TabSnapDenominator { get; set; } public List<PercussionPieceData>? PercussionPieces { get; set; } public List<PedalData>? Pedals { get; set; } }
+    public sealed class PedalData
+    {
+        public Guid Id { get; set; }
+        public string TypeId { get; set; } = "overdrive";
+        public bool Enabled { get; set; } = true;
+        public float Drive { get; set; } = 0.4f;
+        public float Tone { get; set; } = 0.5f;
+        public float Level { get; set; } = 0.5f;
+        public Dictionary<string, float>? Parameters { get; set; }
+        public List<PedalAutomationData>? Automation { get; set; }
+        [JsonExtensionData] public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+        public static PedalData From(TrackPedal pedal) => new() { Id = pedal.Id, TypeId = pedal.TypeId, Enabled = pedal.Enabled,
+            Drive = pedal.Drive, Tone = pedal.Tone, Level = pedal.Level, Parameters = new Dictionary<string, float>(pedal.Parameters, StringComparer.Ordinal),
+            ExtensionData = new Dictionary<string, JsonElement>(pedal.ExtensionData, StringComparer.Ordinal),
+            Automation = pedal.Automation.Select(lane => new PedalAutomationData { ParameterId = lane.ParameterId, Points = lane.Points.ToList(), ExtensionData = new Dictionary<string, JsonElement>(lane.ExtensionData, StringComparer.Ordinal) }).ToList() };
+        public TrackPedal ToValue()
+        {
+            var pedal = new TrackPedal { Id = Id, TypeId = TypeId, Enabled = Enabled, Drive = Drive, Tone = Tone, Level = Level };
+            if (Parameters is not null)
+                foreach (var (parameter, value) in Parameters) pedal.Parameters.Add(parameter, value);
+            if (ExtensionData is not null)
+                foreach (var (name, value) in ExtensionData) pedal.ExtensionData.Add(name, value);
+            foreach (var data in Automation ?? new())
+            {
+                if (data is null) throw new InvalidDataException("A pedal automation lane is missing.");
+                var lane = new PedalAutomationLane { ParameterId = data.ParameterId };
+                lane.Points.AddRange(data.Points ?? new());
+                if (data.ExtensionData is not null)
+                    foreach (var (name, value) in data.ExtensionData) lane.ExtensionData.Add(name, value);
+                pedal.Automation.Add(lane);
+            }
+            return pedal;
+        }
+    }
+    public sealed class PedalAutomationData { public string ParameterId { get; set; } = ""; public List<PedalAutomationPoint>? Points { get; set; } [JsonExtensionData] public Dictionary<string, JsonElement>? ExtensionData { get; set; } }
     public sealed class PercussionPieceData { public string Id { get; set; } = ""; public string Name { get; set; } = ""; public int MidiPitch { get; set; } public bool IsMuted { get; set; } public double GainDb { get; set; } }
     public sealed class SectionData { public Guid Id { get; set; } public string Name { get; set; } = ""; public string Title { get; set; } = ""; public Guid? Lead { get; set; } public TempoData? Tempo { get; set; } public MeterData? Meter { get; set; } public KeyData? Key { get; set; } public Dictionary<Guid, int> Patterns { get; set; } = new(); public List<MeasureData> Measures { get; set; } = new(); public List<AudioClipData>? AudioClips { get; set; } }
     public sealed class AudioAssetData { public Guid Id { get; set; } public string FileName { get; set; } = ""; public string Sha256 { get; set; } = ""; public int SampleRate { get; set; } public int Channels { get; set; } public long FrameCount { get; set; } public string CachePath { get; set; } = ""; public static AudioAssetData From(AudioAsset a) => new() { Id = a.Id, FileName = a.FileName, Sha256 = a.Sha256, SampleRate = a.SampleRate, Channels = a.Channels, FrameCount = a.FrameCount, CachePath = a.CachePath }; public AudioAsset ToValue() => new(Id, FileName, Sha256, SampleRate, Channels, FrameCount, CachePath); }
@@ -351,6 +413,19 @@ public static class ScoreFile
             Voices = p.Voices.Select(v => new VoiceData { Id = v.Id, Number = v.Number, Beats = v.Beats.Select(b => new BeatData { Id = b.Id, Rhythm = RhythmData.From(b.RhythmicValue), Intensity = b.Intensity, Bend = b.PitchBendSemitones,
                 Notes = b.Notes.Select(n => new NoteData { Id = n.Id, Pitch = n.MidiPitch, Velocity = n.Velocity }).ToList() }).ToList() }).ToList() };
     }
+    private static void NormalizeTabAssignment(ScoreTrack track, TabEventData note, int version)
+    {
+        if (track.UsesFullTab && version < 17)
+        {
+            if (note.StringNumber < 1 || note.StringNumber > track.TabTuningMidiPitches.Count || note.Fret < 0 || note.Fret > track.MaxFret ||
+                track.TabTuningMidiPitches[note.StringNumber - 1] + note.Fret != note.Pitch || note.Pitch is < 0 or > 127)
+                throw new InvalidDataException("A legacy tablature event does not match its track tuning.");
+            note.StringNumber = 128 - note.Pitch;
+            note.Fret = 0;
+        }
+        TabEventEditing.ValidateAssignment(track, note.StringNumber, note.Fret);
+    }
+
     public sealed class TabEventData { public Guid Id { get; set; } public int StringNumber { get; set; } public int Fret { get; set; } public int Pitch { get; set; } public int Velocity { get; set; } public long OnsetNumerator { get; set; } public long OnsetDenominator { get; set; } = 1; public long DurationNumerator { get; set; } public long DurationDenominator { get; set; } = 1; public bool AllowsBarOverflow { get; set; } public int TupletActual { get; set; } public string? SoundVariation { get; set; } public StringArticulation IncomingArticulation { get; set; } public List<NoteExpressionData>? Expressions { get; set; } }
     public sealed class NoteExpressionData { public Guid Id { get; set; } public ExpressionKind Kind { get; set; } public double Position { get; set; } public double MinSemitones { get; set; } = -2d; public double MaxSemitones { get; set; } = 2d; public List<ExpressionPointData>? Points { get; set; } }
     public sealed class ExpressionPointData { public double X { get; set; } public double Y { get; set; } public ExpressionSegmentMode SegmentMode { get; set; } }

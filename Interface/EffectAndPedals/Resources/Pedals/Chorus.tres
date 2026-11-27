@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PedalInfo" format=3 uid="uid://cc7hoj1g8fq5h"]
+
+[ext_resource type="Script" uid="uid://cr2d7nbn44cq3" path="res://Interface/EffectAndPedals/Resources/PedalInfo.cs" id="1_info"]
+[ext_resource type="Script" uid="uid://csukwn3oyjavu" path="res://Interface/EffectAndPedals/Resources/PedalConfiguration.cs" id="2_configuration"]
+[ext_resource type="Texture2D" uid="uid://bmr2kr4prkfsq" path="res://Interface/EffectAndPedals/Graph/chorus.jpg" id="3_image"]
+
+[sub_resource type="Resource" id="Default"]
+script = ExtResource("2_configuration")
+DisplayName = "Default"
+Values = Dictionary[String, float]({
+"depth": 0.45,
+"mix": 0.35,
+"rate": 0.35
+})
+
+[resource]
+script = ExtResource("1_info")
+TypeId = "chorus"
+DisplayName = "Chorus"
+Image = ExtResource("3_image")
+DefaultConfiguration = SubResource("Default")

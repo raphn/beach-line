@@ -25,7 +25,7 @@ public sealed class TabSelectionEditPlan
         _moves = moves.ToArray();
         _removed = removed.Distinct().ToArray();
         RequiresConfirmation = requiresConfirmation;
-        _tuning = track.TabTuningMidiPitches.ToArray();
+        _tuning = track.TabLaneMidiPitches.ToArray();
         _snapshot = _moves.Select(m => m.Source).Concat(_removed.Select(r => r.Source)).Distinct()
             .Select(source => (source, source.TabEvents.ToArray(), source.TabEvents.Select(State).ToArray())).ToArray();
         Validate();
@@ -64,7 +64,7 @@ public sealed class TabSelectionEditPlan
     public void Apply(bool confirmed = false)
     {
         if (RequiresConfirmation && !confirmed) throw new InvalidOperationException("Confirm this edit before applying it.");
-        if (!_tuning.SequenceEqual(_track.TabTuningMidiPitches) || _snapshot.Any(s => !s.Events.SequenceEqual(s.Source.TabEvents) ||
+        if (!_tuning.SequenceEqual(_track.TabLaneMidiPitches) || _snapshot.Any(s => !s.Events.SequenceEqual(s.Source.TabEvents) ||
             !s.State.SequenceEqual(s.Source.TabEvents.Select(State))))
             throw new InvalidOperationException("The score changed; select the notes and try again.");
         Validate();
@@ -74,7 +74,7 @@ public sealed class TabSelectionEditPlan
             m.Note.StringNumber = m.StringNumber;
             m.Note.Onset = m.Onset;
             m.Note.Fret = m.Fret ?? m.Note.Fret;
-            m.Note.MidiPitch = _track.TabTuningMidiPitches[m.StringNumber - 1] + m.Note.Fret;
+            m.Note.MidiPitch = _track.TabLaneMidiPitches[m.StringNumber - 1] + m.Note.Fret;
         }
     }
 

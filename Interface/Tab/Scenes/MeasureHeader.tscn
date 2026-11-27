@@ -109,3 +109,11 @@ oversampling_override = 1.0
 title = "Delete measure?"
 theme = ExtResource("drum_theme")
 ok_button_text = "Delete"
+
+[node name="EnablePitchEditing" type="Button" parent="HeaderContent"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"AppActionButton"
+text = "Enable note editing"
+tooltip_text = "Convert this measure's legacy notes to editable Full Tab notes."

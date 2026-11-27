@@ -7,6 +7,37 @@ using OpenTab.Music;
 
 public partial class DrumScorePresenter
 {
+    private static Texture2D GetPercussionPieceTexture(int midiPitch)
+    {
+        var (localName, fallbackIndex) = midiPitch switch
+        {
+            35 or 36 => ("kick", 0),
+            38 or 40 => ("snare", 1),
+            42 or 44 or 46 => ("hi-hat", 2),
+            43 or 45 => ("tom-low", 3),
+            47 or 48 or 50 => ("tom-mid", 4),
+            49 or 51 or 52 or 55 or 57 or 59 => ("cymbal", 5),
+            _ => ("", 6)
+        };
+
+        // The original atlas artwork is private local content. Only load it when
+        // both the source image and the corresponding atlas exist; clean builds
+        // use the bundled original fallback icons instead.
+        if (localName.Length > 0)
+        {
+            var atlasPath = $"res://Interface/DrumKit/Graphs/{localName}.atlastex";
+            if (ResourceLoader.Exists("res://Interface/DrumKit/Graphs/icon-set-basic.png") &&
+                ResourceLoader.Exists(atlasPath) && GD.Load<Texture2D>(atlasPath) is { } localTexture)
+                return localTexture;
+        }
+
+        return new AtlasTexture
+        {
+            Atlas = GD.Load<Texture2D>("res://Interface/DrumKit/Graphs/drum-pieces.svg"),
+            Region = new Rect2(fallbackIndex * 64, 0, 64, 64)
+        };
+    }
+
     private static void ConfigureDefaultPercussionKit(ScoreTrack track)
     {
         track.AddPercussionPiece(Guid.NewGuid().ToString("N"), "Kick", 36);
@@ -17,16 +48,15 @@ public partial class DrumScorePresenter
         track.AddPercussionPiece(Guid.NewGuid().ToString("N"), "Crash cymbal", 49);
     }
 
-    private void RenderPercussionKitTrack(ScoreTrack track, List<TabBar> bars, IReadOnlyList<ScoreSection> visibleSections)
+    private FoldableContainer RenderPercussionKitTrack(ScoreTrack track, List<TabBar> bars, IReadOnlyList<ScoreSection> visibleSections)
     {
         var row = GD.Load<PackedScene>("res://Interface/Tab/Scenes/PercussionKitTrack.tscn").Instantiate<FoldableContainer>();
         row.Name = $"Track_{track.Id:N}";
         _tabTracks.AddChild(row);
+		row.GetNode<TrackPedals>("BoxContainer/TrackPedals").Configure(track, () => { SetActiveEditorTrack(track.Id); NotifyScoreEdited(); });
 
-        row.Folded = _trackFoldedStates.GetValueOrDefault(track.Id, row.Folded);
         RegisterTrackRow(track.Id, row);
-        row.FoldingChanged += folded => { _trackFoldedStates[track.Id] = folded; MarkEditorStateDirty(); };
-        var controls = row.GetNode<Control>("TrackContainer/VBoxContainer/TrackControls/HBoxContainer");
+        var controls = row.GetNode<Control>("BoxContainer/TrackContainer/VBoxContainer/TrackControls/HBoxContainer");
         var name = controls.GetNode<Label>("HBoxContainer/NameContainer/TrackNameLabel");
         var edit = controls.GetNode<LineEdit>("HBoxContainer/NameContainer/TrackNameEdit");
         name.Text = track.Name; name.MouseFilter = Control.MouseFilterEnum.Stop;
@@ -77,7 +107,7 @@ public partial class DrumScorePresenter
             catch (Exception error) when (error is ArgumentException or InvalidOperationException) { SetTabStatus(error.Message); }
         };
 
-        var host = row.GetNode<VBoxContainer>("TrackContainer/VBoxContainer/TabSectionContainer/SubTracks");
+        var host = row.GetNode<VBoxContainer>("BoxContainer/TrackContainer/VBoxContainer/TabSectionContainer/SubTracks");
         var lanes = host.GetNode<HBoxContainer>("KitLanes");
         var headers = lanes.GetNode<VBoxContainer>("SubTrackHeaders");
         var spacer = headers.GetNode<Control>("HeaderSpacer");
@@ -94,11 +124,8 @@ public partial class DrumScorePresenter
             pieceName.Text = piece.Name; pieceName.MouseFilter = Control.MouseFilterEnum.Stop;
             pieceName.TooltipText = string.Format(Tr("MIDI note {0}. Double-click to rename."), piece.MidiPitch);
             var pieceIcon = pieceHeader.GetNode<TextureRect>("BoxContainer/HBoxContainer/PieceTexture");
-            // Drum atlas textures use unverified artwork kept in the local project.
-            // The licensed generic drum marker keeps public builds complete without
-            // trying to load excluded resources or emitting missing-file warnings.
             pieceIcon.Visible = true;
-            pieceIcon.Texture = GD.Load<Texture2D>("res://Interface/Common/Graphs/plain-circle_delapouite.png");
+            pieceIcon.Texture = GetPercussionPieceTexture(piece.MidiPitch);
             pieceName.GuiInput += input => { if (input is InputEventMouseButton { Pressed: true, DoubleClick: true }) { pieceName.Visible = false; pieceEdit.Visible = true; pieceEdit.Text = piece.Name; pieceEdit.GrabFocus(); pieceEdit.SelectAll(); } };
             var editing = false;
             void CommitPieceName() { if (editing) return; editing = true; var text = pieceEdit.Text.Trim(); if (text.Length > 0 && text != piece.Name) { piece.Name = text; NotifyScoreEdited(); } pieceName.Text = piece.Name; pieceEdit.Visible = false; pieceName.Visible = true; editing = false; }
@@ -124,7 +151,7 @@ public partial class DrumScorePresenter
         foreach (var section in visibleSections)
         {
             var template = _nonPercussionTrackScene.Instantiate<FoldableContainer>();
-            var sectionContainer = template.GetNode<Control>("TrackContainer/HBoxContainer/TabSectionContainer");
+            var sectionContainer = template.GetNode<Control>("VBoxContainer/TrackContainer/HBoxContainer/TabSectionContainer");
             sectionContainer.GetParent().RemoveChild(sectionContainer); template.Free();
             pageSections.AddChild(sectionContainer);
             RenderNonPercussionSection(track, section, bars, scroll, sectionContainer);
@@ -221,6 +248,7 @@ public partial class DrumScorePresenter
         pageSections.Resized += QueueKitAlignmentUpdate;
         fixedHeaders.Resized += QueueKitAlignmentUpdate;
         QueueKitAlignmentUpdate();
+        return row;
     }
 
     private static IEnumerable<T> FindControls<T>(Node root) where T : Node

@@ -142,7 +142,8 @@ public partial class DrumScorePresenter
                 int measureSnap = view is null ? snap : view.SnapDenominator;
                 float comfortable = 40 + (float)(duration * measureSnap * minimumCellWidth);
                 int remainder = column.HasMeta("section_remainder_count") ? Math.Max(1, column.GetMeta("section_remainder_count").AsInt32()) : 1;
-                float width = Math.Max(fit, Math.Max(TabMeasureMinimumWidth, comfortable)) * remainder;
+                float headerWidth = column.HasMeta("full_tab_header_width") ? column.GetMeta("full_tab_header_width").AsSingle() : 0;
+                float width = Math.Max(headerWidth, Math.Max(fit, Math.Max(TabMeasureMinimumWidth, comfortable)) * remainder);
                 column.CustomMinimumSize = new Vector2(width, column.CustomMinimumSize.Y);
                 if (view is not null) view.CustomMinimumSize = new Vector2(width, view.CustomMinimumSize.Y);
             }

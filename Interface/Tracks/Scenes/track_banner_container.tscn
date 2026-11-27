@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://xk6tgnncnyiu"]
+
+[ext_resource type="Texture2D" uid="uid://boo82fc0hrdwr" path="res://Interface/Common/Graphs/banners/guitar/vilkasss-artisan-10128139_1920.jpg" id="1_27yba"]
+[ext_resource type="Script" uid="uid://cvs11e4gb5fyx" path="res://Interface/Tracks/Scripts/TrackBanner.cs" id="2_banner"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f381r"]
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13qdw"]
+draw_center = false
+border_width_left = 4
+border_width_top = 2
+border_width_right = 4
+border_width_bottom = 2
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_button"]
+
+[node name="TrackBannerContainer" type="PanelContainer" unique_id=161351533 node_paths=PackedStringArray("_artwork", "_borders", "_selectionButton")]
+clip_children = 2
+custom_minimum_size = Vector2(352, 128)
+theme_override_styles/panel = SubResource("StyleBoxFlat_f381r")
+script = ExtResource("2_banner")
+_artwork = NodePath("TextureRect")
+_borders = NodePath("Borders")
+_selectionButton = NodePath("SelectionButton")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=615827065]
+self_modulate = Color(0.411765, 0.411765, 0.411765, 1)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_27yba")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Borders" type="PanelContainer" parent="." unique_id=1416144166]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_13qdw")
+
+[node name="SelectionButton" type="Button" parent="." unique_id=1948016608]
+layout_mode = 2
+tooltip_text = "Click to select or deselect this track"
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+toggle_mode = true

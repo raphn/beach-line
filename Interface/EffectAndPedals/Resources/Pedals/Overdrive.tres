@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="PedalInfo" format=3 uid="uid://bhfprg3ribwo2"]
+
+[ext_resource type="Script" uid="uid://cr2d7nbn44cq3" path="res://Interface/EffectAndPedals/Resources/PedalInfo.cs" id="1_info"]
+[ext_resource type="Script" uid="uid://csukwn3oyjavu" path="res://Interface/EffectAndPedals/Resources/PedalConfiguration.cs" id="2_configuration"]
+[ext_resource type="Texture2D" uid="uid://edm6yyg268hw" path="res://Interface/EffectAndPedals/Graph/overdrive.jpg" id="3_image"]
+
+[sub_resource type="Resource" id="CleanBoost"]
+script = ExtResource("2_configuration")
+DisplayName = "Clean boost"
+Values = Dictionary[String, float]({
+"drive": 0.12,
+"level": 0.58,
+"tone": 0.6
+})
+
+[sub_resource type="Resource" id="BluesCrunch"]
+script = ExtResource("2_configuration")
+DisplayName = "Blues crunch"
+Values = Dictionary[String, float]({
+"drive": 0.35,
+"level": 0.5,
+"tone": 0.48
+})
+
+[sub_resource type="Resource" id="ClassicRock"]
+script = ExtResource("2_configuration")
+DisplayName = "Classic rock"
+Values = Dictionary[String, float]({
+"drive": 0.58,
+"level": 0.44,
+"tone": 0.6
+})
+
+[sub_resource type="Resource" id="HeavyDrive"]
+script = ExtResource("2_configuration")
+DisplayName = "Heavy drive"
+Values = Dictionary[String, float]({
+"drive": 0.85,
+"level": 0.38,
+"tone": 0.68
+})
+
+[sub_resource type="Resource" id="Default"]
+script = ExtResource("2_configuration")
+DisplayName = "Default"
+Values = Dictionary[String, float]({
+"drive": 0.4,
+"level": 0.5,
+"tone": 0.5
+})
+
+[resource]
+script = ExtResource("1_info")
+TypeId = "overdrive"
+DisplayName = "Overdrive"
+Image = ExtResource("3_image")
+DefaultConfiguration = SubResource("Default")
+BuiltinConfigurations = Array[ExtResource("2_configuration")]([SubResource("CleanBoost"), SubResource("BluesCrunch"), SubResource("ClassicRock"), SubResource("HeavyDrive")])

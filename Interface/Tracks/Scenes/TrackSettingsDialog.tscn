@@ -1,0 +1,515 @@
+[gd_scene format=3 uid="uid://dclyluys5gdj2"]
+
+[ext_resource type="Script" uid="uid://be5xbfb7vqmdj" path="res://Interface/Tab/Scripts/TrackSettingsDialog.cs" id="1_script"]
+[ext_resource type="Theme" uid="uid://b4ged874cqvaq" path="res://Interface/Themes/main.tres" id="2_theme"]
+
+[node name="TrackSettingsDialog" type="ConfirmationDialog" unique_id=186158830 node_paths=PackedStringArray("_bannerImages", "_bannerPopup", "_chooseBannerButton", "_bannerPreview")]
+oversampling_override = 1.0
+title = "Track Settings"
+position = Vector2i(0, 28)
+size = Vector2i(720, 728)
+visible = true
+min_size = Vector2i(560, 620)
+theme = ExtResource("2_theme")
+ok_button_text = "Apply"
+script = ExtResource("1_script")
+_bannerImages = NodePath("InstrumentImagePopup/ImageMargin/InstrumentImages")
+_bannerPopup = NodePath("InstrumentImagePopup")
+_chooseBannerButton = NodePath("SettingsMargin/SettingsScroll/SettingsLayout/ImageSection/ImageRow/ChooseInstrumentImage")
+_bannerPreview = NodePath("SettingsMargin/SettingsScroll/SettingsLayout/ImageSection/ImageRow/InstrumentImagePreview")
+
+[node name="SettingsMargin" type="MarginContainer" parent="." unique_id=805681466]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="SettingsScroll" type="ScrollContainer" parent="SettingsMargin" unique_id=777866705]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SettingsLayout" type="VBoxContainer" parent="SettingsMargin/SettingsScroll" unique_id=1160540555]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="InstrumentInfoHeader" type="BoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout" unique_id=191234523]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="InstrumentHeaderIcon" type="TextureRect" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentInfoHeader" unique_id=317635524]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="InstrumentHeaderLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/InstrumentInfoHeader" unique_id=630061446]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Instrument"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Instruments" type="BoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout" unique_id=776626130]
+unique_name_in_owner = true
+layout_mode = 2
+vertical = true
+
+[node name="InstrumentHeading" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments" unique_id=365316735]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "INSTRUMENT"
+
+[node name="TrackInfo" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments" unique_id=728584995]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choose an instrument, then confirm to create the track. Its type cannot be changed later."
+autowrap_mode = 2
+
+[node name="InstrumentBranch" type="TabContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments" unique_id=1524800502]
+unique_name_in_owner = true
+layout_mode = 2
+current_tab = 0
+
+[node name="Band" type="ScrollContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch" unique_id=617189393]
+custom_minimum_size = Vector2(0, 192)
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 0
+
+[node name="BandInstruments" type="GridContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Band" unique_id=840378925]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
+
+[node name="SetGuitarButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Band/BandInstruments" unique_id=661267769]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Acoustic Guitar"
+expand_icon = true
+
+[node name="SetElectricGuitarButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Band/BandInstruments" unique_id=750978484]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose a clean electric guitar for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Electric Guitar"
+expand_icon = true
+
+[node name="SetElectricBassButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Band/BandInstruments" unique_id=1805256771]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Electric Bass"
+expand_icon = true
+
+[node name="SetKeyboardButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Band/BandInstruments" unique_id=332157742]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Keyboard"
+expand_icon = true
+
+[node name="SetDrumkitButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Band/BandInstruments" unique_id=2045073387]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Drum Kit"
+expand_icon = true
+
+[node name="Orchestra" type="ScrollContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch" unique_id=1869407292]
+visible = false
+custom_minimum_size = Vector2(0, 192)
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 1
+
+[node name="OrchestraInstruments" type="GridContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra" unique_id=1986078489]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
+
+[node name="SetViolinButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=485591497]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Violin"
+expand_icon = true
+
+[node name="SetCelloButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=1008263237]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Cello"
+expand_icon = true
+
+[node name="SetHarpButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=379197404]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Harp"
+expand_icon = true
+
+[node name="SetTrumpetButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=209140197]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Trumpet"
+expand_icon = true
+
+[node name="SetTromboneButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=43169192]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Trombone"
+expand_icon = true
+
+[node name="SetFrenchHornButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=954609287]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "French horn"
+expand_icon = true
+
+[node name="SetSaxophoneButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=113138557]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Saxophone"
+expand_icon = true
+
+[node name="SetClarinetButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=1752271812]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Clarinet"
+expand_icon = true
+
+[node name="SetFluteButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=649040825]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Flute"
+expand_icon = true
+
+[node name="SetXylophoneButton" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/Instruments/InstrumentBranch/Orchestra/OrchestraInstruments" unique_id=158207206]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose this instrument for a new track. Its type cannot be changed after creation."
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Xylophone"
+expand_icon = true
+
+[node name="TrackSection" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout" unique_id=819373037]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TrackHeading" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection" unique_id=1581597324]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "TRACK"
+
+[node name="NameRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection" unique_id=1356384472]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/NameRow" unique_id=1428116623]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Track name"
+vertical_alignment = 1
+
+[node name="TrackName" type="LineEdit" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/NameRow" unique_id=131568126]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Enter a name for this track. Changes are applied when you confirm."
+placeholder_text = "Track name"
+
+[node name="ColorRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection" unique_id=829526867]
+layout_mode = 2
+
+[node name="ColorLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/ColorRow" unique_id=1697228713]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Track color"
+vertical_alignment = 1
+
+[node name="TrackColor" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/ColorRow" unique_id=1470702141]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 32)
+layout_mode = 2
+tooltip_text = "Choose a track color. Changes are applied when you confirm."
+
+[node name="ColorSwatch" type="ColorRect" parent="SettingsMargin/SettingsScroll/SettingsLayout/TrackSection/ColorRow/TrackColor" unique_id=543987161]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = -5.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TuningSection" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout" unique_id=2059689503]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TuningHeading" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection" unique_id=1035951757]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "TUNING"
+
+[node name="TuningHelp" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection" unique_id=1673342110]
+unique_name_in_owner = true
+layout_mode = 2
+text = "String 1 is shown first. Pitches use MIDI notes 0–127."
+autowrap_mode = 2
+
+[node name="StringCountRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection" unique_id=1546806520]
+layout_mode = 2
+
+[node name="StringCountLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/StringCountRow" unique_id=1164861920]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Strings"
+vertical_alignment = 1
+
+[node name="AddHighString" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/StringCountRow" unique_id=254875082]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Add a string five semitones above string 1"
+text = "Add high string"
+
+[node name="InitializeTuning" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/StringCountRow" unique_id=300425906]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Add the first string to a track with no tuning."
+text = "Initialize tuning"
+
+[node name="StringRows" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection" unique_id=1106824789]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="AddLowString" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection" unique_id=1982594621]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Add a string seven semitones below the last string"
+text = "Add low string"
+
+[node name="RetuningPanel" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection" unique_id=1788648704]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RetuningLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/RetuningPanel" unique_id=2104662997]
+layout_mode = 2
+text = "When applying this tuning change"
+
+[node name="RetuningMode" type="OptionButton" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/RetuningPanel" unique_id=473785456]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose whether retuning keeps existing finger positions or sounding pitches."
+theme_type_variation = &"AppOptionButton"
+
+[node name="RetuningFeedback" type="Label" parent="SettingsMargin/SettingsScroll/SettingsLayout/TuningSection/RetuningPanel" unique_id=1388106000]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="ImageSection" type="VBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout" unique_id=1895283144]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ImageRow" type="HBoxContainer" parent="SettingsMargin/SettingsScroll/SettingsLayout/ImageSection" unique_id=1573321355]
+layout_mode = 2
+
+[node name="InstrumentImagePreview" type="TextureRect" parent="SettingsMargin/SettingsScroll/SettingsLayout/ImageSection/ImageRow" unique_id=390908808]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ChooseInstrumentImage" type="Button" parent="SettingsMargin/SettingsScroll/SettingsLayout/ImageSection/ImageRow" unique_id=1822903007]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose artwork for the track banner."
+text = "Choose banner artwork"
+
+[node name="InstrumentImagePopup" type="AcceptDialog" parent="." unique_id=416598177]
+unique_name_in_owner = true
+title = "Choose banner artwork"
+size = Vector2i(560, 360)
+min_size = Vector2i(360, 260)
+ok_button_text = "Close"
+
+[node name="ImageMargin" type="MarginContainer" parent="InstrumentImagePopup" unique_id=1009785219]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InstrumentImages" type="ItemList" parent="InstrumentImagePopup/ImageMargin" unique_id=1594798596]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Select an image for this track banner."
+theme_override_colors/font_selected_color = Color(0.9098039, 0.92941177, 0.9764706, 1)
+auto_width = true
+max_columns = 3
+same_column_width = true
+icon_mode = 0
+fixed_icon_size = Vector2i(120, 68)

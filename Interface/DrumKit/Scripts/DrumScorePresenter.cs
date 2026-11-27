@@ -206,6 +206,11 @@ public partial class DrumScorePresenter : Control
 	public override void _Input(InputEvent inputEvent)
 	{
 		if (_settingsDialog is not null && _settingsDialog.Visible) return;
+		if (TryResizeTracksWithWheel(inputEvent))
+		{
+			GetViewport().SetInputAsHandled();
+			return;
+		}
 		// During a take, SPACE controls the transport this take is following, regardless
 		// of which player normally owns the playback shortcuts.
 		if (inputEvent is InputEventKey { Pressed: true, Echo: false, Keycode: Key.Space,
@@ -234,22 +239,24 @@ public partial class DrumScorePresenter : Control
 			}
 			return;
 		}
-		if (_floatingBoardsInitialized && _chordBoard.IsArmed && inputEvent is InputEventKey { Pressed: true, Echo: false, Keycode: Key.Escape })
+		if (ChordPlacementArmed && inputEvent is InputEventKey { Pressed: true, Echo: false, Keycode: Key.Escape })
 		{
-			_chordBoard.CancelPlacement();
+			CancelChordPlacement();
 			GetViewport().SetInputAsHandled();
 			return;
 		}
 		if (inputEvent is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true } mouse)
 		{
-			var chordPlacement = _floatingBoardsInitialized && _chordBoard.IsArmed;
-			if (!chordPlacement && TryExpandCollapsedTrackAt(mouse.GlobalPosition))
+			if (!ChordPlacementArmed)
 			{
-				GetViewport().SetInputAsHandled();
-				return;
+				if (TryExpandCollapsedTrackAt(mouse.GlobalPosition))
+				{
+					GetViewport().SetInputAsHandled();
+					return;
+				}
+				SelectTrackAtPointer(mouse.GlobalPosition);
+				SelectEditingMeasureAt(mouse.GlobalPosition);
 			}
-			SelectTrackAtPointer(mouse.GlobalPosition);
-			if (!chordPlacement) SelectEditingMeasureAt(mouse.GlobalPosition);
 		}
 		var focusOwner = GetViewport().GuiGetFocusOwner();
 		// Keep project-wide shortcuts from replacing or recording a score during a preview.
@@ -1287,6 +1294,8 @@ public partial class DrumScorePresenter : Control
 	private void NotifyScoreEdited(bool refreshPlayback = true)
 	{
 		RefreshTrackTitles();
+		foreach (var track in _score.Tracks) _trackBanners.RefreshTrack(track);
+		QueueFoldedTrackPreviewRefresh();
 		RecordScoreHistory();
 		MarkEditorStateDirty();
 		_hasUnsavedChanges = true;

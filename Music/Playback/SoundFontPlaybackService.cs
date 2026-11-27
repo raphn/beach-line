@@ -33,6 +33,8 @@ public sealed class SoundFontPlaybackService
     private int _drumProgram;
     private int _drumBank;
     private int _drumBend = 8192;
+    private long _effectSourceFrame;
+    private bool _holdEffectAutomation;
 
     private sealed class ExpressiveVoice
     {
@@ -87,6 +89,18 @@ public sealed class SoundFontPlaybackService
         public SoundFontPlaybackService Service { get; }
         public float TrackGain { get; set; } = 1f;
         public float PercussionMasterGain { get; set; } = 1f;
+        public TrackEffectsChain? Effects { get; set; }
+    }
+
+    /// <summary>Replaces the track effect snapshots without changing the synthesizer voices.</summary>
+    public void SetTrackEffects(IReadOnlyDictionary<Guid, TrackEffectsChain> effects)
+    {
+        ArgumentNullException.ThrowIfNull(effects);
+        lock (_synthesizerLock)
+        {
+            foreach (var output in _trackOutputs.Values) output.Effects = null;
+            foreach (var (trackId, chain) in effects) GetTrackOutput(trackId).Effects = chain;
+        }
     }
 
     private TrackOutput GetTrackOutput(Guid trackId)
@@ -405,7 +419,19 @@ public sealed class SoundFontPlaybackService
     /// Renders the same number of stereo frames into the supplied channel buffers.
     /// Calls are serialized with note commands because MeltySynth is not thread-safe.
     /// </summary>
-    public void Render(Span<float> left, Span<float> right)
+    public void Render(Span<float> left, Span<float> right) => RenderCore(left, right, _effectSourceFrame, _holdEffectAutomation);
+
+    /// <summary>Renders with an explicit source-score position for pedal automation.</summary>
+    public void Render(Span<float> left, Span<float> right, long sourceFrame)
+    {
+        _holdEffectAutomation = false;
+        RenderCore(left, right, sourceFrame, false);
+    }
+
+    /// <summary>Holds the last rendered pedal position during an offline release tail.</summary>
+    public void HoldTrackEffectsAutomation() { _effectSourceFrame = Math.Max(0, _effectSourceFrame - 1); _holdEffectAutomation = true; }
+
+    private void RenderCore(Span<float> left, Span<float> right, long sourceFrame, bool holdAutomation)
     {
         if (left.Length != right.Length)
         {
@@ -441,9 +467,11 @@ public sealed class SoundFontPlaybackService
                 var trackLeft = _trackLeft.AsSpan(0, left.Length);
                 var trackRight = _trackRight.AsSpan(0, left.Length);
                 output.Service.Render(trackLeft, trackRight);
+                output.Effects?.Process(trackLeft, trackRight, sourceFrame, holdAutomation);
                 var gain = output.TrackGain * output.PercussionMasterGain;
                 for (var i = 0; i < left.Length; i++) { left[i] += trackLeft[i] * gain; right[i] += trackRight[i] * gain; }
             }
+            _effectSourceFrame = holdAutomation ? sourceFrame : sourceFrame + left.Length;
         }
     }
 

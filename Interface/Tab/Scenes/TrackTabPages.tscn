@@ -12,6 +12,12 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="PitchMeasureHeaders" type="Control" parent="."]
+visible = false
+clip_contents = true
+layout_mode = 2
+mouse_filter = 2
+
 [node name="Scroll" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3

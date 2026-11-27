@@ -20,7 +20,7 @@ public static class TabEventEditing
         ValidateTimes(onset, duration);
         if (measure.TabEvents.Any(e => e.StringNumber == stringNumber && e.Onset == onset))
             throw new InvalidOperationException("A string cannot have two note attacks at the same onset.");
-        var note = new TabEvent(stringNumber, fret, track.TabTuningMidiPitches[stringNumber - 1] + fret,
+        var note = new TabEvent(stringNumber, fret, track.TabLaneMidiPitches[stringNumber - 1] + fret,
             velocity ?? TrackDefaults.VelocityFor(track.Kind), onset, duration);
         measure.TabEvents.Add(note);
         measure.UsesTabEvents = true;
@@ -47,7 +47,7 @@ public static class TabEventEditing
                     if (!assignments.TryGetValue(legacyNote.Id, out var assignment))
                         throw new InvalidOperationException("Every legacy note must receive a string and fret assignment.");
                     ValidateAssignment(track, assignment.StringNumber, assignment.Fret);
-                    var pitch = track.TabTuningMidiPitches[assignment.StringNumber - 1] + assignment.Fret;
+                    var pitch = track.TabLaneMidiPitches[assignment.StringNumber - 1] + assignment.Fret;
                     if (pitch != legacyNote.MidiPitch) throw new ArgumentException("An assigned string and fret do not match a legacy note pitch.", nameof(assignments));
                     pending.Add(new TabEvent(assignment.StringNumber, assignment.Fret, pitch, legacyNote.Velocity, onset, beat.Duration) { Id = legacyNote.Id });
                 }
@@ -62,6 +62,52 @@ public static class TabEventEditing
         return pending.AsReadOnly();
     }
 
+    /// <summary>Projects legacy notes into detached fixed-pitch events for display without changing the part.</summary>
+    public static IReadOnlyList<TabEvent> GetLegacyPitchNotes(TrackMeasure measure)
+    {
+        ArgumentNullException.ThrowIfNull(measure);
+        var notes = new List<TabEvent>();
+        foreach (var voice in measure.Voices)
+        {
+            var onset = ScoreTime.Zero;
+            foreach (var beat in voice.Beats)
+            {
+                foreach (var note in beat.Notes)
+                    notes.Add(new TabEvent(128 - note.MidiPitch, 0, note.MidiPitch, note.Velocity, onset, beat.Duration) { Id = note.Id });
+                onset += beat.Duration;
+            }
+        }
+        return notes.AsReadOnly();
+    }
+
+    /// <summary>Enables fixed-pitch editing only when every legacy note is represented without loss.</summary>
+    public static IReadOnlyList<TabEvent> ConvertLegacyPitchNotes(TrackMeasure measure, ScoreTrack track, ScoreTime maximumDuration)
+    {
+        ArgumentNullException.ThrowIfNull(measure);
+        ArgumentNullException.ThrowIfNull(track);
+        if (measure.TrackId != track.Id || !track.UsesFullTab)
+            throw new ArgumentException("The part must belong to a keyboard or other pitch-grid track.", nameof(track));
+        if (measure.UsesTabEvents || measure.TabEvents.Count != 0)
+            throw new InvalidOperationException("This part already contains tablature events.");
+        if (!maximumDuration.IsInitialized || maximumDuration <= ScoreTime.Zero)
+            throw new ArgumentOutOfRangeException(nameof(maximumDuration));
+        if (measure.Voices.SelectMany(v => v.Beats).Any(b => b.PitchBendSemitones != 0))
+            throw new InvalidOperationException("Legacy pitch bends cannot be converted without changing playback.");
+        var notes = GetLegacyPitchNotes(measure);
+        if (notes.Any(n => n.EndPosition > maximumDuration))
+            throw new InvalidOperationException("A legacy note extends beyond the shortest resolved bar.");
+        foreach (var lane in notes.GroupBy(n => n.StringNumber))
+        {
+            var ordered = lane.OrderBy(n => n.Onset).ToArray();
+            for (var i = 1; i < ordered.Length; i++)
+                if (ordered[i].Onset < ordered[i - 1].EndPosition)
+                    throw new InvalidOperationException("Overlapping legacy notes of the same pitch cannot be converted without changing playback.");
+        }
+        measure.TabEvents.AddRange(notes);
+        measure.UsesTabEvents = true;
+        return notes;
+    }
+
     public static void Move(TrackMeasure measure, ScoreTrack track, TabEvent note, int stringNumber, ScoreTime onset)
     {
         ArgumentNullException.ThrowIfNull(measure);
@@ -71,7 +117,7 @@ public static class TabEventEditing
         if (!onset.IsInitialized || onset < ScoreTime.Zero) throw new ArgumentOutOfRangeException(nameof(onset));
         EnsureNoOnsetCollision(measure, note, stringNumber, onset);
         note.StringNumber = stringNumber;
-        note.MidiPitch = track.TabTuningMidiPitches[stringNumber - 1] + note.Fret;
+        note.MidiPitch = track.TabLaneMidiPitches[stringNumber - 1] + note.Fret;
         note.Onset = onset;
     }
 
@@ -123,12 +169,12 @@ public static class TabEventEditing
         ArgumentNullException.ThrowIfNull(track);
         if (track.Kind == TrackKind.Percussion && !track.HasConfiguredPercussionKit)
             throw new InvalidOperationException("Configure percussion pieces before editing percussion tablature events.");
-        if (track.TabTuningMidiPitches.Count == 0) throw new InvalidOperationException("The track has no configured tablature tuning.");
-        if (stringNumber < 1 || stringNumber > track.TabTuningMidiPitches.Count) throw new ArgumentOutOfRangeException(nameof(stringNumber));
-        if (track.Kind == TrackKind.Percussion && fret != 0)
-            throw new ArgumentOutOfRangeException(nameof(fret), "Percussion lanes have a fixed pitch and require fret zero.");
+        if (track.TabLaneMidiPitches.Count == 0) throw new InvalidOperationException("The track has no configured tablature tuning.");
+        if (stringNumber < 1 || stringNumber > track.TabLaneMidiPitches.Count) throw new ArgumentOutOfRangeException(nameof(stringNumber));
+        if ((track.Kind == TrackKind.Percussion || track.UsesFullTab) && fret != 0)
+            throw new ArgumentOutOfRangeException(nameof(fret), "Fixed-pitch lanes require fret zero.");
         if (fret < 0 || fret > track.MaxFret) throw new ArgumentOutOfRangeException(nameof(fret));
-        if (track.TabTuningMidiPitches[stringNumber - 1] + fret > 127) throw new ArgumentOutOfRangeException(nameof(fret), "The resulting pitch exceeds MIDI range.");
+        if (track.TabLaneMidiPitches[stringNumber - 1] + fret > 127) throw new ArgumentOutOfRangeException(nameof(fret), "The resulting pitch exceeds MIDI range.");
     }
 
     private static void ValidateTimes(ScoreTime onset, ScoreTime duration)

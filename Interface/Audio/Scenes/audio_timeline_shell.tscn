@@ -15,4 +15,5 @@ vertical_scroll_mode = 0
 
 [node name="AudioTimeline" type="Control" parent="AudioTimelineScroll"]
 layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("1_timeline")

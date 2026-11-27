@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PedalInfo" format=3 uid="uid://d3kws8w8ymrhn"]
+
+[ext_resource type="Script" uid="uid://cr2d7nbn44cq3" path="res://Interface/EffectAndPedals/Resources/PedalInfo.cs" id="1_info"]
+[ext_resource type="Script" uid="uid://csukwn3oyjavu" path="res://Interface/EffectAndPedals/Resources/PedalConfiguration.cs" id="2_configuration"]
+[ext_resource type="Texture2D" uid="uid://ll0hjpssrivj" path="res://Interface/EffectAndPedals/Graph/delay.jpg" id="3_image"]
+
+[sub_resource type="Resource" id="Default"]
+script = ExtResource("2_configuration")
+DisplayName = "Default"
+Values = Dictionary[String, float]({
+"feedback": 0.3,
+"mix": 0.3,
+"time": 0.35
+})
+
+[resource]
+script = ExtResource("1_info")
+TypeId = "delay"
+DisplayName = "Delay"
+Image = ExtResource("3_image")
+DefaultConfiguration = SubResource("Default")
